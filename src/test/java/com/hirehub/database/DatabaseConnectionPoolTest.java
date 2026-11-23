@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -375,6 +376,14 @@ public class DatabaseConnectionPoolTest {
             Optional<User> recruiterOpt = userDAO.findByEmail("infotech@gmail.com");
             if (recruiterOpt.isPresent()) {
                 recruiterId = recruiterOpt.get().getId();
+            } else {
+                try (Connection conn = DatabaseConnection.getConnection();
+                     Statement st = conn.createStatement();
+                     ResultSet rs = st.executeQuery("SELECT user_id FROM recruiter_profiles LIMIT 1")) {
+                    if (rs.next()) {
+                        recruiterId = rs.getInt(1);
+                    }
+                }
             }
         } catch (Exception e) {
             recordFailure("6.1 UserDAO integration failed: " + e.getMessage());

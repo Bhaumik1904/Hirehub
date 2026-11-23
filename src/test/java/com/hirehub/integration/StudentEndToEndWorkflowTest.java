@@ -66,6 +66,8 @@ public class StudentEndToEndWorkflowTest {
             assertCondition(student.getRole() == User.Role.STUDENT,
                     "Verified target user is a STUDENT (ID: " + studentId + ", Name: " + student.getFullName() + ")");
 
+            SessionManager.getInstance().login(student);
+
             ResumeDAO resumeDAO = new ResumeDAO();
             ResumeService resumeService = new ResumeService();
             ResumeAnalysisDAO analysisDAO = new ResumeAnalysisDAO();
@@ -224,6 +226,7 @@ public class StudentEndToEndWorkflowTest {
             t.printStackTrace();
             testsFailed++;
         } finally {
+            SessionManager.getInstance().logout();
             if (resumePdf1 != null && resumePdf1.exists()) resumePdf1.delete();
             if (resumePdf2 != null && resumePdf2.exists()) resumePdf2.delete();
         }

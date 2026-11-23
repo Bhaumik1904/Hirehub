@@ -47,12 +47,16 @@ flowchart TD
 | **Primary Model** | `openai/gpt-oss-20b` | Structured JSON extraction & career chat | Fast time-to-first-token (<300ms on Groq LPUs), precise JSON compliance |
 | **Fallback Model** | `llama-3.3-70b-versatile` | High-complexity reasoning | Activated automatically on HTTP 429 (rate limit) or 503 (overload) |
 
-Configuration is supplied via environment variables:
+Configuration is supplied via environment variables or JVM system properties:
 ```bash
 GROQ_API_KEY=gsk_...
-GROQ_MODEL=openai/gpt-oss-20b                 # Optional override
-GROQ_FALLBACK_MODEL=llama-3.3-70b-versatile    # Optional override
+GROQ_ENDPOINT=https://api.groq.com/openai/v1/chat/completions # Optional override
+GROQ_MODEL=openai/gpt-oss-20b                                 # Optional override (or GROQ_PRIMARY_MODEL)
+GROQ_FALLBACK_MODEL=llama-3.3-70b-versatile                  # Optional override
+GROQ_FALLBACK_ENABLED=true                                   # Optional toggle
 ```
+
+The client incorporates a circuit breaker with a 60-second cooldown period and enforces a strict 45-second per-call request deadline.
 
 ---
 

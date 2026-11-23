@@ -17,6 +17,7 @@ target/
 # Environment variables, credentials, and secrets
 .env
 .env.*
+!.env.example
 env.properties
 db.properties
 *.key

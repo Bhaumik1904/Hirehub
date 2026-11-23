@@ -87,7 +87,7 @@ flowchart TD
 Encapsulates all business rules, transactional logic, and security checks:
 - **`AuthService`**: Authenticates users against BCrypt password hashes, validates password complexity, and registers students and recruiters.
 - **`JobService`**: Manages job lifecycles (`ACTIVE`, `CLOSED`, `DRAFT`) and moderation statuses (`APPROVED`, `PENDING`, `REJECTED`, `SUSPENDED`).
-- **`ApplicationService`**: Validates student eligibility, prevents duplicate submissions, captures immutable resume snapshots, and updates application statuses (`APPLIED`, `REVIEWING`, `SHORTLISTED`, `ACCEPTED`, `REJECTED`).
+- **`ApplicationService`**: Validates student eligibility, prevents duplicate submissions, links submitted resume IDs (`applications.resume_id`), and updates application statuses (`PENDING`, `SHORTLISTED`, `REJECTED`, `SELECTED`).
 - **`ResumeService`**: Coordinates PDF text extraction via Apache PDFBox, executes the deterministic 5-part scoring engine, and handles resume persistence.
 - **`AIService`**: Interfaces with GroqCloud API for qualitative resume evaluation and career guidance with built-in model fallbacks.
 - **`AdminModerationService`**: Manages administrative workflows (approving/rejecting jobs, verifying recruiters, suspending accounts) and records immutable entries in `admin_audit_logs`.
@@ -99,7 +99,8 @@ Encapsulates all business rules, transactional logic, and security checks:
 - **HikariCP Connection Pool (`DatabaseConnection.java`)**: High-performance connection pooling configured with:
   - Minimum idle connections: 2
   - Maximum pool size: 10
-  - Connection timeout: 10,000 ms
+  - Connection timeout: 30,000 ms (30 seconds)
+  - Validation timeout: 5,000 ms (5 seconds)
   - Idle timeout: 600,000 ms (10 minutes)
   - Max lifetime: 1,800,000 ms (30 minutes)
   - JVM Runtime Shutdown Hook: Automatically closes open pool connections on application exit.
@@ -133,7 +134,7 @@ flowchart LR
 
 - **Fail-Closed Session Guarding**: `SessionManager.getInstance().getCurrentUser()` is queried at every controller `initialize()` and service method invocation. If the user session is missing or the role does not match, execution fails closed and the user is redirected to the login stage.
 - **Recruiter Isolation**: Recruiters can only query and modify jobs, applicants, and metrics belonging to their own `recruiter_id`. Cross-tenant data leaks are impossible at the DAO layer.
-- **Immutable Resume Snapshots**: When a student submits an application, the exact resume metadata and file are snapshotted into `application_resumes`. If the student later updates or deletes their primary resume, the recruiter's historical submission snapshot remains unaltered.
+- **Resume Snapshot & Access Protection**: When a student submits an application, the active resume's ID is stored in `applications.resume_id` with an `ON DELETE RESTRICT` foreign key constraint. The student cannot delete a resume once referenced by an application (`isResumeReferencedByApplication` check and database FK constraint). Uploading a replacement resume creates a new record in `resumes` and marks it active, ensuring historical applications remain permanently linked to the exact resume submitted without file duplication.
 - **Password Security**: Standardized on BCrypt with cost factor 12. No plain-text passwords exist anywhere in memory, database, or logs.
 
 ---

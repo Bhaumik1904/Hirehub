@@ -108,7 +108,7 @@ HireHub features a unified PowerShell test runner:
 | **`AIConnectivityResilienceTest`** | Tests connection timeouts, socket disconnects, and graceful degradation when GroqCloud endpoints are unreachable. |
 | **`AIFeaturesLiveTest`** | Verifies end-to-end AI career chat responses and qualitative resume evaluation against live Groq endpoints. |
 | **`ClasspathDiagnosticTest`** | Inspects JVM runtime classpath, verifying all required native and third-party JAR dependencies exist. |
-| **`GroqConnectivityDiagnostic`** | Low-level diagnostic utility that pings GroqCloud API endpoints and validates authentication tokens. |
+| **`GroqConnectivityDiagnostic`** | Low-level diagnostic utility that pings GroqCloud API endpoints and validates authentication tokens. *(Requires `GROQ_API_KEY` configured in the shell environment; used as an active diagnostic tool)*. |
 | **`GroqIntegrationTest`** | Validates HTTP request headers, authorization bearer tokens, JSON payloads, and response deserialization. |
 | **`StudentEndToEndWorkflowTest`** | Full student workflow: registration, profile setup, resume upload, job search, and application submission. |
 | **`UIAccuracyQualityAuditTest`** | Inspects FXML and CSS definitions against Figma Make visual design tokens and color palettes. |

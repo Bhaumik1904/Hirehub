@@ -227,6 +227,8 @@ public class ApplicationResumeSnapshotTest {
             // 1. Create test users
             rec1Id = insertUser(PREFIX + "rec1@test.local", "Recruiter One", User.Role.RECRUITER);
             rec2Id = insertUser(PREFIX + "rec2@test.local", "Recruiter Two", User.Role.RECRUITER);
+            insertRecruiterProfile(rec1Id, "TechCorp");
+            insertRecruiterProfile(rec2Id, "DevStudio");
             stu1Id = insertUser(PREFIX + "stu1@test.local", "Student One", User.Role.STUDENT);
             stu2Id = insertUser(PREFIX + "stu2@test.local", "Student Two", User.Role.STUDENT);
 
@@ -440,9 +442,19 @@ public class ApplicationResumeSnapshotTest {
         throw new SQLException("Could not insert user " + email);
     }
 
+    private void insertRecruiterProfile(int userId, String company) throws SQLException {
+        String sql = "INSERT INTO recruiter_profiles (user_id, company_name, verification_status) VALUES (?, ?, 'VERIFIED')";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            stmt.setString(2, company);
+            stmt.executeUpdate();
+        }
+    }
+
     private int insertJob(int recruiterId, String title, String company) throws SQLException {
-        String sql = "INSERT INTO jobs (recruiter_id, title, company_name, description, job_type, location, status, deadline) " +
-                "VALUES (?, ?, ?, 'Test job description', 'FULL_TIME', 'Remote', 'ACTIVE', ?)";
+        String sql = "INSERT INTO jobs (recruiter_id, title, company_name, description, job_type, location, status, moderation_status, deadline) " +
+                "VALUES (?, ?, ?, 'Test job description', 'FULL_TIME', 'Remote', 'ACTIVE', 'APPROVED', ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, recruiterId);

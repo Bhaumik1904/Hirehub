@@ -5,7 +5,7 @@
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![HikariCP](https://img.shields.io/badge/HikariCP-5.1.0-brightgreen)](https://github.com/brettwooldridge/HikariCP)
 [![GroqCloud](https://img.shields.io/badge/AI-GroqCloud%20API-F55036)](https://groq.com/)
-[![Architecture](https://img.shields.io/badge/Architecture-MVC%20%2B%20DAO%20%2B%20Service-blue)](docs/architecture/ARCHITECTURE.md)
+[![Architecture](https://img.shields.io/badge/Architecture-MVC%20%2B%20DAO%20%2B%20Service-blue)](ARCHITECTURE.md)
 
 HireHub is an enterprise-grade desktop placement and recruitment application built with **Java 21**, **JavaFX 21**, **MySQL 8**, and **HikariCP**. The platform streamlines campus hiring workflows for students, corporate recruiters, and placement administration with integrated AI career guidance and deterministic resume scoring.
 
@@ -139,7 +139,7 @@ Seed the default administrative account:
 ```powershell
 mysql -u root -p hirehub_db < database/seed/admin_seed.sql
 ```
-*Default Administrator Credentials: `admin@hirehub.com` / `Admin@1234`*
+*Note: Initial administrative credentials are seeded from `admin_seed.sql`. Ensure administrator credentials are changed immediately upon first login.*
 
 ### 3. Environment Configuration
 Configure your environment variables in PowerShell or create a `.env` file from `.env.example`:
