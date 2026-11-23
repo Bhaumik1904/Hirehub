@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  my_applications.fxml — HireHub Student Applications Center
+  Visual Source of Truth: D:\HireHub\images\student-applications.png
+  Controller: com.hirehub.controller.MyApplicationsController
+  Preserves 100% of existing fx:id bindings, event handlers, and application workflows.
+-->
+<BorderPane xmlns="http://javafx.oracle.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hirehub.controller.MyApplicationsController"
+            styleClass="app-root">
+
+    <!-- ── Left Persistent Navigation Sidebar ── -->
+    <left>
+        <fx:include fx:id="studentSidebar" source="student_sidebar.fxml"/>
+    </left>
+
+    <!-- ── Main Content Area ── -->
+    <center>
+        <VBox spacing="0">
+            <!-- ── Top Header Bar ── -->
+            <HBox styleClass="content-header" alignment="CENTER_LEFT" spacing="14">
+                <Button fx:id="backBtn" text="← Back to Dashboard" styleClass="header-icon-action" onAction="#handleBack"/>
+                <VBox spacing="1" HBox.hgrow="ALWAYS">
+                    <Label text="Student workspace &gt; My Applications" styleClass="header-breadcrumb-root"/>
+                    <Label text="My Applications" styleClass="content-header-title"/>
+                </VBox>
+                <HBox styleClass="header-search-wrap" alignment="CENTER_LEFT" spacing="8">
+                    <Label text="🔍" style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                    <TextField fx:id="searchField" promptText="Search applications…" styleClass="header-search-box" prefWidth="180" onAction="#handleSearch"/>
+                    <Label text="Ctrl K" styleClass="header-shortcut-tag"/>
+                </HBox>
+                <Button text="🔔" styleClass="header-icon-action"/>
+                <Label text="STUDENT" styleClass="navbar-role-badge"/>
+            </HBox>
+
+            <!-- ── Main Layout: Filter Panel (Left) + Table View + Detail Panel ── -->
+            <HBox spacing="0" style="-fx-background-color: #F8FAFC;" VBox.vgrow="ALWAYS">
+
+            <!-- ── Left Filter Panel ── -->
+            <VBox styleClass="filter-panel" spacing="16" minWidth="240" prefWidth="240"
+                  style="-fx-background-color: #FFFFFF; -fx-border-color: transparent #E2E8F0 transparent transparent; -fx-border-width: 0 1 0 0; -fx-padding: 22 20;">
+
+                <Label text="Filter &amp; Search" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+                <VBox spacing="6">
+                    <Label text="Filter by Status" styleClass="field-label"/>
+                    <ComboBox fx:id="statusFilter" styleClass="combo-input" maxWidth="Infinity" onAction="#handleStatusFilter"/>
+                </VBox>
+
+                <Button fx:id="refreshBtn" text="↻ Refresh List" styleClass="secondary-button"
+                        maxWidth="Infinity" onAction="#handleRefresh"/>
+
+                <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-padding: 8 0 0 0;">
+                    <Label fx:id="resultLabel" style="-fx-font-size: 12px; -fx-text-fill: #64748B; -fx-font-weight: bold;"/>
+                    <ProgressIndicator fx:id="loadingIndicator" prefWidth="18" prefHeight="18" visible="false" managed="false"/>
+                </HBox>
+
+            </VBox>
+
+            <!-- ── Center Applications Table ── -->
+            <VBox HBox.hgrow="ALWAYS" minWidth="440" spacing="14" style="-fx-padding: 22 24;">
+                <VBox spacing="2">
+                    <Label text="APPLICATION CENTRE" style="-fx-font-size: 10.5px; -fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-letter-spacing: 0.8px;"/>
+                    <Label text="Submitted Applications" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                </VBox>
+
+                <TableView fx:id="applicationsTable" styleClass="job-table" VBox.vgrow="ALWAYS"
+                           style="-fx-background-color: #FFFFFF; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10;">
+                    <columns>
+                        <TableColumn fx:id="colJobTitle"    text="JOB TITLE"      prefWidth="190"/>
+                        <TableColumn fx:id="colCompany"     text="COMPANY"        prefWidth="150"/>
+                        <TableColumn fx:id="colType"        text="TYPE"           prefWidth="100"/>
+                        <TableColumn fx:id="colLocation"    text="LOCATION"       prefWidth="120"/>
+                        <TableColumn fx:id="colAppliedDate" text="APPLIED ON"     prefWidth="110"/>
+                        <TableColumn fx:id="colStatus"      text="STATUS"         prefWidth="110"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- ── Right Detail Panel ── -->
+            <ScrollPane fitToWidth="true" HBox.hgrow="NEVER" prefWidth="360"
+                        style="-fx-background-color: #FFFFFF; -fx-border-color: transparent transparent transparent #E2E8F0; -fx-border-width: 0 0 0 1;">
+                <VBox fx:id="detailPanel" styleClass="detail-panel" spacing="14"
+                      visible="false" managed="false" prefWidth="340" style="-fx-padding: 24 22; -fx-background-color: #FFFFFF;">
+
+                    <Label text="Application Details" style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    <Separator/>
+
+                    <Label text="Job Title" styleClass="detail-key"/>
+                    <Label fx:id="detailJobTitle" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" wrapText="true"/>
+
+                    <Label text="Company" styleClass="detail-key"/>
+                    <Label fx:id="detailCompany" style="-fx-font-size: 13.5px; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
+
+                    <Label text="Job Type" styleClass="detail-key"/>
+                    <Label fx:id="detailType" styleClass="detail-value"/>
+
+                    <Label text="Location" styleClass="detail-key"/>
+                    <Label fx:id="detailLocation" styleClass="detail-value"/>
+
+                    <Label text="Applied On" styleClass="detail-key"/>
+                    <Label fx:id="detailAppliedDate" styleClass="detail-value"/>
+
+                    <Label text="Current Status" styleClass="detail-key"/>
+                    <Label fx:id="detailStatus" styleClass="detail-value" style="-fx-font-weight: bold; -fx-text-fill: #16A34A;"/>
+
+                    <Separator/>
+
+                    <Label text="Cover Letter" styleClass="detail-section-heading"/>
+                    <TextArea fx:id="detailCoverLetter" styleClass="text-input detail-description"
+                              editable="false" wrapText="true" prefRowCount="6"/>
+                </VBox>
+            </ScrollPane>
+
+        </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

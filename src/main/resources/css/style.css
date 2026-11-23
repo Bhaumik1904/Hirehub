@@ -1,0 +1,3237 @@
+/* ==========================================================================
+   HireHub — Global Stylesheet
+   Design System: Professional recruitment SaaS — white/navy/light-grey
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. IMPORTS — Google Fonts via @font-face is not needed in JavaFX.
+      JavaFX uses system fonts. We select "Segoe UI" (Windows default professional font).
+   -------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------------
+   2. COLOUR TOKENS (defined on the root StackPane)
+   -------------------------------------------------------------------------- */
+
+.root,
+.root-pane,
+.app-root {
+    /* Primary palette */
+    -fx-navy:          #1A2B5E;
+    -fx-navy-dark:     #111E45;
+    -fx-navy-light:    #2C3E80;
+    -fx-accent:        #2563EB;
+    -fx-accent-hover:  #1D4ED8;
+    -fx-accent-light:  #EFF6FF;
+
+    /* Neutral palette */
+    -fx-white:         #FFFFFF;
+    -fx-grey-50:       #F8F9FB;
+    -fx-grey-100:      #F1F3F7;
+    -fx-grey-200:      #E2E6EF;
+    -fx-grey-400:      #9BA3B5;
+    -fx-grey-600:      #6B7280;
+    -fx-grey-800:      #374151;
+    -fx-text-dark:     #111827;
+    -fx-text-mid:      #4B5563;
+    -fx-text-light:    #6B7280;
+
+    /* Status colours */
+    -fx-error:         #DC2626;
+    -fx-error-bg:      #FEF2F2;
+    -fx-success:       #16A34A;
+    -fx-success-bg:    #F0FDF4;
+
+    /* Shadows — JavaFX uses dropshadow effect, not CSS box-shadow */
+    /* Applied via -fx-effect on individual nodes */
+
+    -fx-background-color: -fx-grey-100;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   3. PAGE BACKGROUND
+   -------------------------------------------------------------------------- */
+
+.page-background {
+    -fx-background-color: -fx-grey-100;
+    -fx-padding: 40 20 40 20;
+    -fx-alignment: center;
+}
+
+/* --------------------------------------------------------------------------
+   4. AUTH CARD (login + register)
+   -------------------------------------------------------------------------- */
+
+.auth-card {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: -fx-grey-200;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 24, 0, 0, 4);
+    -fx-padding: 48 44 40 44;
+    -fx-spacing: 0;
+}
+
+/* --------------------------------------------------------------------------
+   5. BRANDING SECTION
+   -------------------------------------------------------------------------- */
+
+.brand-section {
+    -fx-alignment: center;
+    -fx-padding: 0 0 28 0;
+    -fx-spacing: 4;
+}
+
+.brand-logo {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-navy;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-letter-spacing: -0.5px;
+}
+
+.brand-tagline {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-accent;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-letter-spacing: 0.5px;
+}
+
+/* --------------------------------------------------------------------------
+   6. AUTH HEADINGS
+   -------------------------------------------------------------------------- */
+
+.heading-section {
+    -fx-padding: 0 0 24 0;
+    -fx-spacing: 6;
+}
+
+.auth-heading {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.auth-subheading {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-light;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   7. FORM SECTION
+   -------------------------------------------------------------------------- */
+
+.form-section {
+    -fx-padding: 0 0 24 0;
+}
+
+.field-group {
+    -fx-spacing: 6;
+}
+
+.field-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-grey-800;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   8. INPUT CONTROLS
+   -------------------------------------------------------------------------- */
+
+.text-input {
+    -fx-background-color: -fx-white;
+    -fx-border-color: -fx-grey-200;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 14 10 14;
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-dark;
+    -fx-prompt-text-fill: -fx-grey-400;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-pref-height: 42px;
+    -fx-effect: none;
+}
+
+.text-input:focused {
+    -fx-border-color: -fx-accent;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.15), 8, 0, 0, 0);
+}
+
+.text-input:hover {
+    -fx-border-color: -fx-grey-400;
+}
+
+.combo-input {
+    -fx-background-color: -fx-white;
+    -fx-border-color: -fx-grey-200;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-dark;
+    -fx-pref-height: 42px;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.combo-input:focused {
+    -fx-border-color: -fx-accent;
+    -fx-border-width: 2;
+}
+
+.combo-input .list-cell {
+    -fx-padding: 8 12;
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.combo-input .list-cell:filled:hover {
+    -fx-background-color: -fx-accent-light;
+    -fx-text-fill: -fx-accent;
+}
+
+/* --------------------------------------------------------------------------
+   9. BUTTONS
+   -------------------------------------------------------------------------- */
+
+.primary-button {
+    -fx-background-color: -fx-accent;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 12 0 12 0;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.30), 8, 0, 0, 2);
+}
+
+.primary-button:hover {
+    -fx-background-color: -fx-accent-hover;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.45), 12, 0, 0, 3);
+}
+
+.primary-button:pressed {
+    -fx-background-color: #1E3FAA;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.20), 4, 0, 0, 1);
+    -fx-translate-y: 1;
+}
+
+.primary-button:disabled {
+    -fx-background-color: -fx-grey-200;
+    -fx-text-fill: -fx-grey-400;
+    -fx-effect: none;
+}
+
+/* --------------------------------------------------------------------------
+   10. LOADING INDICATOR
+   -------------------------------------------------------------------------- */
+
+.progress-indicator {
+    -fx-accent: -fx-accent;
+    -fx-progress-color: -fx-accent;
+}
+
+/* --------------------------------------------------------------------------
+   11. ERROR AND SUCCESS LABELS
+   -------------------------------------------------------------------------- */
+
+.error-label {
+    -fx-text-fill: -fx-error;
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: -fx-error-bg;
+    -fx-background-radius: 6;
+    -fx-padding: 8 12 8 12;
+    -fx-border-color: rgba(220, 38, 38, 0.25);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+.success-label {
+    -fx-text-fill: -fx-success;
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: -fx-success-bg;
+    -fx-background-radius: 6;
+    -fx-padding: 8 12 8 12;
+    -fx-border-color: rgba(22, 163, 74, 0.25);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+/* --------------------------------------------------------------------------
+   12. FOOTER / HYPERLINKS
+   -------------------------------------------------------------------------- */
+
+.footer-section {
+    -fx-padding: 0;
+    -fx-alignment: center;
+}
+
+.footer-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-text-light;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.footer-link {
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-accent;
+    -fx-font-weight: bold;
+    -fx-underline: false;
+    -fx-border-color: transparent;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-cursor: hand;
+}
+
+.footer-link:hover {
+    -fx-text-fill: -fx-accent-hover;
+    -fx-underline: true;
+}
+
+/* --------------------------------------------------------------------------
+   13. SCROLL PANE (transparent background for registration)
+   -------------------------------------------------------------------------- */
+
+.scroll-transparent {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-transparent > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-transparent > .scroll-bar {
+    -fx-opacity: 0.6;
+}
+
+/* --------------------------------------------------------------------------
+   14. DASHBOARD — NAVIGATION BAR
+   -------------------------------------------------------------------------- */
+
+.dashboard-root {
+    -fx-background-color: -fx-grey-100;
+}
+
+.navbar {
+    -fx-background-color: -fx-white;
+    -fx-padding: 0 28 0 28;
+    -fx-pref-height: 60px;
+    -fx-min-height: 60px;
+    -fx-border-color: transparent transparent -fx-grey-200 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);
+    -fx-spacing: 16;
+    -fx-alignment: center-left;
+}
+
+.navbar-brand {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-navy;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.navbar-role-badge {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-accent;
+    -fx-background-color: -fx-accent-light;
+    -fx-background-radius: 20;
+    -fx-padding: 4 12 4 12;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.recruiter-badge {
+    -fx-text-fill: #7C3AED;
+    -fx-background-color: #F5F3FF;
+}
+
+.admin-badge {
+    -fx-text-fill: #B45309;
+    -fx-background-color: #FFFBEB;
+}
+
+.logout-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-mid;
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-border-color: -fx-grey-200;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6 14 6 14;
+    -fx-cursor: hand;
+}
+
+.logout-button:hover {
+    -fx-background-color: -fx-grey-100;
+    -fx-text-fill: -fx-text-dark;
+    -fx-border-color: -fx-grey-400;
+}
+
+/* --------------------------------------------------------------------------
+   15. DASHBOARD — CONTENT AREA
+   -------------------------------------------------------------------------- */
+
+.dashboard-center {
+    -fx-padding: 48 40 40 40;
+    -fx-alignment: center;
+    -fx-spacing: 24;
+}
+
+/* --------------------------------------------------------------------------
+   16. WELCOME CARD (dashboard)
+   -------------------------------------------------------------------------- */
+
+.welcome-card {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: -fx-grey-200;
+    -fx-border-width: 1;
+    -fx-padding: 36 48 36 48;
+    -fx-alignment: center;
+    -fx-spacing: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 16, 0, 0, 2);
+    -fx-min-width: 480;
+    -fx-max-width: 640;
+}
+
+.dashboard-welcome-heading {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.dashboard-email {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-light;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.dashboard-meta {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-grey-400;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   17. INFO CARD (placeholder section)
+   -------------------------------------------------------------------------- */
+
+.info-card {
+    -fx-background-color: -fx-accent-light;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: rgba(37,99,235,0.15);
+    -fx-border-width: 1;
+    -fx-padding: 28 40 28 40;
+    -fx-alignment: center;
+    -fx-max-width: 640;
+    -fx-min-width: 480;
+}
+
+.placeholder-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-navy;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.placeholder-body {
+    -fx-font-size: 13px;
+    -fx-text-fill: -fx-text-mid;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+/* --------------------------------------------------------------------------
+   18. STAT CARDS (dashboard quick stats)
+   -------------------------------------------------------------------------- */
+
+.stat-card {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: -fx-grey-200;
+    -fx-border-width: 1;
+    -fx-padding: 20 32 20 32;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 1);
+    -fx-min-width: 120;
+}
+
+.stat-number {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-accent;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.stat-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-text-light;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* ==========================================================================
+   HireHub — Phase 2 CSS Extensions
+   Append to style.css — sidebar, section cards, action cards, job board,
+   table, filter panel, and job detail panel styles.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   A. APP ROOT — full-window container
+   -------------------------------------------------------------------------- */
+
+.app-root {
+    -fx-background-color: #F8FAFC;
+}
+
+/* --------------------------------------------------------------------------
+   B. SIDEBAR
+   -------------------------------------------------------------------------- */
+
+.sidebar {
+    -fx-background-color: #0F172A;
+    -fx-padding: 0 0 0 0;
+    -fx-min-height: 600;
+}
+
+.sidebar-brand {
+    -fx-padding: 20 18 16 18;
+    -fx-alignment: center-left;
+}
+
+.sidebar-brand-name {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.sidebar-brand-sub {
+    -fx-font-size: 10.5px;
+    -fx-text-fill: #64748B;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.8px;
+}
+
+.recruiter-sub {
+    -fx-text-fill: #94A3B8;
+}
+
+.sidebar-divider {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-border-color: transparent;
+    -fx-padding: 0 16;
+    -fx-opacity: 0.6;
+}
+
+.sidebar-nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94A3B8;
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-padding: 10 16 10 16;
+    -fx-alignment: center-left;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
+.sidebar-nav-btn:hover {
+    -fx-background-color: #1E293B;
+    -fx-text-fill: #F1F5F9;
+}
+
+.sidebar-nav-active {
+    -fx-background-color: #1E293B;
+    -fx-text-fill: white;
+    -fx-border-color: transparent transparent transparent #2563EB;
+    -fx-border-width: 0 0 0 3;
+    -fx-font-weight: bold;
+}
+
+.sidebar-post-job-btn {
+    -fx-background-color: rgba(37,99,235,0.20);
+    -fx-text-fill: #93C5FD;
+    -fx-font-weight: bold;
+}
+
+.sidebar-post-job-btn:hover {
+    -fx-background-color: rgba(37,99,235,0.40);
+    -fx-text-fill: white;
+}
+
+.sidebar-logout-btn {
+    -fx-text-fill: rgba(255,255,255,0.50);
+}
+
+.sidebar-logout-btn:hover {
+    -fx-background-color: rgba(220,38,38,0.15);
+    -fx-text-fill: #FCA5A5;
+}
+
+/* --------------------------------------------------------------------------
+   C. CONTENT HEADER BAR (top of main content area)
+   -------------------------------------------------------------------------- */
+
+.content-header {
+    -fx-background-color: white;
+    -fx-padding: 18 28 18 28;
+    -fx-border-color: transparent transparent #E2E6EF transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);
+}
+
+.content-header-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.content-header-sub {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   D. CONTENT SCROLL + BODY PADDING
+   -------------------------------------------------------------------------- */
+
+.content-scroll {
+    -fx-background-color: #F8FAFC;
+    -fx-background: #F8FAFC;
+    -fx-border-color: transparent;
+}
+
+.content-scroll > .viewport {
+    -fx-background-color: #F8FAFC;
+}
+
+.content-body {
+    -fx-padding: 28 28 28 28;
+    -fx-spacing: 24;
+}
+
+/* --------------------------------------------------------------------------
+   E. SECTION CARD (white card with shadow — replaces raw VBox styling)
+   -------------------------------------------------------------------------- */
+
+.section-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E2E6EF;
+    -fx-border-width: 1;
+    -fx-padding: 24 28 24 28;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 12, 0, 0, 2);
+}
+
+.section-card-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   F. DETAIL KEY / VALUE (profile summary grid)
+   -------------------------------------------------------------------------- */
+
+.detail-key {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-font-weight: bold;
+}
+
+.detail-value {
+    -fx-font-size: 13px;
+    -fx-text-fill: #111827;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   G. ACTION CARDS (quick-action grid on dashboard)
+   -------------------------------------------------------------------------- */
+
+.action-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E2E6EF;
+    -fx-border-width: 1;
+    -fx-padding: 20 20 20 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 1);
+    -fx-alignment: top-left;
+}
+
+.action-card-muted {
+    -fx-background-color: #F8F9FB;
+}
+
+.action-card-icon {
+    -fx-font-size: 28px;
+}
+
+.action-card-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.action-card-body {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.action-card-btn {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #2563EB;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-padding: 7 16 7 16;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.action-card-btn:hover {
+    -fx-background-color: #DBEAFE;
+}
+
+/* --------------------------------------------------------------------------
+   H. TEXT AREA INPUT (multi-line variant of .text-input)
+   -------------------------------------------------------------------------- */
+
+.text-area-input {
+    -fx-pref-height: auto;
+}
+
+.text-area-input > .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.text-area-input > .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   I. SECONDARY BUTTON
+   -------------------------------------------------------------------------- */
+
+.secondary-button {
+    -fx-background-color: white;
+    -fx-text-fill: #374151;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #E2E6EF;
+    -fx-border-width: 1.5;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #F1F3F7;
+    -fx-border-color: #9BA3B5;
+}
+
+/* --------------------------------------------------------------------------
+   J. JOB TABLE (recruiter job management)
+   -------------------------------------------------------------------------- */
+
+.job-table {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #E2E6EF;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 6, 0, 0, 1);
+}
+
+.job-table .column-header {
+    -fx-background-color: #F8F9FB;
+    -fx-border-color: transparent transparent #E2E6EF transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10 12;
+}
+
+.job-table .column-header .label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.job-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #F1F3F7 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 2 0;
+}
+
+.job-table .table-row-cell:selected {
+    -fx-background-color: #EFF6FF;
+}
+
+.job-table .table-cell {
+    -fx-font-size: 13px;
+    -fx-text-fill: #374151;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-padding: 10 12;
+}
+
+/* --------------------------------------------------------------------------
+   K. TABLE ACTION BUTTONS (Edit / Close / Delete)
+   -------------------------------------------------------------------------- */
+
+.table-action-btn {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #2563EB;
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+    -fx-padding: 7 16 7 16;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.table-action-btn:hover { -fx-background-color: #DBEAFE; }
+
+.table-action-warn {
+    -fx-background-color: #FFFBEB;
+    -fx-text-fill: #B45309;
+}
+.table-action-warn:hover { -fx-background-color: #FEF3C7; }
+
+.table-action-danger {
+    -fx-background-color: #FEF2F2;
+    -fx-text-fill: #DC2626;
+}
+.table-action-danger:hover { -fx-background-color: #FEE2E2; }
+
+/* --------------------------------------------------------------------------
+   L. STAT CARD MUTED (placeholder stats — greyed out)
+   -------------------------------------------------------------------------- */
+
+.stat-card-muted {
+    -fx-background-color: #F8F9FB;
+    -fx-border-color: #E2E6EF;
+}
+
+.stat-number-muted {
+    -fx-text-fill: #9BA3B5;
+}
+
+/* --------------------------------------------------------------------------
+   M. PROFILE STATUS LABEL (complete / incomplete indicator)
+   -------------------------------------------------------------------------- */
+
+.profile-status-label {
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-text-fill: #2563EB;
+    -fx-background-color: #EFF6FF;
+    -fx-background-radius: 6;
+    -fx-padding: 8 12;
+}
+
+/* --------------------------------------------------------------------------
+   N. JOB BOARD — FILTER PANEL
+   -------------------------------------------------------------------------- */
+
+.filter-panel {
+    -fx-background-color: white;
+    -fx-border-color: transparent #E2E6EF transparent transparent;
+    -fx-border-width: 0 1 0 0;
+    -fx-padding: 24 20 24 20;
+    -fx-min-height: 500;
+}
+
+.filter-panel-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   O. JOB BOARD — LIST VIEW
+   -------------------------------------------------------------------------- */
+
+.job-list-view {
+    -fx-background-color: #F8F9FB;
+    -fx-border-color: transparent #E2E6EF transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.job-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #E2E6EF transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0;
+}
+
+.job-list-view .list-cell:selected {
+    -fx-background-color: #EFF6FF;
+}
+
+.job-list-cell {
+    -fx-padding: 14 16 14 16;
+}
+
+.job-cell-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.job-cell-sub {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   P. JOB BOARD — DETAIL PANEL
+   -------------------------------------------------------------------------- */
+
+.detail-panel {
+    -fx-background-color: white;
+    -fx-padding: 28 24 28 24;
+    -fx-spacing: 12;
+}
+
+.detail-panel-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.detail-panel-company {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2563EB;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.detail-section-heading {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-padding: 4 0 0 0;
+}
+
+.detail-description {
+    -fx-font-size: 13px;
+    -fx-text-fill: #374151;
+    -fx-background-color: #F8F9FB;
+    -fx-border-color: #E2E6EF;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+/* --------------------------------------------------------------------------
+   Q. INFO LABEL (neutral informational message — job board apply note)
+   -------------------------------------------------------------------------- */
+
+.info-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #4B5563;
+    -fx-background-color: #F1F3F7;
+    -fx-background-radius: 6;
+    -fx-padding: 8 12;
+    -fx-border-color: #E2E6EF;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+
+/* ==========================================================================
+   R. PHASE 3 EXTENSIONS — APPLICATIONS & AI CAREER ASSISTANT
+   ========================================================================== */
+
+/* AI feature buttons */
+.ai-feature-btn {
+    -fx-font-size: 13px;
+    -fx-padding: 10 18;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+}
+
+/* AI results formatted container (expands naturally inside resultsCard) */
+.ai-results-container {
+    -fx-background-color: transparent;
+    -fx-padding: 6 0 6 0;
+    -fx-spacing: 12;
+}
+
+/* Status badges for tables and cards */
+.status-badge-pending {
+    -fx-text-fill: #6B7280;
+    -fx-font-weight: bold;
+}
+
+.status-badge-shortlisted {
+    -fx-text-fill: #2563EB;
+    -fx-font-weight: bold;
+}
+
+.status-badge-selected {
+    -fx-text-fill: #16A34A;
+    -fx-font-weight: bold;
+}
+
+.status-badge-rejected {
+    -fx-text-fill: #DC2626;
+    -fx-font-weight: bold;
+}
+
+
+/* ==========================================================================
+   S. HEADER BACK BUTTON STYLES
+   ========================================================================== */
+
+/* Header back button — high contrast, clearly visible on white header */
+.header-back-btn {
+    -fx-background-color: #F1F3F7;
+    -fx-text-fill: #1A2B5E;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+
+.header-back-btn:hover {
+    -fx-background-color: #E2E6EF;
+    -fx-text-fill: #0F172A;
+    -fx-border-color: #94A3B8;
+}
+
+.header-back-btn:pressed {
+    -fx-background-color: #CBD5E1;
+}
+
+/* Fallback for any .sidebar-nav-btn placed inside .content-header */
+.content-header .sidebar-nav-btn {
+    -fx-background-color: #F1F3F7;
+    -fx-text-fill: #1A2B5E;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+
+.content-header .sidebar-nav-btn:hover {
+    -fx-background-color: #E2E6EF;
+    -fx-text-fill: #0F172A;
+    -fx-border-color: #94A3B8;
+}
+
+/* AI Assistant specific helper styles */
+.ai-api-key-badge-active {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #15803D;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-background-radius: 6;
+    -fx-border-color: #86EFAC;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+}
+
+.ai-api-key-badge-inactive {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #92400E;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-background-radius: 6;
+    -fx-border-color: #FCD34D;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+}
+
+.ai-validation-error-label {
+    -fx-text-fill: #DC2626;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-color: #FEF2F2;
+    -fx-padding: 8 14;
+    -fx-background-radius: 6;
+    -fx-border-color: #FECACA;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+}
+
+/* ==========================================================================
+   Phase 4: AI Resume Analyzer Styles
+   ========================================================================== */
+
+.upload-placeholder-box {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #CBD5E1;
+    -fx-border-style: dashed;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 32 24;
+}
+
+.upload-icon {
+    -fx-font-size: 38px;
+    -fx-text-fill: #2563EB;
+}
+
+.upload-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+}
+
+.delete-button {
+    -fx-background-color: #FEF2F2;
+    -fx-text-fill: #DC2626;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-border-color: #FCA5A5;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+
+.delete-button:hover {
+    -fx-background-color: #FEE2E2;
+    -fx-border-color: #F87171;
+}
+
+.accent-outline-button {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #2563EB;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 6 14;
+    -fx-background-radius: 6;
+    -fx-border-color: #93C5FD;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+
+.accent-outline-button:hover {
+    -fx-background-color: #DBEAFE;
+    -fx-border-color: #60A5FA;
+}
+
+.skill-chip {
+    -fx-background-color: #F1F5F9;
+    -fx-text-fill: #334155;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10;
+    -fx-background-radius: 16;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+}
+
+.matching-skill-chip {
+    -fx-background-color: #F0FDF4;
+    -fx-text-fill: #15803D;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10;
+    -fx-background-radius: 16;
+    -fx-border-color: #86EFAC;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+}
+
+.missing-skill-chip {
+    -fx-background-color: #FEF2F2;
+    -fx-text-fill: #B91C1C;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10;
+    -fx-background-radius: 16;
+    -fx-border-color: #FECACA;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+}
+
+.callout-card {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12 16;
+}
+
+.score-circle-container {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 2;
+    -fx-border-radius: 50;
+    -fx-background-radius: 50;
+    -fx-min-width: 90px;
+    -fx-min-height: 90px;
+    -fx-pref-width: 90px;
+    -fx-pref-height: 90px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);
+}
+
+.score-number-big {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.score-sub-label {
+    -fx-font-size: 10px;
+    -fx-text-fill: #64748B;
+    -fx-font-weight: bold;
+}
+
+.rubric-title {
+    -fx-font-size: 13.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E293B;
+}
+
+.rubric-pts {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2563EB;
+}
+
+.rubric-bar {
+    -fx-accent: #2563EB;
+    -fx-pref-height: 8px;
+    -fx-min-height: 8px;
+}
+
+.consent-info-box {
+    -fx-background-color: #EFF6FF;
+    -fx-border-color: #BFDBFE;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 10 14;
+}
+
+.table-action-button {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #2563EB;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10;
+    -fx-background-radius: 4;
+    -fx-border-color: #BFDBFE;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-cursor: hand;
+}
+
+.table-action-button:hover {
+    -fx-background-color: #DBEAFE;
+}
+
+.badge-active {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #15803D;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10;
+    -fx-background-radius: 12;
+    -fx-border-color: #86EFAC;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-font-size: 12px;
+}
+
+.badge-inactive {
+    -fx-background-color: #F1F5F9;
+    -fx-text-fill: #64748B;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10;
+    -fx-background-radius: 12;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-font-size: 12px;
+}
+
+.badge-neutral {
+    -fx-background-color: #F1F5F9;
+    -fx-text-fill: #475569;
+    -fx-font-size: 11.5px;
+    -fx-padding: 3 8;
+    -fx-background-radius: 4;
+}
+
+.detail-value-bold {
+    -fx-text-fill: #0F172A;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.detail-value-mono {
+    -fx-font-family: "Consolas", monospace;
+    -fx-text-fill: #475569;
+    -fx-font-size: 12.5px;
+}
+
+/* ==========================================================================
+   Phase 5: Admin Placement Intelligence Dashboard Styles
+   Strictly scoped to Admin Dashboard controls — shared classes untouched.
+   ========================================================================== */
+
+.admin-sub {
+    -fx-text-fill: #FCD34D;
+}
+
+.sidebar-refresh-btn {
+    -fx-background-color: rgba(37, 99, 235, 0.22);
+    -fx-text-fill: #DBEAFE;
+    -fx-font-weight: bold;
+}
+
+.sidebar-refresh-btn:hover {
+    -fx-background-color: rgba(37, 99, 235, 0.42);
+    -fx-text-fill: white;
+}
+
+.sidebar-refresh-btn:disabled {
+    -fx-opacity: 0.5;
+}
+
+.admin-toolbar-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E2E6EF;
+    -fx-border-width: 1;
+    -fx-padding: 16 22 16 22;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);
+}
+
+.admin-toolbar-wrap {
+    -fx-padding: 20 28 0 28;
+    -fx-spacing: 12;
+}
+
+.admin-scope-pill {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #1D4ED8;
+    -fx-border-color: #BFDBFE;
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+    -fx-padding: 4 12;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.admin-refresh-pill {
+    -fx-background-color: #F8FAFC;
+    -fx-text-fill: #475569;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+    -fx-padding: 4 12;
+    -fx-font-size: 12px;
+}
+
+.admin-compact-btn {
+    -fx-padding: 8 16 8 16;
+    -fx-font-size: 13px;
+}
+
+.admin-compact-combo {
+    -fx-pref-height: 36px;
+    -fx-font-size: 13px;
+}
+
+.admin-kpi-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #E2E6EF;
+    -fx-border-width: 1;
+    -fx-padding: 16 18 16 18;
+    -fx-alignment: top-left;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 8, 0, 0, 1);
+    -fx-min-width: 180;
+}
+
+.admin-kpi-title {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6B7280;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.admin-kpi-number {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.admin-kpi-number-accent {
+    -fx-text-fill: #2563EB;
+}
+
+.admin-kpi-number-success {
+    -fx-text-fill: #16A34A;
+}
+
+.admin-kpi-number-warn {
+    -fx-text-fill: #D97706;
+}
+
+.admin-kpi-sub {
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #64748B;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.admin-badge-warn {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #B45309;
+    -fx-border-color: #FCD34D;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 2 9;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.admin-badge-info {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #1D4ED8;
+    -fx-border-color: #BFDBFE;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 2 9;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.admin-badge-success {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #15803D;
+    -fx-border-color: #86EFAC;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 2 9;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.admin-badge-danger {
+    -fx-background-color: #FEE2E2;
+    -fx-text-fill: #B91C1C;
+    -fx-border-color: #FECACA;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 2 9;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.admin-badge-neutral {
+    -fx-background-color: #F1F5F9;
+    -fx-text-fill: #475569;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 2 9;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.admin-empty-box {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 20 18;
+    -fx-alignment: center;
+}
+
+.admin-empty-title {
+    -fx-font-size: 13.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+.admin-empty-body {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+    -fx-text-alignment: center;
+}
+
+.admin-error-banner {
+    -fx-background-color: #FEF2F2;
+    -fx-border-color: #FCA5A5;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 12 18;
+}
+
+.admin-notice-banner {
+    -fx-background-color: #EFF6FF;
+    -fx-border-color: #BFDBFE;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 14;
+}
+
+.admin-funnel-bar-pending > .bar {
+    -fx-background-color: #6B7280;
+    -fx-background-radius: 4;
+}
+
+.admin-funnel-bar-shortlisted > .bar {
+    -fx-background-color: #2563EB;
+    -fx-background-radius: 4;
+}
+
+.admin-funnel-bar-selected > .bar {
+    -fx-background-color: #16A34A;
+    -fx-background-radius: 4;
+}
+
+.admin-funnel-bar-rejected > .bar {
+    -fx-background-color: #DC2626;
+    -fx-background-radius: 4;
+}
+
+.admin-progress-bar > .track {
+    -fx-background-color: #E2E8F0;
+    -fx-background-radius: 4;
+}
+
+.admin-chart .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.admin-chart .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.admin-chart .chart-horizontal-grid-lines {
+    -fx-stroke: #E2E8F0;
+}
+
+.admin-bar-chart .default-color0.chart-bar {
+    -fx-bar-fill: #1A2B5E;
+}
+
+.admin-bar-chart .default-color1.chart-bar {
+    -fx-bar-fill: #2563EB;
+}
+
+.admin-trend-chart .default-color0.chart-bar {
+    -fx-bar-fill: #2563EB;
+}
+
+.admin-trend-chart .default-color1.chart-bar {
+    -fx-bar-fill: #16A34A;
+}
+
+.admin-row-expired {
+    -fx-background-color: #FFFBEB;
+}
+
+.admin-row-expired:selected {
+    -fx-background-color: #FEF3C7;
+}
+
+.admin-activity-row {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent transparent #E2E6EF transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10 12;
+}
+
+.admin-activity-row:hover {
+    -fx-background-color: #F8FAFC;
+}
+
+.admin-score-pill {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 14 20;
+    -fx-alignment: center;
+}
+
+
+/* ── Admin UI Polish: ProgressIndicator loop guard & purple event badge ── */
+.progress-indicator {
+    -fx-accent: #2563EB;
+    -fx-progress-color: #2563EB;
+}
+
+.progress-indicator:indeterminate .segment {
+    -fx-background-color: #2563EB;
+}
+
+.admin-badge-purple {
+    -fx-background-color: #F3E8FF;
+    -fx-text-fill: #6B21A8;
+    -fx-padding: 3 10 3 10;
+    -fx-background-radius: 999px;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.admin-compact-combo {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+
+.admin-compact-combo:focused {
+    -fx-border-color: #2563EB;
+}
+
+.admin-compact-combo .list-cell,
+.admin-compact-combo .text-input {
+    -fx-text-fill: #0F172A;
+    -fx-prompt-text-fill: #64748B;
+}
+
+.admin-compact-combo {
+    -fx-font-size: 12px;
+    -fx-padding: 1 2 1 2;
+}
+
+.admin-compact-combo > .list-cell {
+    -fx-padding: 4 6 4 8;
+}
+
+.admin-compact-combo > .text-field {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 4 4 4 8;
+    -fx-font-size: 12px;
+}
+
+
+/* ============================================================================
+   Phase 5 Step 3C: Recruiter Intelligence Dashboard Styles (.rec-*)
+   ============================================================================ */
+
+.rec-progress {
+    -fx-accent: #2563EB;
+    -fx-progress-color: #2563EB;
+}
+
+.rec-role-badge {
+    -fx-background-color: #E0E7FF;
+    -fx-text-fill: #1A2B5E;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 12;
+    -fx-background-radius: 999;
+}
+
+.rec-profile-pill-ok {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #166534;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+    -fx-background-radius: 999;
+}
+
+.rec-profile-pill-warn {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #92400E;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+    -fx-background-radius: 999;
+}
+
+.rec-page-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+}
+
+.rec-page-subtitle {
+    -fx-font-size: 12.5px;
+    -fx-text-fill: #64748B;
+}
+
+.rec-toolbar-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E2E6EF;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 16 20;
+    -fx-effect: dropshadow(gaussian, rgba(26,43,94,0.05), 8, 0, 0, 2);
+}
+
+.rec-filter-label {
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+.rec-preset-btn {
+    -fx-background-color: #F1F5F9;
+    -fx-text-fill: #334155;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 7 14;
+    -fx-background-radius: 8;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.rec-preset-btn:hover {
+    -fx-background-color: #E2E8F0;
+    -fx-text-fill: #1A2B5E;
+}
+
+.rec-preset-btn-active {
+    -fx-background-color: #1A2B5E;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #1A2B5E;
+}
+
+.rec-preset-btn-active:hover {
+    -fx-background-color: #253C7E;
+    -fx-text-fill: #FFFFFF;
+}
+
+.rec-period-pill {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #1E40AF;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 12;
+    -fx-background-radius: 999;
+    -fx-border-color: #BFDBFE;
+    -fx-border-radius: 999;
+}
+
+.rec-granularity-pill {
+    -fx-background-color: #F3E8FF;
+    -fx-text-fill: #6B21A8;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 11;
+    -fx-background-radius: 999;
+    -fx-border-color: #DDD6FE;
+    -fx-border-radius: 999;
+}
+
+.rec-scope-note {
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #64748B;
+}
+
+.rec-refresh-btn {
+    -fx-background-color: #1A2B5E;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.rec-refresh-btn:hover {
+    -fx-background-color: #2563EB;
+}
+
+.rec-refresh-btn:disabled {
+    -fx-opacity: 0.6;
+    -fx-cursor: default;
+}
+
+.rec-error-banner {
+    -fx-background-color: #FEF2F2;
+    -fx-border-color: #FCA5A5;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 12 16;
+}
+
+.rec-error-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #991B1B;
+}
+
+.rec-error-detail {
+    -fx-font-size: 12px;
+    -fx-text-fill: #B91C1C;
+}
+
+.rec-retry-btn {
+    -fx-background-color: #DC2626;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 7 15;
+    -fx-background-radius: 7;
+    -fx-cursor: hand;
+}
+
+.rec-retry-btn:hover {
+    -fx-background-color: #B91C1C;
+}
+
+.rec-info-banner {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 14 18;
+}
+
+.rec-kpi-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E2E6EF;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 15 16;
+    -fx-effect: dropshadow(gaussian, rgba(26,43,94,0.04), 6, 0, 0, 2);
+}
+
+.rec-kpi-card-accent-navy {
+    -fx-border-color: #E2E6EF #E2E6EF #E2E6EF #1A2B5E;
+    -fx-border-width: 1 1 1 4;
+}
+
+.rec-kpi-card-accent-blue {
+    -fx-border-color: #E2E6EF #E2E6EF #E2E6EF #2563EB;
+    -fx-border-width: 1 1 1 4;
+}
+
+.rec-kpi-card-accent-green {
+    -fx-border-color: #E2E6EF #E2E6EF #E2E6EF #16A34A;
+    -fx-border-width: 1 1 1 4;
+}
+
+.rec-kpi-card-accent-amber {
+    -fx-border-color: #E2E6EF #E2E6EF #E2E6EF #D97706;
+    -fx-border-width: 1 1 1 4;
+}
+
+.rec-kpi-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748B;
+}
+
+.rec-kpi-value {
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+}
+
+.rec-kpi-sub {
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #64748B;
+}
+
+.rec-warn-pill {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #92400E;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8;
+    -fx-background-radius: 999;
+}
+
+.rec-section-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+}
+
+.rec-section-sub {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+}
+
+.rec-status-pill-row {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12;
+}
+
+.rec-rate-tile {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 9;
+    -fx-background-radius: 9;
+    -fx-padding: 10 12;
+}
+
+.rec-rate-label {
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748B;
+}
+
+.rec-rate-value {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+}
+
+.rec-rate-hint {
+    -fx-font-size: 10.5px;
+    -fx-text-fill: #64748B;
+}
+
+.rec-progress-bar {
+    -fx-pref-height: 9;
+    -fx-min-height: 9;
+    -fx-max-height: 9;
+    -fx-accent: #2563EB;
+}
+
+.rec-progress-bar > .track {
+    -fx-background-color: #E2E8F0;
+    -fx-background-radius: 999;
+}
+
+.rec-progress-bar > .bar {
+    -fx-background-color: #2563EB;
+    -fx-background-radius: 999;
+    -fx-background-insets: 0;
+}
+
+.rec-progress-green > .bar {
+    -fx-background-color: #16A34A;
+}
+
+.rec-progress-amber > .bar {
+    -fx-background-color: #D97706;
+}
+
+.rec-progress-navy > .bar {
+    -fx-background-color: #1A2B5E;
+}
+
+.rec-progress-red > .bar {
+    -fx-background-color: #DC2626;
+}
+
+.rec-badge-pending {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #92400E;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 9;
+    -fx-background-radius: 999;
+}
+
+.rec-badge-shortlisted {
+    -fx-background-color: #DBEAFE;
+    -fx-text-fill: #1E40AF;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 9;
+    -fx-background-radius: 999;
+}
+
+.rec-badge-selected {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #166534;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 9;
+    -fx-background-radius: 999;
+}
+
+.rec-badge-rejected {
+    -fx-background-color: #FEE2E2;
+    -fx-text-fill: #991B1B;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 9;
+    -fx-background-radius: 999;
+}
+
+.rec-badge-purple {
+    -fx-background-color: #F3E8FF;
+    -fx-text-fill: #6B21A8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 9;
+    -fx-background-radius: 999;
+}
+
+.rec-badge-expired {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #92400E;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 9;
+    -fx-background-radius: 999;
+}
+
+.rec-row-expired {
+    -fx-background-color: #FFFBEB;
+}
+
+.rec-empty-box {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-style: dashed;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 24 20;
+}
+
+.rec-empty-title {
+    -fx-font-size: 13.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+.rec-empty-sub {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+}
+
+.rec-trend-chart .chart-plot-background,
+.rec-type-chart .chart-plot-background {
+    -fx-background-color: #FFFFFF;
+}
+
+.rec-trend-chart .chart-horizontal-grid-lines,
+.rec-type-chart .chart-horizontal-grid-lines {
+    -fx-stroke: #EEF2F6;
+}
+
+.rec-trend-chart .default-color0.chart-series-line {
+    -fx-stroke: #1A2B5E;
+    -fx-stroke-width: 2.5px;
+}
+
+.rec-trend-chart .default-color0.chart-line-symbol {
+    -fx-background-color: #1A2B5E, #FFFFFF;
+}
+
+.rec-trend-chart .default-color1.chart-series-line {
+    -fx-stroke: #2563EB;
+    -fx-stroke-width: 2.2px;
+}
+
+.rec-trend-chart .default-color1.chart-line-symbol {
+    -fx-background-color: #2563EB, #FFFFFF;
+}
+
+.rec-trend-chart .default-color2.chart-series-line {
+    -fx-stroke: #16A34A;
+    -fx-stroke-width: 2.2px;
+}
+
+.rec-trend-chart .default-color2.chart-line-symbol {
+    -fx-background-color: #16A34A, #FFFFFF;
+}
+
+.rec-type-chart .default-color0.chart-bar {
+    -fx-bar-fill: #1A2B5E;
+}
+
+.rec-type-chart .default-color1.chart-bar {
+    -fx-bar-fill: #2563EB;
+}
+
+.rec-type-chart .default-color2.chart-bar {
+    -fx-bar-fill: #16A34A;
+}
+
+.rec-type-pill-card {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 9;
+    -fx-background-radius: 9;
+    -fx-padding: 10 12;
+}
+
+.rec-feed-row {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 9;
+    -fx-background-radius: 9;
+    -fx-padding: 10 14;
+}
+
+.rec-pending-row {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 9;
+    -fx-background-radius: 9;
+    -fx-padding: 11 14;
+}
+
+.rec-ai-score-card {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 18 20;
+}
+
+.rec-ai-score-value {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+}
+
+.rec-ai-score-na {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748B;
+}
+
+.rec-advisory-box {
+    -fx-background-color: #EFF6FF;
+    -fx-border-color: #BFDBFE;
+    -fx-border-radius: 9;
+    -fx-background-radius: 9;
+    -fx-padding: 11 14;
+}
+
+.rec-advisory-text {
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #1E3A8A;
+}
+
+.rec-row-action-btn {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #1D4ED8;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10;
+    -fx-background-radius: 6;
+    -fx-border-color: #BFDBFE;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+
+.rec-row-action-btn:hover {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #2563EB;
+}
+
+.rec-primary-btn {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.rec-primary-btn:hover {
+    -fx-background-color: #1D4ED8;
+}
+
+.rec-secondary-btn {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #1A2B5E;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 7 15;
+    -fx-background-radius: 8;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.rec-secondary-btn:hover {
+    -fx-background-color: #F1F5F9;
+    -fx-border-color: #94A3B8;
+}
+
+.rec-perf-table .table-cell {
+    -fx-padding: 4 5;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.rec-perf-table .column-header .label {
+    -fx-padding: 6 4;
+    -fx-font-size: 11.5px;
+}
+
+.rec-perf-table .column-header {
+    -fx-padding: 0 2;
+}
+
+.rec-perf-table .column-header .label {
+    -fx-padding: 6 2;
+}
+
+/* ==========================================================================
+   Phase 5 Step 4C: Student Intelligence Dashboard Scoped Styles (.stu-*)
+   ========================================================================== */
+
+.stu-header-pill {
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 12;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+}
+
+.stu-header-pill-ok {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #15803D;
+    -fx-border-color: #86EFAC;
+    -fx-border-width: 1;
+}
+
+.stu-header-pill-warn {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #B45309;
+    -fx-border-color: #FCD34D;
+    -fx-border-width: 1;
+}
+
+.stu-refresh-btn {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #1A2B5E;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 14;
+    -fx-background-radius: 6;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.stu-refresh-btn:hover {
+    -fx-background-color: #F1F5F9;
+    -fx-border-color: #94A3B8;
+}
+
+.stu-error-banner {
+    -fx-background-color: #FEF2F2;
+    -fx-border-color: #FCA5A5;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12 16;
+}
+
+.stu-error-text {
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #991B1B;
+}
+
+.stu-retry-btn {
+    -fx-background-color: #DC2626;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 12;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.stu-retry-btn:hover {
+    -fx-background-color: #B91C1C;
+}
+
+.stu-kpi-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-padding: 16 18;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 4, 0, 0, 2);
+}
+
+.stu-kpi-title {
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748B;
+    -fx-text-transform: uppercase;
+}
+
+.stu-kpi-value {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+}
+
+.stu-kpi-sub {
+    -fx-font-size: 11px;
+    -fx-text-fill: #94A3B8;
+}
+
+.stu-section-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 20 22;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 5, 0, 0, 2);
+}
+
+.stu-section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+}
+
+.stu-section-sub {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+}
+
+.stu-bar-row {
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 8;
+    -fx-padding: 10 14;
+    -fx-border-color: #F1F5F9;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+.stu-bar-label {
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+.stu-bar-count {
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+}
+
+.stu-bar-pct {
+    -fx-font-size: 11px;
+    -fx-text-fill: #64748B;
+}
+
+.stu-progress-custom {
+    -fx-accent: #2563EB;
+}
+
+.stu-progress-custom .track {
+    -fx-background-color: #E2E8F0;
+    -fx-background-radius: 4;
+}
+
+.stu-progress-custom .bar {
+    -fx-background-color: #2563EB;
+    -fx-background-radius: 4;
+}
+
+.stu-progress-pending .bar {
+    -fx-background-color: #F59E0B;
+}
+
+.stu-progress-shortlisted .bar {
+    -fx-background-color: #3B82F6;
+}
+
+.stu-progress-selected .bar {
+    -fx-background-color: #10B981;
+}
+
+.stu-progress-rejected .bar {
+    -fx-background-color: #EF4444;
+}
+
+.stu-skill-chip-current {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #1D4ED8;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 12;
+    -fx-background-radius: 16;
+    -fx-border-color: #BFDBFE;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+}
+
+.stu-skill-chip-demand {
+    -fx-background-color: #FEF2F2;
+    -fx-text-fill: #B91C1C;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 12;
+    -fx-background-radius: 16;
+    -fx-border-color: #FECACA;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+}
+
+.stu-rec-item {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-padding: 14 18;
+}
+
+.stu-rec-item:hover {
+    -fx-border-color: #93C5FD;
+    -fx-background-color: #F8FAFC;
+}
+
+.stu-rec-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+}
+
+.stu-rec-company {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #475569;
+}
+
+.stu-rec-meta {
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #64748B;
+}
+
+.stu-match-badge {
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 9;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+
+.stu-match-high {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #15803D;
+    -fx-border-color: #86EFAC;
+    -fx-border-width: 1;
+}
+
+.stu-match-medium {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #B45309;
+    -fx-border-color: #FCD34D;
+    -fx-border-width: 1;
+}
+
+.stu-match-unranked {
+    -fx-background-color: #F1F5F9;
+    -fx-text-fill: #64748B;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1;
+}
+
+.stu-applied-badge {
+    -fx-background-color: #F0FDF4;
+    -fx-text-fill: #166534;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 8;
+    -fx-background-radius: 6;
+    -fx-border-color: #BBF7D0;
+    -fx-border-width: 1;
+}
+
+.stu-activity-row {
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 8;
+    -fx-padding: 10 14;
+    -fx-border-color: #F1F5F9;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+.stu-activity-badge {
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8;
+    -fx-background-radius: 6;
+}
+
+.stu-activity-app {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #1D4ED8;
+}
+
+.stu-activity-status {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #92400E;
+}
+
+.stu-activity-resume {
+    -fx-background-color: #F0FDF4;
+    -fx-text-fill: #166534;
+}
+
+.stu-activity-analysis {
+    -fx-background-color: #F3E8FF;
+    -fx-text-fill: #6B21A8;
+}
+
+.stu-empty-state {
+    -fx-padding: 20;
+    -fx-alignment: center;
+}
+
+.stu-empty-text {
+    -fx-font-size: 12.5px;
+    -fx-text-fill: #94A3B8;
+    -fx-font-style: italic;
+}
+
+.stu-disclaimer-box {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12;
+}
+
+.stu-disclaimer-text {
+    -fx-font-size: 11px;
+    -fx-text-fill: #64748B;
+    -fx-font-style: italic;
+}
+
+/* =============================================================================
+   Phase 6 Step 4.2D: Recruiter Verification UI & Onboarding Styles
+   ============================================================================= */
+
+.rec-profile-pill-neutral {
+    -fx-background-color: #F1F5F9;
+    -fx-text-fill: #475569;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+    -fx-background-radius: 999;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 999;
+    -fx-border-width: 1;
+}
+
+.rec-profile-pill-danger {
+    -fx-background-color: #FEE2E2;
+    -fx-text-fill: #991B1B;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+    -fx-background-radius: 999;
+    -fx-border-color: #FECACA;
+    -fx-border-radius: 999;
+    -fx-border-width: 1;
+}
+
+.rec-badge-unverified {
+    -fx-background-color: #F1F5F9;
+    -fx-text-fill: #475569;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+    -fx-background-radius: 6;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+.rec-badge-pending {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #92400E;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+    -fx-background-radius: 6;
+    -fx-border-color: #FDE68A;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+.rec-badge-verified {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #166534;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+    -fx-background-radius: 6;
+    -fx-border-color: #BBF7D0;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+.rec-badge-rejected {
+    -fx-background-color: #FEE2E2;
+    -fx-text-fill: #991B1B;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+    -fx-background-radius: 6;
+    -fx-border-color: #FECACA;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+.rec-badge-suspended {
+    -fx-background-color: #7F1D1D;
+    -fx-text-fill: #FEF2F2;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 10;
+    -fx-background-radius: 6;
+    -fx-border-color: #991B1B;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+.rec-verification-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E2E6EF;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 16 20;
+    -fx-effect: dropshadow(gaussian, rgba(26,43,94,0.05), 8, 0, 0, 2);
+}
+
+.rec-verification-title {
+    -fx-font-size: 13.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A2B5E;
+}
+
+.rec-verification-msg {
+    -fx-font-size: 12.5px;
+    -fx-text-fill: #475569;
+}
+
+.rec-feedback-box {
+    -fx-background-color: #FEF2F2;
+    -fx-border-color: #FCA5A5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 14;
+    -fx-border-width: 1;
+}
+
+.rec-feedback-title {
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #991B1B;
+}
+
+.rec-feedback-body {
+    -fx-font-size: 12px;
+    -fx-text-fill: #7F1D1D;
+}
+
+.rec-timeline-box {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 14;
+    -fx-border-width: 1;
+}
+
+.rec-timeline-item {
+    -fx-font-size: 11px;
+    -fx-text-fill: #64748B;
+}
+
+.rec-warning-banner {
+    -fx-background-color: #FFFBEB;
+    -fx-border-color: #FCD34D;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 12 16;
+    -fx-border-width: 1;
+}
+
+.rec-warning-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #92400E;
+}
+
+.rec-warning-body {
+    -fx-font-size: 12px;
+    -fx-text-fill: #78350F;
+}
+
+/* ========================================================================= */
+/* Phase 6 Step 4.2E: Admin Recruiter Verification & Job Moderation Styles   */
+/* ========================================================================= */
+
+.admin-badge-suspended {
+    -fx-background-color: #7F1D1D;
+    -fx-text-fill: #FEF2F2;
+    -fx-border-color: #991B1B;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 2 9;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.admin-kpi-number-danger {
+    -fx-text-fill: #DC2626;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.admin-kpi-number-darkred {
+    -fx-text-fill: #991B1B;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.admin-kpi-number-neutral {
+    -fx-text-fill: #64748B;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.admin-detail-panel {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 16 18;
+}
+
+.admin-detail-header {
+    -fx-padding: 0 0 10 0;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.admin-detail-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.admin-detail-sub {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+}
+
+.admin-detail-grid {
+    -fx-padding: 8 0;
+}
+
+.admin-detail-row {
+    -fx-alignment: center-left;
+}
+
+.admin-detail-key {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748B;
+}
+
+.admin-detail-val {
+    -fx-font-size: 13px;
+    -fx-text-fill: #1E293B;
+}
+
+.admin-detail-desc {
+    -fx-font-size: 12px;
+    -fx-text-fill: #334155;
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8 10;
+}
+
+.admin-action-bar {
+    -fx-padding: 12 0 4 0;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1 0 0 0;
+    -fx-alignment: center-left;
+}
+
+.admin-btn-verify {
+    -fx-background-color: #059669;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 6;
+    -fx-padding: 6 14;
+}
+.admin-btn-verify:hover {
+    -fx-background-color: #047857;
+}
+
+.admin-btn-reject {
+    -fx-background-color: #DC2626;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 6;
+    -fx-padding: 6 14;
+}
+.admin-btn-reject:hover {
+    -fx-background-color: #B91C1C;
+}
+
+.admin-btn-suspend {
+    -fx-background-color: #991B1B;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 6;
+    -fx-padding: 6 14;
+}
+.admin-btn-suspend:hover {
+    -fx-background-color: #7F1D1D;
+}
+
+.admin-btn-pending {
+    -fx-background-color: #D97706;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 6;
+    -fx-padding: 6 14;
+}
+.admin-btn-pending:hover {
+    -fx-background-color: #B45309;
+}
+
+.admin-audit-box {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 12;
+}
+
+.admin-audit-item {
+    -fx-padding: 6 0;
+    -fx-border-color: #F1F5F9;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* ==========================================================================
+   HireHub — Figma Make UI Redesign System (Phase 6 Final Polish)
+   Source of Truth: D:\HireHub\images (23 Visual Screenshots)
+   Palette: Dark Navy #0F172A, Canvas #F8FAFC, Cards #FFFFFF, Accent #2563EB
+   ========================================================================== */
+
+/* ── 1. Split-Screen Auth (Login & Register) ── */
+.auth-split-root {
+    -fx-background-color: #F8FAFC;
+}
+
+.auth-hero-pane {
+    -fx-background-color: #0F172A;
+    -fx-padding: 48 48 48 56;
+    -fx-alignment: center-left;
+}
+
+.auth-hero-brand {
+    -fx-alignment: center-left;
+    -fx-spacing: 12;
+}
+
+.auth-hero-title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-wrap-text: true;
+}
+
+.auth-hero-sub {
+    -fx-font-size: 14px;
+    -fx-text-fill: #94A3B8;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-line-spacing: 4px;
+    -fx-wrap-text: true;
+}
+
+.auth-stats-row {
+    -fx-spacing: 16;
+    -fx-padding: 24 0 0 0;
+}
+
+.auth-stat-card {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-border-color: rgba(255, 255, 255, 0.12);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 14 18;
+    -fx-min-width: 110;
+}
+
+.auth-stat-val {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.auth-stat-lbl {
+    -fx-font-size: 11px;
+    -fx-text-fill: #94A3B8;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.auth-form-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 24, 0, 0, 4);
+    -fx-padding: 40 44 36 44;
+}
+
+.auth-role-tabs {
+    -fx-background-color: #F1F5F9;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 4;
+    -fx-spacing: 4;
+    -fx-alignment: center;
+}
+
+.auth-role-tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: #334155;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+}
+
+.auth-role-tab:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.65);
+    -fx-text-fill: #0F172A;
+}
+
+.auth-role-tab-active {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #0F172A;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.08), 6, 0, 0, 1.5);
+}
+
+.auth-field-input {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1.2;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 14;
+    -fx-font-size: 13.5px;
+    -fx-pref-height: 42px;
+}
+
+.auth-field-input:focused {
+    -fx-border-color: #2563EB;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.15), 6, 0, 0, 0);
+}
+
+/* ── 2. Unified Modern Sidebar ── */
+.sidebar-logo-badge {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 8;
+    -fx-min-width: 32;
+    -fx-min-height: 32;
+    -fx-max-width: 32;
+    -fx-max-height: 32;
+    -fx-alignment: center;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2563EB;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.sidebar-category-header {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #475569;
+    -fx-padding: 14 16 4 16;
+    -fx-letter-spacing: 1px;
+}
+
+.sidebar-pill-badge {
+    -fx-background-color: #1E293B;
+    -fx-text-fill: #94A3B8;
+    -fx-background-radius: 10;
+    -fx-padding: 2 7;
+    -fx-font-size: 10.5px;
+    -fx-font-weight: bold;
+}
+
+.sidebar-bottom-panel {
+    -fx-background-color: #1E293B;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.06);
+    -fx-border-width: 1;
+    -fx-padding: 12 14;
+}
+
+/* ── 3. Unified Modern Top Header ── */
+.header-breadcrumb-root {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.header-breadcrumb-current {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.header-search-wrap {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 5 12;
+    -fx-spacing: 8;
+    -fx-alignment: center-left;
+}
+
+.header-search-box {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 12.5px;
+    -fx-prompt-text-fill: #94A3B8;
+    -fx-padding: 0;
+}
+
+.header-shortcut-tag {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 1 5;
+    -fx-font-size: 10px;
+    -fx-text-fill: #64748B;
+}
+
+.header-icon-action {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 6 10;
+    -fx-cursor: hand;
+    -fx-text-fill: #64748B;
+}
+
+.header-icon-action:hover {
+    -fx-background-color: #F1F5F9;
+}
+
+.header-avatar-badge {
+    -fx-background-color: #0F172A;
+    -fx-background-radius: 18;
+    -fx-min-width: 36;
+    -fx-min-height: 36;
+    -fx-max-width: 36;
+    -fx-max-height: 36;
+    -fx-alignment: center;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+/* ── 4. Unified Modern 5-Column KPI Cards ── */
+.kpi-card-figma {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+    -fx-padding: 18 20;
+    -fx-spacing: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.025), 8, 0, 0, 1);
+}
+
+.kpi-figma-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748B;
+    -fx-letter-spacing: 0.5px;
+}
+
+.kpi-figma-val {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+    -fx-font-family: "Segoe UI Semibold", "Segoe UI", sans-serif;
+}
+
+.kpi-figma-sub {
+    -fx-font-size: 11.5px;
+    -fx-text-fill: #64748B;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.kpi-icon-pill {
+    -fx-background-color: #EFF6FF;
+    -fx-background-radius: 8;
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-max-width: 30;
+    -fx-max-height: 30;
+    -fx-alignment: center;
+    -fx-font-size: 14px;
+}
+
+/* ── 5. Status Badges & Pills ── */
+.badge-pill-success {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #16A34A;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-padding: 3 10;
+}
+
+.badge-pill-warning {
+    -fx-background-color: #FEF3C7;
+    -fx-text-fill: #D97706;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-padding: 3 10;
+}
+
+.badge-pill-info {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #2563EB;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-padding: 3 10;
+}
+
+.badge-pill-purple {
+    -fx-background-color: #F3E8FF;
+    -fx-text-fill: #9333EA;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-padding: 3 10;
+}
+
+.badge-pill-danger {
+    -fx-background-color: #FEE2E2;
+    -fx-text-fill: #DC2626;
+    -fx-font-size: 11.5px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-padding: 3 10;
+}
+
+
+

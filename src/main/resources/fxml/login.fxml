@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+
+<!--
+  login.fxml — HireHub Split-Screen Login View
+  Redesigned to match approved Figma Make specification (media_1795368142785_db63afce.jpg)
+  Controller: com.hirehub.controller.LoginController
+  Preserves 100% of existing fx:id bindings, event handlers, and background Task authentication.
+-->
+<BorderPane xmlns="http://javafx.oracle.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hirehub.controller.LoginController"
+            styleClass="auth-split-root"
+            prefWidth="1200" prefHeight="750">
+
+    <!-- ── Left Hero Pane (Dark Navy #0F172A) ── -->
+    <left>
+        <VBox styleClass="auth-hero-pane" prefWidth="540" minWidth="480" maxWidth="600" spacing="36">
+
+            <!-- Brand Logo -->
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <StackPane styleClass="sidebar-logo-badge">
+                    <Label text="H" style="-fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-font-size: 18px;"/>
+                </StackPane>
+                <VBox spacing="1">
+                    <Label text="HireHub" styleClass="sidebar-brand-name" style="-fx-font-size: 20px;"/>
+                    <Label text="Campus careers, connected." styleClass="sidebar-brand-sub" style="-fx-text-fill: #64748B;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Spacer to center main hero text -->
+            <Pane VBox.vgrow="ALWAYS"/>
+
+            <!-- Central Hero Graphic / Typography Card -->
+            <VBox spacing="18" maxWidth="460">
+                <Label text="YOUR CAREER WORKSPACE"
+                       style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #38BDF8; -fx-letter-spacing: 1px;"/>
+                <Label text="Turn preparation into opportunity."
+                       styleClass="auth-hero-title"/>
+                <Label text="Build a stronger profile, discover matched roles, and manage every step of your placement journey."
+                       styleClass="auth-hero-sub"/>
+            </VBox>
+
+            <!-- Spacer -->
+            <Pane VBox.vgrow="ALWAYS"/>
+
+            <!-- ── Bottom Product Capability Highlights ── -->
+            <HBox styleClass="auth-stats-row" spacing="16">
+                <VBox styleClass="auth-stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Campus First" styleClass="auth-stat-val" style="-fx-font-size: 14.5px;"/>
+                    <Label text="Structured cohorts" styleClass="auth-stat-lbl"/>
+                </VBox>
+                <VBox styleClass="auth-stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Verified" styleClass="auth-stat-val" style="-fx-font-size: 14.5px;"/>
+                    <Label text="Moderated partners" styleClass="auth-stat-lbl"/>
+                </VBox>
+                <VBox styleClass="auth-stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="AI Powered" styleClass="auth-stat-val" style="-fx-font-size: 14.5px; -fx-text-fill: #38BDF8;"/>
+                    <Label text="ATS resume insights" styleClass="auth-stat-lbl"/>
+                </VBox>
+            </HBox>
+
+        </VBox>
+    </left>
+
+    <!-- ── Right Form Pane (Clean White / Light Slate) ── -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-transparent">
+            <VBox alignment="CENTER" style="-fx-background-color: #FFFFFF; -fx-padding: 40 48;">
+
+                <VBox alignment="TOP_LEFT" maxWidth="440" minWidth="360" spacing="20">
+
+                    <!-- Portal Category Subtitle -->
+                    <Label text="CAMPUS PLACEMENT PLATFORM"
+                           style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-letter-spacing: 0.8px;"/>
+
+                    <!-- Heading -->
+                    <VBox spacing="6">
+                        <Label text="Welcome back"
+                               style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #0F172A; -fx-font-family: 'Segoe UI Semibold', 'Segoe UI', sans-serif;"/>
+                        <Label text="Sign in to manage roles, candidates, and your placement pipeline."
+                               style="-fx-font-size: 13.5px; -fx-text-fill: #64748B; -fx-font-family: 'Segoe UI', sans-serif;"/>
+                    </VBox>
+
+                    <!-- Role Hint Tabs -->
+                    <HBox styleClass="auth-role-tabs">
+                        <Label text="👤  Student" styleClass="auth-role-tab auth-role-tab-active" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="💼  Recruiter" styleClass="auth-role-tab" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="⚙  Admin" styleClass="auth-role-tab" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+                    </HBox>
+
+                    <!-- ── Authentication Form ── -->
+                    <VBox spacing="14" style="-fx-padding: 8 0 0 0;">
+
+                        <!-- Email Address -->
+                        <VBox spacing="6">
+                            <Label text="Institution email"
+                                   style="-fx-font-size: 12.5px; -fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="emailField"
+                                       promptText="name@university.edu or company.com"
+                                       styleClass="auth-field-input"/>
+                        </VBox>
+
+                        <!-- Password -->
+                        <VBox spacing="6">
+                            <Label text="Password"
+                                   style="-fx-font-size: 12.5px; -fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                            <PasswordField fx:id="passwordField"
+                                           promptText="Enter your password"
+                                           styleClass="auth-field-input"/>
+                        </VBox>
+
+                        <!-- Error Feedback Label -->
+                        <Label fx:id="errorLabel"
+                               styleClass="error-label"
+                               wrapText="true"
+                               maxWidth="440"
+                               visible="false"
+                               managed="false"/>
+
+                        <!-- Loading Indicator -->
+                        <HBox alignment="CENTER" spacing="8" fx:id="loadingIndicatorBox">
+                            <ProgressIndicator fx:id="loadingIndicator"
+                                               prefWidth="24" prefHeight="24"
+                                               visible="false" managed="false"/>
+                        </HBox>
+
+                        <!-- Sign In Button -->
+                        <Button fx:id="loginButton"
+                                text="Sign in to HireHub →"
+                                maxWidth="Infinity"
+                                styleClass="primary-button"
+                                style="-fx-font-size: 14.5px; -fx-padding: 12 0; -fx-background-color: #0F172A;"
+                                onAction="#handleLogin"/>
+
+                    </VBox>
+
+                    <!-- Security Notice -->
+                    <HBox alignment="CENTER" spacing="6" style="-fx-padding: 8 0 0 0;">
+                        <Label text="🔒" style="-fx-font-size: 11px;"/>
+                        <Label text="Your account is protected with secure institutional credentials."
+                               style="-fx-font-size: 11.5px; -fx-text-fill: #94A3B8;"/>
+                    </HBox>
+
+                    <!-- Footer / Registration Link -->
+                    <HBox alignment="CENTER" spacing="6" style="-fx-padding: 14 0 0 0;">
+                        <Label text="Don't have an account?"
+                               style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                        <Hyperlink fx:id="registerLink"
+                                   text="Create account"
+                                   styleClass="footer-link"
+                                   style="-fx-font-size: 13px; -fx-text-fill: #2563EB;"
+                                   onAction="#handleRegisterLink"/>
+                    </HBox>
+
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

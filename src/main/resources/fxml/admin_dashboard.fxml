@@ -1,0 +1,1036 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  admin_dashboard.fxml — Phase 5: Admin Placement Intelligence Dashboard
+  Layout: Persistent dark-navy left sidebar + single outer ScrollPane (zero nested scrollbars).
+  Controller: com.hirehub.controller.AdminDashboardController
+-->
+<BorderPane fx:id="rootPane"
+            xmlns="http://javafx.oracle.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hirehub.controller.AdminDashboardController"
+            styleClass="app-root">
+
+    <!-- ── Left Sidebar ── -->
+        <left>
+        <VBox styleClass="sidebar" spacing="2" minWidth="240" prefWidth="240">
+
+            <!-- Brand Logo Header -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="sidebar-brand">
+                <StackPane styleClass="sidebar-logo-badge">
+                    <Label text="H" style="-fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-font-size: 16px;"/>
+                </StackPane>
+                <VBox spacing="1">
+                    <Label text="HireHub" styleClass="sidebar-brand-name"/>
+                    <Label text="PLACEMENT OPERATIONS" styleClass="sidebar-brand-sub"/>
+                </VBox>
+            </HBox>
+
+            <Separator styleClass="sidebar-divider"/>
+
+            <!-- Category: INTELLIGENCE -->
+            <Label text="INTELLIGENCE" styleClass="sidebar-category-header"/>
+
+            <Button fx:id="navOverviewBtn" text="Overview"
+                    styleClass="sidebar-nav-btn, sidebar-nav-active"
+                    maxWidth="Infinity" onAction="#handleNavOverview"/>
+            <Button fx:id="navJobsBtn" text="Jobs &amp; Recruitment"
+                    styleClass="sidebar-nav-btn"
+                    maxWidth="Infinity" onAction="#handleNavJobs"/>
+            <Button fx:id="navStudentsBtn" text="Student Readiness"
+                    styleClass="sidebar-nav-btn"
+                    maxWidth="Infinity" onAction="#handleNavStudents"/>
+            <Button fx:id="navRecruitersBtn" text="Recruiter Engagement"
+                    styleClass="sidebar-nav-btn"
+                    maxWidth="Infinity" onAction="#handleNavRecruiters"/>
+
+            <!-- Category: GOVERNANCE -->
+            <Label text="GOVERNANCE" styleClass="sidebar-category-header" style="-fx-padding: 14 16 4 16;"/>
+
+            <Button fx:id="navRecruiterVerificationBtn" text="Recruiter Verification"
+                    styleClass="sidebar-nav-btn"
+                    maxWidth="Infinity" onAction="#handleNavRecruiterVerification"/>
+            <Button fx:id="navJobModerationBtn" text="Job Moderation"
+                    styleClass="sidebar-nav-btn"
+                    maxWidth="Infinity" onAction="#handleNavJobModeration"/>
+            <Button fx:id="navUsersBtn" text="User Management"
+                    styleClass="sidebar-nav-btn"
+                    maxWidth="Infinity" onAction="#handleNavUsers"/>
+            <Button fx:id="navActivityBtn" text="Activity Log"
+                    styleClass="sidebar-nav-btn"
+                    maxWidth="Infinity" onAction="#handleNavActivity"/>
+
+            <Pane VBox.vgrow="ALWAYS"/>
+
+            <!-- Bottom Platform Operations Status Pill -->
+            <VBox styleClass="sidebar-bottom-panel" spacing="6" style="-fx-margin: 0 14 8 14;">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="⚙" style="-fx-font-size: 12px;"/>
+                    <VBox spacing="1" HBox.hgrow="ALWAYS">
+                        <Label text="Placement Operations" style="-fx-font-size: 10.5px; -fx-text-fill: #94A3B8; -fx-font-weight: bold;"/>
+                        <Label text="System Administration" style="-fx-font-size: 11.5px; -fx-text-fill: #F1F5F9; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <Separator styleClass="sidebar-divider"/>
+
+            <Button fx:id="navRefreshBtn" text="Refresh Data"
+                    styleClass="sidebar-nav-btn, sidebar-refresh-btn"
+                    maxWidth="Infinity" onAction="#handleRefresh"/>
+            <Button fx:id="navLogoutBtn" text="Logout"
+                    styleClass="sidebar-nav-btn, sidebar-logout-btn"
+                    maxWidth="Infinity" onAction="#handleLogout"/>
+            <Region minHeight="8"/>
+        </VBox>
+    </left>
+
+    <!-- ── Main Scrollable Area (Single Outer ScrollPane) ── -->
+    <center>
+        <ScrollPane fx:id="mainScrollPane" fitToWidth="true" fitToHeight="false"
+                    hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    styleClass="content-scroll">
+            <VBox spacing="0">
+
+                                <!-- ── Top Header Bar ── -->
+                <HBox styleClass="content-header" alignment="CENTER_LEFT" spacing="14" style="-fx-padding: 14 28 14 28;">
+                    <VBox spacing="1" HBox.hgrow="ALWAYS">
+                        <Label text="Placement Administration &gt; Command Center" styleClass="header-breadcrumb-root"/>
+                        <Label text="Placement Command Center" styleClass="content-header-title"/>
+                        <Label fx:id="welcomeSubtitleLabel"
+                               text="System placement analytics &amp; recruitment telemetry"
+                               styleClass="content-header-sub"/>
+                    </VBox>
+
+                    <!-- Search Input Box -->
+                    <HBox styleClass="header-search-wrap" alignment="CENTER_LEFT" spacing="8">
+                        <Label text="🔍" style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                        <TextField promptText="Search metrics, logs..." styleClass="header-search-box" prefWidth="180"/>
+                        <Label text="Ctrl K" styleClass="header-shortcut-tag"/>
+                    </HBox>
+
+                    <ProgressIndicator fx:id="loadingIndicator" prefWidth="22" prefHeight="22"
+                                       visible="false" managed="false"/>
+                    <Label fx:id="lastRefreshedLabel" text="Last refreshed: —"
+                           styleClass="admin-refresh-pill" minWidth="-Infinity"/>
+                    <Button text="🔔" styleClass="header-icon-action"/>
+
+                    <!-- User Profile Avatar Pill -->
+                    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 4 0 8;">
+                        <StackPane styleClass="header-avatar-badge" style="-fx-background-color: #6366F1;">
+                            <Label fx:id="adminInitialsHeaderLabel" text="AD" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 11px;"/>
+                        </StackPane>
+                        <VBox spacing="1">
+                            <Label fx:id="adminNameHeaderLabel" text="System Administrator" style="-fx-font-size: 12.5px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                            <Label text="Placement Admin" style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                        </VBox>
+                    </HBox>
+                </HBox>
+
+                <!-- ── Global Date-Range Filter & Error Feedback Toolbar ── -->
+                <VBox styleClass="admin-toolbar-wrap" spacing="12">
+                    <VBox styleClass="admin-toolbar-card" spacing="10">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="Period:" styleClass="detail-key" minWidth="-Infinity"/>
+                            <ComboBox fx:id="datePresetCombo" styleClass="admin-compact-combo"
+                                      prefWidth="148" minWidth="144"/>
+
+                            <Label text="From" styleClass="detail-key" minWidth="-Infinity"/>
+                            <DatePicker fx:id="fromDatePicker" styleClass="admin-compact-combo"
+                                        prefWidth="146" minWidth="142" promptText="Start date"/>
+
+                            <Label text="To" styleClass="detail-key" minWidth="-Infinity"/>
+                            <DatePicker fx:id="toDatePicker" styleClass="admin-compact-combo"
+                                        prefWidth="146" minWidth="142" promptText="End date"/>
+
+                            <Button fx:id="applyFilterBtn" text="Apply Filter"
+                                    styleClass="primary-button, admin-compact-btn" minWidth="-Infinity"
+                                    onAction="#handleApplyFilter"/>
+                            <Button fx:id="resetFilterBtn" text="Reset"
+                                    styleClass="secondary-button, admin-compact-btn" minWidth="-Infinity"
+                                    onAction="#handleResetFilter"/>
+
+                            <Pane HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="activeFilterBadge" text="All Time"
+                                   styleClass="admin-scope-pill" minWidth="-Infinity"/>
+                        </HBox>
+
+                        <Label fx:id="filterScopeNoteLabel" styleClass="admin-kpi-sub" wrapText="true"
+                               text="Date scopes: Users by registration date | Jobs by creation date | Applications by apply date | Student Readiness by registered cohort + in-range actions | Recruiter Engagement by period job postings &amp; all applications for those jobs | Activity Log by event timestamp | Open-job status &amp; profile completeness reflect current live snapshot."/>
+
+                        <Label fx:id="filterErrorLabel" styleClass="error-label" wrapText="true"
+                               maxWidth="Infinity" visible="false" managed="false"/>
+                    </VBox>
+
+                    <!-- Backend Load Error Banner (shown only on failure) -->
+                    <HBox fx:id="loadErrorBox" styleClass="admin-error-banner" alignment="CENTER_LEFT"
+                          spacing="12" visible="false" managed="false">
+                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                            <Label text="Analytics Load Error" styleClass="detail-value-bold"/>
+                            <Label fx:id="loadErrorLabel" styleClass="admin-kpi-sub" wrapText="true"/>
+                        </VBox>
+                        <Button fx:id="retryLoadBtn" text="Retry" styleClass="table-action-btn, table-action-danger"
+                                minWidth="-Infinity" onAction="#handleRefresh"/>
+                    </HBox>
+                </VBox>
+
+                <!-- ================================================================ -->
+                <!-- PANE 1: OVERVIEW                                                  -->
+                <!-- ================================================================ -->
+                <VBox fx:id="overviewPane" styleClass="content-body" spacing="20">
+
+                    <!-- Row 1: Ecosystem & Jobs KPIs -->
+                    <HBox spacing="16">
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="TOTAL STUDENTS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="ovTotalStudentsLabel" text="—" styleClass="admin-kpi-number"/>
+                            <Label fx:id="ovStudentsSubLabel" text="Completed profiles: —" styleClass="admin-kpi-sub" wrapText="true"/>
+                        </VBox>
+
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="TOTAL RECRUITERS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="ovTotalRecruitersLabel" text="—" styleClass="admin-kpi-number"/>
+                            <Label fx:id="ovRecruitersSubLabel" text="Completed profiles: —" styleClass="admin-kpi-sub" wrapText="true"/>
+                        </VBox>
+
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="JOBS POSTED" styleClass="admin-kpi-title"/>
+                            <Label fx:id="ovTotalJobsLabel" text="—" styleClass="admin-kpi-number, admin-kpi-number-accent"/>
+                            <Label fx:id="ovJobsBreakdownLabel" text="Active: — | Draft: — | Closed: —" styleClass="admin-kpi-sub" wrapText="true"/>
+                        </VBox>
+
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="OPEN JOBS ACCEPTING APPS" styleClass="admin-kpi-title"/>
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label fx:id="ovOpenJobsLabel" text="—" styleClass="admin-kpi-number, admin-kpi-number-success"/>
+                                <Label fx:id="ovExpiredJobsBadge" text="0 expired ACTIVE" styleClass="admin-badge-neutral" minWidth="-Infinity"/>
+                            </HBox>
+                            <Label fx:id="ovOpenJobsSubLabel" text="Active status &amp; deadline open" styleClass="admin-kpi-sub" wrapText="true"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Row 2: Application Funnel KPIs -->
+                    <HBox spacing="16">
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="TOTAL APPLICATIONS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="ovTotalAppsLabel" text="—" styleClass="admin-kpi-number"/>
+                            <Label fx:id="ovUniqueApplicantsLabel" text="Unique applicants: —" styleClass="admin-kpi-sub" wrapText="true"/>
+                        </VBox>
+
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="PENDING APPLICATIONS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="ovPendingAppsLabel" text="—" styleClass="admin-kpi-number"/>
+                            <Label fx:id="ovPendingSubLabel" text="Awaiting recruiter review" styleClass="admin-kpi-sub" wrapText="true"/>
+                        </VBox>
+
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="SHORTLISTED APPLICATIONS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="ovShortlistedAppsLabel" text="—" styleClass="admin-kpi-number, admin-kpi-number-accent"/>
+                            <Label fx:id="ovShortlistedSubLabel" text="Unique shortlisted: —" styleClass="admin-kpi-sub" wrapText="true"/>
+                        </VBox>
+
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="SELECTED STUDENTS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="ovUniqueSelectedLabel" text="—" styleClass="admin-kpi-number, admin-kpi-number-success"/>
+                            <Label fx:id="ovSelectedAppsSubLabel" text="Selected applications: —" styleClass="admin-kpi-sub" wrapText="true"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Status PieChart + Application Funnel Breakdown -->
+                    <HBox spacing="20">
+
+                        <!-- Left: PieChart + 4-status count/percentage breakdown -->
+                        <VBox styleClass="section-card" spacing="12" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <VBox spacing="2">
+                                <Label text="Application Status Distribution" styleClass="section-card-title"/>
+                                <Label text="Canonical statuses across period applications (zero-filled)" styleClass="detail-key"/>
+                            </VBox>
+
+                            <PieChart fx:id="statusPieChart" legendVisible="false" labelsVisible="true"
+                                      animated="false" minHeight="240" prefHeight="250" styleClass="admin-chart"/>
+
+                            <VBox fx:id="statusPieEmptyBox" styleClass="admin-empty-box" spacing="4"
+                                  visible="false" managed="false" minHeight="140">
+                                <Label text="No Applications in Selected Period" styleClass="admin-empty-title"/>
+                                <Label text="Pie chart hidden when total applications is zero to avoid misleading visuals."
+                                       styleClass="admin-empty-body" wrapText="true"/>
+                            </VBox>
+
+                            <VBox fx:id="statusBreakdownList" spacing="8"/>
+                        </VBox>
+
+                        <!-- Right: Current Status Pipeline Funnel -->
+                        <VBox styleClass="section-card" spacing="14" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <VBox spacing="2">
+                                <Label text="Current Application Funnel" styleClass="section-card-title"/>
+                                <Label text="Current application status counts (applications.status), not historical status-transition records."
+                                       styleClass="admin-kpi-sub" wrapText="true"/>
+                            </VBox>
+
+                            <VBox fx:id="funnelRowsContainer" spacing="12"/>
+
+                            <Separator/>
+
+                            <HBox spacing="16">
+                                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                    <Label text="SHORTLIST RATE" styleClass="admin-kpi-title"/>
+                                    <Label fx:id="ovShortlistRateLabel" text="0.0%" styleClass="detail-value-bold"/>
+                                </VBox>
+                                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                    <Label text="SELECTION RATE" styleClass="admin-kpi-title"/>
+                                    <Label fx:id="ovSelectionRateLabel" text="0.0%" styleClass="detail-value-bold"/>
+                                </VBox>
+                                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                    <Label text="UNIQUE HIRE RATE" styleClass="admin-kpi-title"/>
+                                    <Label fx:id="ovUniqueHireRateLabel" text="0.0%" styleClass="detail-value-bold"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Recent Platform Activity (Latest 8 on Overview) -->
+                    <VBox styleClass="section-card" spacing="14">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <Label text="Recent Platform Activity" styleClass="section-card-title"/>
+                                <Label text="Latest 8 events across registrations, jobs, applications, and resumes"
+                                       styleClass="detail-key"/>
+                            </VBox>
+                            <Button text="View Full Activity Log →" styleClass="table-action-btn"
+                                    onAction="#handleNavActivity"/>
+                        </HBox>
+
+                        <VBox fx:id="overviewActivityContainer" spacing="0"/>
+                    </VBox>
+                </VBox>
+
+                <!-- ================================================================ -->
+                <!-- PANE 2: JOBS & RECRUITMENT                                        -->
+                <!-- ================================================================ -->
+                <VBox fx:id="jobsPane" styleClass="content-body" spacing="20"
+                      visible="false" managed="false">
+
+                    <!-- Job Metrics Strip (2 balanced rows of 3 KPI cards) -->
+                    <VBox spacing="14">
+                        <HBox spacing="16">
+                            <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                                <Label text="TOTAL JOBS" styleClass="admin-kpi-title"/>
+                                <Label fx:id="jbTotalLabel" text="—" styleClass="admin-kpi-number"/>
+                            </VBox>
+                            <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                                <Label text="ACTIVE STATUS" styleClass="admin-kpi-title"/>
+                                <Label fx:id="jbActiveStatusLabel" text="—" styleClass="admin-kpi-number, admin-kpi-number-accent"/>
+                            </VBox>
+                            <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                                <Label text="OPEN ACCEPTING" styleClass="admin-kpi-title"/>
+                                <Label fx:id="jbOpenLabel" text="—" styleClass="admin-kpi-number, admin-kpi-number-success"/>
+                            </VBox>
+                        </HBox>
+                        <HBox spacing="16">
+                            <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                                <Label text="EXPIRED ACTIVE" styleClass="admin-kpi-title"/>
+                                <Label fx:id="jbExpiredActiveLabel" text="—" styleClass="admin-kpi-number, admin-kpi-number-warn"/>
+                            </VBox>
+                            <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                                <Label text="DRAFT JOBS" styleClass="admin-kpi-title"/>
+                                <Label fx:id="jbDraftLabel" text="—" styleClass="admin-kpi-number"/>
+                            </VBox>
+                            <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                                <Label text="CLOSED JOBS" styleClass="admin-kpi-title"/>
+                                <Label fx:id="jbClosedLabel" text="—" styleClass="admin-kpi-number"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Jobs by JobType BarChart -->
+                    <VBox styleClass="section-card" spacing="14">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <Label text="Job Distribution by Type" styleClass="section-card-title"/>
+                                <Label fx:id="jbPostingRecruitersLabel"
+                                       text="Comparison of posted jobs vs currently open jobs by job type"
+                                       styleClass="detail-key"/>
+                            </VBox>
+                        </HBox>
+
+                        <BarChart fx:id="jobTypeBarChart" animated="false"
+                                  legendVisible="true" legendSide="TOP"
+                                  styleClass="admin-chart, admin-bar-chart"
+                                  minHeight="250" prefHeight="270">
+                            <xAxis>
+                                <CategoryAxis fx:id="jobTypeXAxis" label="Job Type"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="jobTypeYAxis" label="Number of Jobs"/>
+                            </yAxis>
+                        </BarChart>
+
+                        <VBox fx:id="jobTypeChartEmptyBox" styleClass="admin-empty-box" spacing="4"
+                              visible="false" managed="false" minHeight="130">
+                            <Label text="No Jobs Posted in Selected Period" styleClass="admin-empty-title"/>
+                            <Label text="Chart hidden when total job postings is zero." styleClass="admin-empty-body"/>
+                        </VBox>
+
+                        <HBox fx:id="jobTypeSummaryRow" spacing="14"/>
+                    </VBox>
+
+                    <!-- Top Jobs TableView -->
+                    <VBox styleClass="section-card" spacing="14">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <Label text="Top Jobs by Application Volume" styleClass="section-card-title"/>
+                                <Label text="Jobs filtered by creation date; application counts include all submissions received for each listing. Expired ACTIVE listings are highlighted."
+                                       styleClass="detail-key" wrapText="true"/>
+                            </VBox>
+                            <Label text="Expired ACTIVE Highlighted" styleClass="admin-badge-warn" minWidth="-Infinity"/>
+                        </HBox>
+
+                        <TableView fx:id="topJobsTable" styleClass="job-table">
+                            <columns>
+                                <TableColumn fx:id="colTopJobTitle" text="Job Title" minWidth="150" prefWidth="190"/>
+                                <TableColumn fx:id="colTopJobCompany" text="Company" minWidth="110" prefWidth="135"/>
+                                <TableColumn fx:id="colTopJobType" text="Job Type" minWidth="85" prefWidth="95"/>
+                                <TableColumn fx:id="colTopJobStatus" text="Status" minWidth="125" prefWidth="135"/>
+                                <TableColumn fx:id="colTopJobDeadline" text="Deadline" minWidth="98" prefWidth="108"/>
+                                <TableColumn fx:id="colTopJobApps" text="Apps" minWidth="68" prefWidth="78"/>
+                                <TableColumn fx:id="colTopJobShortlisted" text="Shortlisted" minWidth="82" prefWidth="88"/>
+                                <TableColumn fx:id="colTopJobSelected" text="Selected" minWidth="72" prefWidth="78"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </VBox>
+
+                <!-- ================================================================ -->
+                <!-- PANE 3: STUDENT READINESS                                         -->
+                <!-- ================================================================ -->
+                <VBox fx:id="studentsPane" styleClass="content-body" spacing="20"
+                      visible="false" managed="false">
+
+                    <!-- Cohort Semantics Banner -->
+                    <HBox styleClass="admin-notice-banner" spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Cohort Scope:" styleClass="detail-value-bold" minWidth="-Infinity"/>
+                        <Label text="When a bounded date range is active, Student Readiness evaluates students registered within that period (users.created_at) alongside their applications and resume analyses within that period. Profile completeness and active resume status reflect current live state."
+                               styleClass="admin-kpi-sub" wrapText="true" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+
+                    <!-- Student KPI Row -->
+                    <HBox spacing="16">
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="TOTAL STUDENTS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="stTotalStudentsLabel" text="—" styleClass="admin-kpi-number"/>
+                            <Label text="In selected registration cohort" styleClass="admin-kpi-sub"/>
+                        </VBox>
+
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="COMPLETED PROFILES" styleClass="admin-kpi-title"/>
+                            <Label fx:id="stCompletedProfilesLabel" text="—" styleClass="admin-kpi-number, admin-kpi-number-success"/>
+                            <Label fx:id="stProfileCompletionRateLabel" text="0.0% completion" styleClass="admin-kpi-sub"/>
+                        </VBox>
+
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="STUDENTS APPLIED" styleClass="admin-kpi-title"/>
+                            <Label fx:id="stAppliedStudentsLabel" text="—" styleClass="admin-kpi-number, admin-kpi-number-accent"/>
+                            <Label fx:id="stAppliedRateLabel" text="0.0% of cohort" styleClass="admin-kpi-sub"/>
+                        </VBox>
+
+                        <VBox styleClass="admin-kpi-card" spacing="6" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                            <Label text="AI RESUME ANALYZER USERS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="stAiUsersLabel" text="—" styleClass="admin-kpi-number, admin-kpi-number-accent"/>
+                            <Label fx:id="stAiTotalAnalysesLabel" text="0 total analyses" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Profile & Resume Readiness Bars -->
+                    <VBox styleClass="section-card" spacing="14">
+                        <VBox spacing="2">
+                            <Label text="Student Profile, Resume &amp; Participation Coverage" styleClass="section-card-title"/>
+                            <Label text="Measures completeness, PDF/legacy resume upload coverage, application activity, and AI analyzer adoption"
+                                   styleClass="detail-key"/>
+                        </VBox>
+
+                        <VBox fx:id="studentProgressContainer" spacing="14"/>
+                    </VBox>
+
+                    <!-- AI Resume Analyzer Outcomes & Score -->
+                    <VBox styleClass="section-card" spacing="14">
+                        <Label text="AI Resume Analyzer Outcomes" styleClass="section-card-title"/>
+
+                        <HBox spacing="24" alignment="CENTER_LEFT">
+                            <VBox styleClass="admin-score-pill" spacing="4" minWidth="190">
+                                <Label text="AVERAGE RESUME SCORE" styleClass="admin-kpi-title"/>
+                                <Label fx:id="stAvgScoreLabel" text="Not available" styleClass="admin-kpi-number"/>
+                                <Label text="Weighted across analyses" styleClass="admin-kpi-sub"/>
+                            </VBox>
+
+                            <GridPane hgap="28" vgap="10" HBox.hgrow="ALWAYS">
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="160"/>
+                                    <ColumnConstraints hgrow="ALWAYS"/>
+                                    <ColumnConstraints minWidth="160"/>
+                                    <ColumnConstraints hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <Label text="Total Analyses" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="stDetailTotalAnalysesLabel" text="0" styleClass="detail-value-bold" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                <Label text="Students Evaluated" styleClass="detail-key" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                <Label fx:id="stDetailAiUsersLabel" text="0" styleClass="detail-value-bold" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                                <Label text="Job-Specific Audits" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="stDetailJobSpecificLabel" text="0" styleClass="detail-value-bold" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                <Label text="General Resume Audits" styleClass="detail-key" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <Label fx:id="stDetailGeneralLabel" text="0" styleClass="detail-value-bold" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                            </GridPane>
+                        </HBox>
+
+                        <VBox fx:id="stAiEmptyBox" styleClass="admin-empty-box" spacing="4"
+                              visible="false" managed="false">
+                            <Label text="No AI Resume Analysis Records Found" styleClass="admin-empty-title"/>
+                            <Label text="Average score is shown as 'Not available' instead of 0.0 when no resume analyses exist in the selected period."
+                                   styleClass="admin-empty-body" wrapText="true"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ================================================================ -->
+                <!-- PANE 4: RECRUITER ENGAGEMENT                                      -->
+                <!-- ================================================================ -->
+                <VBox fx:id="recruitersPane" styleClass="content-body" spacing="20"
+                      visible="false" managed="false">
+
+                    <VBox styleClass="admin-notice-banner" spacing="4">
+                        <Label text="Recruitment Engagement Proxy &amp; Dual Date Scope" styleClass="detail-value-bold"/>
+                        <Label text="Engagement is measured through operational recruitment proxies (job postings, profile updates, and application review timestamps), not login or session logs. Every registered recruiter appears even when recruiter_profiles is incomplete (company falls back to job postings). When a date filter is applied, 'Apps Received', 'Shortlisted', and 'Selected' reflect all applications submitted to jobs posted in that period, even if applied outside that period."
+                               styleClass="admin-kpi-sub" wrapText="true"/>
+                    </VBox>
+
+                    <VBox styleClass="section-card" spacing="14">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="Recruiter Activity Overview" styleClass="section-card-title" HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="recruiterCountBadge" text="0 Recruiters" styleClass="admin-scope-pill" minWidth="-Infinity"/>
+                        </HBox>
+
+                        <TableView fx:id="recruiterTable" styleClass="job-table">
+                            <columns>
+                                <TableColumn fx:id="colRecName" text="Recruiter" minWidth="100" prefWidth="115"/>
+                                <TableColumn fx:id="colRecCompany" text="Company" minWidth="108" prefWidth="125"/>
+                                <TableColumn fx:id="colRecJobsPosted" text="Jobs" minWidth="50" prefWidth="56"/>
+                                <TableColumn fx:id="colRecOpenJobs" text="Open" minWidth="50" prefWidth="56"/>
+                                <TableColumn fx:id="colRecAppsReceived" text="Apps" minWidth="50" prefWidth="56"/>
+                                <TableColumn fx:id="colRecShortlisted" text="Shortlisted" minWidth="76" prefWidth="84"/>
+                                <TableColumn fx:id="colRecSelected" text="Selected" minWidth="68" prefWidth="76"/>
+                                <TableColumn fx:id="colRecLastJob" text="Last Job" minWidth="138" prefWidth="146"/>
+                                <TableColumn fx:id="colRecLastReview" text="Last Review" minWidth="138" prefWidth="146"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </VBox>
+
+                <!-- ================================================================ -->
+                <!-- PANE 5: USER MANAGEMENT & ACCOUNT MODERATION                     -->
+                <!-- ================================================================ -->
+                <VBox fx:id="usersPane" styleClass="content-body" spacing="20"
+                      visible="false" managed="false">
+
+                    <VBox styleClass="section-card" spacing="14">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <Label text="User Accounts &amp; Moderation" styleClass="section-card-title"/>
+                                <Label fx:id="userCountSubtitleLabel"
+                                       text="Search, inspect, and moderate student, recruiter, and administrator accounts"
+                                       styleClass="detail-key"/>
+                            </VBox>
+                            <ProgressIndicator fx:id="userLoadingIndicator" prefWidth="20" prefHeight="20"
+                                               visible="false" managed="false"/>
+                        </HBox>
+
+                        <!-- Filter & Search Toolbar -->
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="admin-toolbar-wrap">
+                            <TextField fx:id="txtUserSearch" promptText="Search name, email, or user ID..."
+                                       prefWidth="260" styleClass="text-field"/>
+
+                            <Label text="Role:" styleClass="detail-key" minWidth="-Infinity"/>
+                            <ComboBox fx:id="comboRoleFilter" styleClass="admin-compact-combo" prefWidth="140"/>
+
+                            <Label text="Status:" styleClass="detail-key" minWidth="-Infinity"/>
+                            <ComboBox fx:id="comboStatusFilter" styleClass="admin-compact-combo" prefWidth="130"/>
+
+                            <Button fx:id="btnApplyUserFilters" text="Search"
+                                    styleClass="primary-button, admin-compact-btn"
+                                    onAction="#handleApplyUserFilters"/>
+                            <Button fx:id="btnClearUserFilters" text="Clear"
+                                    styleClass="secondary-button, admin-compact-btn"
+                                    onAction="#handleClearUserFilters"/>
+                        </HBox>
+
+                        <!-- Feedback notification message (success / error) -->
+                        <Label fx:id="userStatusMessageLabel" styleClass="detail-key"
+                               visible="false" managed="false" wrapText="true"/>
+
+                        <!-- User Table -->
+                        <TableView fx:id="userTable" prefHeight="420" minHeight="250" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="colUserId" text="ID" prefWidth="60" minWidth="50"/>
+                                <TableColumn fx:id="colUserFullName" text="Full Name" prefWidth="180" minWidth="140"/>
+                                <TableColumn fx:id="colUserEmail" text="Email Address" prefWidth="220" minWidth="160"/>
+                                <TableColumn fx:id="colUserRole" text="Role" prefWidth="120" minWidth="100"/>
+                                <TableColumn fx:id="colUserStatus" text="Account Status" prefWidth="130" minWidth="110"/>
+                                <TableColumn fx:id="colUserCreatedAt" text="Registered" prefWidth="150" minWidth="120"/>
+                                <TableColumn fx:id="colUserAction" text="Actions" prefWidth="150" minWidth="130"/>
+                            </columns>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
+                        </TableView>
+
+                        <!-- Empty State Box -->
+                        <VBox fx:id="userEmptyBox" styleClass="admin-empty-box" spacing="4"
+                              visible="false" managed="false">
+                            <Label text="No Users Found" styleClass="admin-empty-title"/>
+                            <Label text="No user accounts match the selected search and filter criteria."
+                                   styleClass="admin-empty-body" wrapText="true"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ================================================================ -->
+                <!-- PANE 6: ACTIVITY LOG                                              -->
+                <!-- ================================================================ -->
+                <VBox fx:id="activityPane" styleClass="content-body" spacing="20"
+                      visible="false" managed="false">
+
+                    <VBox styleClass="section-card" spacing="14">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <Label text="Platform Activity Log" styleClass="section-card-title"/>
+                                <Label fx:id="activityCountLabel"
+                                       text="Up to 50 recent platform events filtered by event timestamp"
+                                       styleClass="detail-key"/>
+                            </VBox>
+
+                            <Label text="Event Type:" styleClass="detail-key" minWidth="-Infinity"/>
+                            <ComboBox fx:id="activityFilterCombo"
+                                      styleClass="admin-compact-combo" prefWidth="225"/>
+                            <Button fx:id="clearActivityFilterBtn" text="Clear"
+                                    styleClass="secondary-button, admin-compact-btn" minWidth="-Infinity"
+                                    onAction="#handleClearActivityFilter"/>
+                        </HBox>
+
+                        <HBox spacing="12" style="-fx-background-color: #F8F9FB; -fx-padding: 10 12; -fx-border-color: #E2E6EF; -fx-border-width: 1 0 1 0;">
+                            <Label text="Event Type" styleClass="detail-key" minWidth="175" prefWidth="175"/>
+                            <Label text="Actor" styleClass="detail-key" minWidth="160" prefWidth="160"/>
+                            <Label text="Description" styleClass="detail-key" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                            <Label text="Date &amp; Time" styleClass="detail-key" minWidth="145" prefWidth="145"
+                                   alignment="CENTER_RIGHT"/>
+                        </HBox>
+
+                        <VBox fx:id="activityLogContainer" spacing="0"/>
+
+                        <VBox fx:id="activityEmptyBox" styleClass="admin-empty-box" spacing="4"
+                              visible="false" managed="false">
+                            <Label text="No Matching Platform Activity" styleClass="admin-empty-title"/>
+                            <Label fx:id="activityEmptyDescLabel"
+                                   text="No events recorded for the active date range and event-type filter."
+                                   styleClass="admin-empty-body" wrapText="true"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ================================================================ -->
+                <!-- PANE 7: RECRUITER VERIFICATION                                    -->
+                <!-- ================================================================ -->
+                <VBox fx:id="recruiterVerificationPane" styleClass="content-body" spacing="20"
+                      visible="false" managed="false">
+
+                    <!-- Summary Metrics Row (6 KPIs) -->
+                    <HBox spacing="14">
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="TOTAL RECRUITERS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="recTotalLabel" text="—" styleClass="admin-kpi-number"/>
+                            <Label text="All registered recruiters" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="PENDING VERIFICATION" styleClass="admin-kpi-title"/>
+                            <Label fx:id="recPendingLabel" text="—" styleClass="admin-kpi-number-warn"/>
+                            <Label text="Awaiting admin review" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="VERIFIED" styleClass="admin-kpi-title"/>
+                            <Label fx:id="recVerifiedLabel" text="—" styleClass="admin-kpi-number-success"/>
+                            <Label text="Approved to post jobs" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="REJECTED" styleClass="admin-kpi-title"/>
+                            <Label fx:id="recRejectedLabel" text="—" styleClass="admin-kpi-number-danger"/>
+                            <Label text="Verification declined" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="SUSPENDED" styleClass="admin-kpi-title"/>
+                            <Label fx:id="recSuspendedLabel" text="—" styleClass="admin-kpi-number-darkred"/>
+                            <Label text="Publishing revoked" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="UNVERIFIED" styleClass="admin-kpi-title"/>
+                            <Label fx:id="recUnverifiedLabel" text="—" styleClass="admin-kpi-number-neutral"/>
+                            <Label text="Incomplete profile" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Main Section Card -->
+                    <VBox styleClass="section-card" spacing="14">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <Label text="Recruiter Accounts &amp; Company Verification Queue" styleClass="section-card-title"/>
+                                <Label fx:id="recSubtitleLabel"
+                                       text="Review submitted company documentation, verify credentials, and govern publishing privileges"
+                                       styleClass="detail-key"/>
+                            </VBox>
+                            <ProgressIndicator fx:id="recLoadingIndicator" prefWidth="20" prefHeight="20"
+                                               visible="false" managed="false"/>
+                        </HBox>
+
+                        <!-- Filter & Search Toolbar -->
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="admin-toolbar-wrap">
+                            <TextField fx:id="txtRecruiterSearch" promptText="Search company, recruiter name, email, or user ID..."
+                                       prefWidth="280" styleClass="text-field"/>
+
+                            <Label text="Status:" styleClass="detail-key" minWidth="-Infinity"/>
+                            <ComboBox fx:id="comboRecruiterStatusFilter" styleClass="admin-compact-combo" prefWidth="175"/>
+
+                            <Button fx:id="btnApplyRecruiterFilters" text="Search"
+                                    styleClass="primary-button, admin-compact-btn"
+                                    onAction="#handleApplyRecruiterFilters"/>
+                            <Button fx:id="btnClearRecruiterFilters" text="Clear"
+                                    styleClass="secondary-button, admin-compact-btn"
+                                    onAction="#handleClearRecruiterFilters"/>
+                            <Button fx:id="btnRefreshRecruiters" text="Refresh"
+                                    styleClass="secondary-button, admin-compact-btn"
+                                    onAction="#handleRefreshRecruiters"/>
+                        </HBox>
+
+                        <!-- Status notification message -->
+                        <Label fx:id="recruiterStatusMsgLabel" styleClass="detail-key"
+                               visible="false" managed="false" wrapText="true"/>
+
+                        <!-- Master-Detail Container -->
+                        <HBox spacing="16" alignment="TOP_LEFT">
+                            <!-- Left: Recruiter Table -->
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <TableView fx:id="recruiterVerificationTable" prefHeight="480" minHeight="300" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colRecruiterCompany" text="Company / Recruiter" prefWidth="180" minWidth="140"/>
+                                        <TableColumn fx:id="colRecruiterEmail" text="Email" prefWidth="180" minWidth="130"/>
+                                        <TableColumn fx:id="colRecruiterIndustry" text="Industry" prefWidth="130" minWidth="100"/>
+                                        <TableColumn fx:id="colRecruiterWebsite" text="Website" prefWidth="140" minWidth="110"/>
+                                        <TableColumn fx:id="colRecruiterStatus" text="Status" prefWidth="120" minWidth="95"/>
+                                        <TableColumn fx:id="colRecruiterSubmittedAt" text="Updated / Submitted" prefWidth="145" minWidth="120"/>
+                                        <TableColumn fx:id="colRecruiterReviewedAt" text="Last Reviewed" prefWidth="140" minWidth="110"/>
+                                    </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                    </columnResizePolicy>
+                                </TableView>
+
+                                <!-- Empty State Box -->
+                                <VBox fx:id="recruiterEmptyBox" styleClass="admin-empty-box" spacing="4"
+                                      visible="false" managed="false">
+                                    <Label text="No Recruiters Found" styleClass="admin-empty-title"/>
+                                    <Label text="No recruiter accounts match the active search and verification status filter."
+                                           styleClass="admin-empty-body" wrapText="true"/>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Right: Detailed Review Panel -->
+                            <VBox minWidth="340" prefWidth="380" maxWidth="420" styleClass="admin-detail-panel" spacing="12">
+                                <!-- Placeholder when nothing selected -->
+                                <VBox fx:id="recruiterPlaceholderBox" alignment="CENTER" spacing="8" minHeight="350">
+                                    <Label text="Select a Recruiter" styleClass="admin-empty-title"/>
+                                    <Label text="Choose a recruiter from the table on the left to inspect profile credentials and record a verification decision."
+                                           wrapText="true" styleClass="admin-empty-body" textAlignment="CENTER"/>
+                                </VBox>
+
+                                <!-- Detail Content (visible when a row is selected) -->
+                                <VBox fx:id="recruiterDetailContainer" spacing="10" visible="false" managed="false">
+                                    <HBox styleClass="admin-detail-header" alignment="CENTER_LEFT" spacing="8">
+                                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                            <Label fx:id="recDetailCompanyName" text="Company Name" styleClass="admin-detail-title" wrapText="true"/>
+                                            <Label fx:id="recDetailRecruiterName" text="Recruiter Name" styleClass="admin-detail-sub"/>
+                                        </VBox>
+                                        <Label fx:id="recDetailStatusBadge" text="PENDING" styleClass="admin-badge"/>
+                                    </HBox>
+
+                                    <!-- Attributes Grid -->
+                                    <VBox spacing="6" styleClass="admin-detail-grid">
+                                        <HBox spacing="8" alignment="CENTER_LEFT">
+                                            <Label text="Email:" styleClass="admin-detail-key" minWidth="110"/>
+                                            <Label fx:id="recDetailEmail" text="—" styleClass="admin-detail-val" wrapText="true"/>
+                                        </HBox>
+                                        <HBox spacing="8" alignment="CENTER_LEFT">
+                                            <Label text="User Account:" styleClass="admin-detail-key" minWidth="110"/>
+                                            <Label fx:id="recDetailUserIdAndActive" text="—" styleClass="admin-detail-val"/>
+                                        </HBox>
+                                        <HBox spacing="8" alignment="CENTER_LEFT">
+                                            <Label text="Registered:" styleClass="admin-detail-key" minWidth="110"/>
+                                            <Label fx:id="recDetailRegisteredDate" text="—" styleClass="admin-detail-val"/>
+                                        </HBox>
+                                        <HBox spacing="8" alignment="CENTER_LEFT">
+                                            <Label text="Website:" styleClass="admin-detail-key" minWidth="110"/>
+                                            <Label fx:id="recDetailWebsite" text="—" styleClass="admin-detail-val" wrapText="true"/>
+                                        </HBox>
+                                        <HBox spacing="8" alignment="CENTER_LEFT">
+                                            <Label text="Industry:" styleClass="admin-detail-key" minWidth="110"/>
+                                            <Label fx:id="recDetailIndustry" text="—" styleClass="admin-detail-val"/>
+                                        </HBox>
+                                        <VBox spacing="3">
+                                            <Label text="Company Description:" styleClass="admin-detail-key"/>
+                                            <Label fx:id="recDetailDescription" text="—" wrapText="true" styleClass="admin-detail-desc"/>
+                                        </VBox>
+                                        <VBox spacing="3">
+                                            <Label text="Moderation Reason / Feedback:" styleClass="admin-detail-key"/>
+                                            <Label fx:id="recDetailReason" text="—" wrapText="true" styleClass="admin-detail-desc"/>
+                                        </VBox>
+                                        <HBox spacing="8" alignment="CENTER_LEFT">
+                                            <Label text="Review Info:" styleClass="admin-detail-key" minWidth="110"/>
+                                            <Label fx:id="recDetailReviewMetadata" text="—" styleClass="admin-detail-val" wrapText="true"/>
+                                        </HBox>
+                                    </VBox>
+
+                                    <!-- Action Buttons Bar -->
+                                    <HBox spacing="8" styleClass="admin-action-bar">
+                                        <Button fx:id="btnVerifyRecruiter" text="Verify"
+                                                styleClass="admin-btn-verify"
+                                                onAction="#handleVerifyRecruiter"/>
+                                        <Button fx:id="btnRejectRecruiter" text="Reject"
+                                                styleClass="admin-btn-reject"
+                                                onAction="#handleRejectRecruiter"/>
+                                        <Button fx:id="btnSuspendRecruiter" text="Suspend"
+                                                styleClass="admin-btn-suspend"
+                                                onAction="#handleSuspendRecruiter"/>
+                                        <Button fx:id="btnReturnRecruiterPending" text="To Pending"
+                                                styleClass="admin-btn-pending"
+                                                onAction="#handleReturnRecruiterPending"/>
+                                    </HBox>
+
+                                    <!-- Recruiter Moderation Audit History -->
+                                    <VBox spacing="6" styleClass="admin-audit-box">
+                                        <Label text="Moderation Audit History" styleClass="detail-key"/>
+                                        <VBox fx:id="recruiterAuditListContainer" spacing="4"/>
+                                        <Label fx:id="recruiterAuditEmptyLabel" text="No moderation audit records found."
+                                               styleClass="admin-kpi-sub" visible="false" managed="false"/>
+                                    </VBox>
+                                </VBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ================================================================ -->
+                <!-- PANE 8: JOB MODERATION                                            -->
+                <!-- ================================================================ -->
+                <VBox fx:id="jobModerationPane" styleClass="content-body" spacing="20"
+                      visible="false" managed="false">
+
+                    <!-- Summary Metrics Row (6 KPIs) -->
+                    <HBox spacing="14">
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="TOTAL JOBS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="jobModTotalLabel" text="—" styleClass="admin-kpi-number"/>
+                            <Label text="All job postings" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="PENDING MODERATION" styleClass="admin-kpi-title"/>
+                            <Label fx:id="jobModPendingLabel" text="—" styleClass="admin-kpi-number-warn"/>
+                            <Label text="Awaiting admin approval" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="APPROVED JOBS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="jobModApprovedLabel" text="—" styleClass="admin-kpi-number-success"/>
+                            <Label text="Approved for student catalog" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="REJECTED JOBS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="jobModRejectedLabel" text="—" styleClass="admin-kpi-number-danger"/>
+                            <Label text="Approval declined" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="SUSPENDED JOBS" styleClass="admin-kpi-title"/>
+                            <Label fx:id="jobModSuspendedLabel" text="—" styleClass="admin-kpi-number-darkred"/>
+                            <Label text="Moderation revoked" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                        <VBox styleClass="admin-kpi-card" spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="ACTIVE LIFECYCLE" styleClass="admin-kpi-title"/>
+                            <Label fx:id="jobModActiveLifecycleLabel" text="—" styleClass="admin-kpi-number-accent"/>
+                            <Label text="Lifecycle status ACTIVE" styleClass="admin-kpi-sub"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Main Section Card -->
+                    <VBox styleClass="section-card" spacing="14">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <Label text="Job Postings &amp; Content Moderation Queue" styleClass="section-card-title"/>
+                                <Label fx:id="jobModSubtitleLabel"
+                                       text="Inspect job listings, enforce quality standards, and govern student visibility"
+                                       styleClass="detail-key"/>
+                            </VBox>
+                            <ProgressIndicator fx:id="jobModLoadingIndicator" prefWidth="20" prefHeight="20"
+                                               visible="false" managed="false"/>
+                        </HBox>
+
+                        <!-- Filter & Search Toolbar -->
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="admin-toolbar-wrap">
+                            <TextField fx:id="txtJobModSearch" promptText="Search title, company, recruiter, location, or job ID..."
+                                       prefWidth="280" styleClass="text-field"/>
+
+                            <Label text="Moderation:" styleClass="detail-key" minWidth="-Infinity"/>
+                            <ComboBox fx:id="comboJobModerationStatusFilter" styleClass="admin-compact-combo" prefWidth="160"/>
+
+                            <Label text="Lifecycle:" styleClass="detail-key" minWidth="-Infinity"/>
+                            <ComboBox fx:id="comboJobLifecycleFilter" styleClass="admin-compact-combo" prefWidth="140"/>
+
+                            <Button fx:id="btnApplyJobModFilters" text="Search"
+                                    styleClass="primary-button, admin-compact-btn"
+                                    onAction="#handleApplyJobModFilters"/>
+                            <Button fx:id="btnClearJobModFilters" text="Clear"
+                                    styleClass="secondary-button, admin-compact-btn"
+                                    onAction="#handleClearJobModFilters"/>
+                            <Button fx:id="btnRefreshJobMod" text="Refresh"
+                                    styleClass="secondary-button, admin-compact-btn"
+                                    onAction="#handleRefreshJobMod"/>
+                        </HBox>
+
+                        <!-- Status notification message -->
+                        <Label fx:id="jobModStatusMsgLabel" styleClass="detail-key"
+                               visible="false" managed="false" wrapText="true"/>
+
+                        <!-- Master-Detail Container -->
+                        <HBox spacing="16" alignment="TOP_LEFT">
+                            <!-- Left: Job Moderation Table -->
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <TableView fx:id="jobModerationTable" prefHeight="480" minHeight="300" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colJobModTitle" text="Job Title" prefWidth="180" minWidth="130"/>
+                                        <TableColumn fx:id="colJobModCompany" text="Company" prefWidth="150" minWidth="110"/>
+                                        <TableColumn fx:id="colJobModRecruiter" text="Recruiter" prefWidth="150" minWidth="120"/>
+                                        <TableColumn fx:id="colJobModLocation" text="Location" prefWidth="120" minWidth="90"/>
+                                        <TableColumn fx:id="colJobModType" text="Type" prefWidth="100" minWidth="80"/>
+                                        <TableColumn fx:id="colJobModLifecycleStatus" text="Lifecycle" prefWidth="105" minWidth="85"/>
+                                        <TableColumn fx:id="colJobModModerationStatus" text="Moderation" prefWidth="115" minWidth="95"/>
+                                        <TableColumn fx:id="colJobModCreatedAt" text="Created" prefWidth="130" minWidth="100"/>
+                                        <TableColumn fx:id="colJobModDeadline" text="Deadline" prefWidth="120" minWidth="95"/>
+                                    </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                    </columnResizePolicy>
+                                </TableView>
+
+                                <!-- Empty State Box -->
+                                <VBox fx:id="jobModEmptyBox" styleClass="admin-empty-box" spacing="4"
+                                      visible="false" managed="false">
+                                    <Label text="No Jobs Found" styleClass="admin-empty-title"/>
+                                    <Label text="No job postings match the active search and moderation/lifecycle filter criteria."
+                                           styleClass="admin-empty-body" wrapText="true"/>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Right: Detailed Job Review Panel -->
+                            <VBox minWidth="340" prefWidth="380" maxWidth="420" styleClass="admin-detail-panel" spacing="12">
+                                <!-- Placeholder when nothing selected -->
+                                <VBox fx:id="jobModPlaceholderBox" alignment="CENTER" spacing="8" minHeight="350">
+                                    <Label text="Select a Job Posting" styleClass="admin-empty-title"/>
+                                    <Label text="Choose a job posting from the table on the left to inspect job specifications, requirements, and record a moderation decision."
+                                           wrapText="true" styleClass="admin-empty-body" textAlignment="CENTER"/>
+                                </VBox>
+
+                                <!-- Detail Content (visible when a row is selected) -->
+                                <VBox fx:id="jobModDetailContainer" spacing="10" visible="false" managed="false">
+                                    <HBox styleClass="admin-detail-header" alignment="CENTER_LEFT" spacing="8">
+                                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                            <Label fx:id="jobModDetailTitle" text="Job Title" styleClass="admin-detail-title" wrapText="true"/>
+                                            <Label fx:id="jobModDetailCompany" text="Company Name" styleClass="admin-detail-sub"/>
+                                        </VBox>
+                                        <HBox spacing="4" alignment="CENTER_RIGHT">
+                                            <Label fx:id="jobModDetailLifecycleBadge" text="ACTIVE" styleClass="admin-badge"/>
+                                            <Label fx:id="jobModDetailModerationBadge" text="PENDING" styleClass="admin-badge"/>
+                                        </HBox>
+                                    </HBox>
+
+                                    <!-- Attributes Grid -->
+                                    <VBox spacing="6" styleClass="admin-detail-grid">
+                                        <HBox spacing="8" alignment="CENTER_LEFT">
+                                            <Label text="Recruiter:" styleClass="admin-detail-key" minWidth="110"/>
+                                            <Label fx:id="jobModDetailRecruiter" text="—" styleClass="admin-detail-val" wrapText="true"/>
+                                        </HBox>
+                                        <HBox spacing="8" alignment="CENTER_LEFT">
+                                            <Label text="Type &amp; Loc:" styleClass="admin-detail-key" minWidth="110"/>
+                                            <Label fx:id="jobModDetailTypeAndLocation" text="—" styleClass="admin-detail-val"/>
+                                        </HBox>
+                                        <HBox spacing="8" alignment="CENTER_LEFT">
+                                            <Label text="Salary Range:" styleClass="admin-detail-key" minWidth="110"/>
+                                            <Label fx:id="jobModDetailSalary" text="—" styleClass="admin-detail-val"/>
+                                        </HBox>
+                                        <HBox spacing="8" alignment="CENTER_LEFT">
+                                            <Label text="Dates:" styleClass="admin-detail-key" minWidth="110"/>
+                                            <Label fx:id="jobModDetailDates" text="—" styleClass="admin-detail-val" wrapText="true"/>
+                                        </HBox>
+                                        <VBox spacing="2">
+                                            <Label text="Required Skills:" styleClass="admin-detail-key"/>
+                                            <Label fx:id="jobModDetailSkills" text="—" wrapText="true" styleClass="admin-detail-val"/>
+                                        </VBox>
+                                        <VBox spacing="2">
+                                            <Label text="Eligibility Criteria:" styleClass="admin-detail-key"/>
+                                            <Label fx:id="jobModDetailEligibility" text="—" wrapText="true" styleClass="admin-detail-val"/>
+                                        </VBox>
+                                        <VBox spacing="3">
+                                            <Label text="Job Description:" styleClass="admin-detail-key"/>
+                                            <Label fx:id="jobModDetailDesc" text="—" wrapText="true" styleClass="admin-detail-desc"/>
+                                        </VBox>
+                                        <VBox spacing="3">
+                                            <Label text="Moderation Feedback / Reason:" styleClass="admin-detail-key"/>
+                                            <Label fx:id="jobModDetailReason" text="—" wrapText="true" styleClass="admin-detail-desc"/>
+                                        </VBox>
+                                        <HBox spacing="8" alignment="CENTER_LEFT">
+                                            <Label text="Moderation Info:" styleClass="admin-detail-key" minWidth="110"/>
+                                            <Label fx:id="jobModDetailReviewMetadata" text="—" styleClass="admin-detail-val" wrapText="true"/>
+                                        </HBox>
+                                    </VBox>
+
+                                    <!-- Action Buttons Bar -->
+                                    <HBox spacing="8" styleClass="admin-action-bar">
+                                        <Button fx:id="btnApproveJob" text="Approve"
+                                                styleClass="admin-btn-verify"
+                                                onAction="#handleApproveJob"/>
+                                        <Button fx:id="btnRejectJob" text="Reject"
+                                                styleClass="admin-btn-reject"
+                                                onAction="#handleRejectJob"/>
+                                        <Button fx:id="btnSuspendJob" text="Suspend"
+                                                styleClass="admin-btn-suspend"
+                                                onAction="#handleSuspendJob"/>
+                                        <Button fx:id="btnReturnJobPending" text="To Pending"
+                                                styleClass="admin-btn-pending"
+                                                onAction="#handleReturnJobPending"/>
+                                    </HBox>
+
+                                    <!-- Job Moderation Audit History -->
+                                    <VBox spacing="6" styleClass="admin-audit-box">
+                                        <Label text="Moderation Audit History" styleClass="detail-key"/>
+                                        <VBox fx:id="jobAuditListContainer" spacing="4"/>
+                                        <Label fx:id="jobAuditEmptyLabel" text="No moderation audit records found."
+                                               styleClass="admin-kpi-sub" visible="false" managed="false"/>
+                                    </VBox>
+                                </VBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

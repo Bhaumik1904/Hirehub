@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  job_board.fxml — HireHub Opportunity Marketplace
+  Visual Source of Truth: D:\HireHub\images\student-browse-jobs.png
+  Controller: com.hirehub.controller.JobBoardController
+  Preserves 100% of existing fx:id bindings, event handlers, and application workflows.
+-->
+<BorderPane xmlns="http://javafx.oracle.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hirehub.controller.JobBoardController"
+            styleClass="app-root">
+
+    <!-- ── Left Persistent Navigation Sidebar ── -->
+    <left>
+        <fx:include fx:id="studentSidebar" source="student_sidebar.fxml"/>
+    </left>
+
+    <!-- ── Main Content Area ── -->
+    <center>
+        <VBox spacing="0">
+            <!-- ── Top Header Bar ── -->
+            <HBox styleClass="content-header" alignment="CENTER_LEFT" spacing="14">
+                <Button fx:id="backBtn" text="← Back to Dashboard" styleClass="header-icon-action" onAction="#handleBack"/>
+                <VBox spacing="1" HBox.hgrow="ALWAYS">
+                    <Label text="Student workspace &gt; Browse Jobs" styleClass="header-breadcrumb-root"/>
+                    <Label text="Browse Jobs" styleClass="content-header-title"/>
+                </VBox>
+                <HBox styleClass="header-search-wrap" alignment="CENTER_LEFT" spacing="8">
+                    <Label text="🔍" style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                    <TextField promptText="Search jobs, companies…" styleClass="header-search-box" prefWidth="180"/>
+                    <Label text="Ctrl K" styleClass="header-shortcut-tag"/>
+                </HBox>
+                <Button text="🔔" styleClass="header-icon-action"/>
+                <Label text="STUDENT" styleClass="navbar-role-badge"/>
+            </HBox>
+
+            <!-- ── Main Layout: Filter Sidebar (Left) + Results List + Detail Panel ── -->
+            <HBox spacing="0" style="-fx-background-color: #F8FAFC;" VBox.vgrow="ALWAYS">
+
+            <!-- ── Left Filter Sidebar Panel ── -->
+            <VBox styleClass="filter-panel" spacing="16" minWidth="260" prefWidth="260"
+                  style="-fx-background-color: #FFFFFF; -fx-border-color: transparent #E2E8F0 transparent transparent; -fx-border-width: 0 1 0 0; -fx-padding: 22 20;">
+
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Filters" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="clearBtn" text="Reset all" styleClass="table-action-btn" onAction="#handleClear"/>
+                </HBox>
+
+                <VBox spacing="6">
+                    <Label text="Keyword or Role" styleClass="field-label"/>
+                    <TextField fx:id="keywordField" styleClass="text-input" promptText="Role, skill, or company…"/>
+                </VBox>
+
+                <VBox spacing="6">
+                    <Label text="Location" styleClass="field-label"/>
+                    <TextField fx:id="locationFilterField" styleClass="text-input" promptText="e.g. Bangalore, Remote"/>
+                </VBox>
+
+                <VBox spacing="6">
+                    <Label text="Job Type" styleClass="field-label"/>
+                    <ComboBox fx:id="jobTypeFilter" styleClass="combo-input" maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Search Action -->
+                <Button fx:id="searchBtn" text="Apply Filters" styleClass="primary-button"
+                        maxWidth="Infinity" onAction="#handleSearch"/>
+
+                <!-- Results & Loading Status -->
+                <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-padding: 6 0 0 0;">
+                    <Label fx:id="resultCountLabel" style="-fx-font-size: 12px; -fx-text-fill: #64748B; -fx-font-weight: bold;"/>
+                    <ProgressIndicator fx:id="searchLoading" prefWidth="18" prefHeight="18" visible="false" managed="false"/>
+                </HBox>
+
+            </VBox>
+
+            <!-- ── Middle Results Area ── -->
+            <VBox HBox.hgrow="ALWAYS" minWidth="380" spacing="14" style="-fx-padding: 22 24;">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="2" HBox.hgrow="ALWAYS">
+                        <Label text="OPPORTUNITY MARKETPLACE" style="-fx-font-size: 10.5px; -fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-letter-spacing: 0.8px;"/>
+                        <Label text="Available Opportunities" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    </VBox>
+                </HBox>
+
+                <ListView fx:id="jobListView" styleClass="job-list-view" VBox.vgrow="ALWAYS"
+                          style="-fx-background-color: transparent; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10;"/>
+            </VBox>
+
+            <!-- ── Right Detail Panel ── -->
+            <ScrollPane fitToWidth="true" HBox.hgrow="NEVER" prefWidth="400"
+                        style="-fx-background-color: #FFFFFF; -fx-border-color: transparent transparent transparent #E2E8F0; -fx-border-width: 0 0 0 1;">
+                <VBox fx:id="detailPanel" styleClass="detail-panel" spacing="14"
+                      visible="false" managed="false" prefWidth="380" style="-fx-padding: 24 22; -fx-background-color: #FFFFFF;">
+
+                    <VBox spacing="4">
+                        <Label fx:id="detailTitle" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" wrapText="true"/>
+                        <Label fx:id="detailCompany" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <GridPane hgap="16" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="80"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+                        <Label text="Type" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <Label fx:id="detailType" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        <Label text="Location" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <Label fx:id="detailLocation" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <Label text="Salary" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <Label fx:id="detailSalary" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <Label text="Deadline" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <Label fx:id="detailDeadline" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    </GridPane>
+
+                    <Separator/>
+
+                    <Label text="Job Description" styleClass="detail-section-heading"/>
+                    <TextArea fx:id="detailDescription" styleClass="text-input detail-description"
+                              editable="false" wrapText="true" prefRowCount="6"/>
+
+                    <Label text="Required Skills" styleClass="detail-section-heading"/>
+                    <Label fx:id="detailSkills" styleClass="detail-value" wrapText="true"/>
+
+                    <Label text="Eligibility" styleClass="detail-section-heading"/>
+                    <Label fx:id="detailEligibility" styleClass="detail-value" wrapText="true"/>
+
+                    <Separator/>
+
+                    <Button fx:id="applyBtn" text="Apply Now →" styleClass="primary-button"
+                            maxWidth="Infinity" onAction="#handleApply"/>
+                    <Label fx:id="applyNoteLabel" styleClass="info-label" wrapText="true"/>
+
+                </VBox>
+            </ScrollPane>
+
+        </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

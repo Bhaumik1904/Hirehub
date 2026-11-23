@@ -1,0 +1,50 @@
+# ============================================================
+# HireHub — Git Ignore
+# ============================================================
+
+# Build outputs & compiled classes
+target/
+*.class
+
+# IDE configuration files
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# Environment variables, credentials, and secrets
+.env
+.env.*
+env.properties
+db.properties
+*.key
+*.pem
+
+# Database backups and local dumps
+database/backups/
+*.sql.bak
+*.dump
+
+# Local runtime uploaded data (preserve directory via .gitkeep)
+data/resumes/*
+!data/resumes/.gitkeep
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Application logs & diagnostic dumps
+*.log
+logs/
+hs_err_pid*.log
+
+# Compressed archives
+*.zip
+*.tar.gz
+*.rar
+
+# Local build tools
+tools/

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  ai_assistant.fxml — HireHub AI Career Assistant View
+  Visual Source of Truth: D:\HireHub\images\student-career-assistant.png
+  Controller: com.hirehub.controller.AIAssistantController
+  Preserves 100% of existing fx:id bindings, event handlers, and GroqCloud AI workflows.
+-->
+<BorderPane xmlns="http://javafx.oracle.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hirehub.controller.AIAssistantController"
+            styleClass="app-root">
+
+    <!-- ── Left Persistent Navigation Sidebar ── -->
+    <left>
+        <fx:include fx:id="studentSidebar" source="student_sidebar.fxml"/>
+    </left>
+
+    <!-- ── Main Content Area ── -->
+    <center>
+        <VBox spacing="0">
+            <!-- ── Top Header Bar ── -->
+            <HBox styleClass="content-header" alignment="CENTER_LEFT" spacing="14">
+                <Button fx:id="backBtn" text="← Back to Dashboard" styleClass="header-icon-action" onAction="#handleBack"/>
+                <VBox spacing="1" HBox.hgrow="ALWAYS">
+                    <Label text="Student workspace &gt; AI Career Assistant" styleClass="header-breadcrumb-root"/>
+                    <Label text="AI Career Assistant" styleClass="content-header-title"/>
+                </VBox>
+                <HBox styleClass="header-search-wrap" alignment="CENTER_LEFT" spacing="8">
+                    <Label text="🔍" style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                    <TextField promptText="Search career guidance…" styleClass="header-search-box" prefWidth="180"/>
+                    <Label text="Ctrl K" styleClass="header-shortcut-tag"/>
+                </HBox>
+                <Button text="🔔" styleClass="header-icon-action"/>
+                <Label text="STUDENT" styleClass="navbar-role-badge"/>
+            </HBox>
+
+            <!-- ── Scrollable Body ── -->
+            <ScrollPane fx:id="contentScrollPane" fitToWidth="true" fitToHeight="false"
+                        vbarPolicy="AS_NEEDED" hbarPolicy="NEVER" styleClass="content-scroll" VBox.vgrow="ALWAYS">
+            <VBox styleClass="content-body" spacing="22">
+
+                <!-- ── Header Banner & Status Badge ── -->
+                <HBox alignment="CENTER_LEFT" spacing="16" styleClass="section-card" style="-fx-padding: 18 24;">
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                        <Label text="PERSONAL CAREER COACH" style="-fx-font-size: 10.5px; -fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-letter-spacing: 0.8px;"/>
+                        <Label text="AI Career Assistant" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        <Label text="Get structured, profile-grounded career guidance and technical interview simulations powered by GroqCloud AI."
+                               style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+                    <Label fx:id="apiKeyStatusLabel" styleClass="badge-pill-success" text="● Assistant Ready" style="-fx-padding: 6 14; -fx-font-size: 12px;"/>
+                </HBox>
+
+                <!-- Hidden bindings container for configuration preservation -->
+                <VBox visible="false" managed="false">
+                    <Label fx:id="apiKeyHelpLabel"/>
+                    <Label fx:id="studentSkillsLabel"/>
+                    <Label fx:id="studentSkillsWarningLabel"/>
+                    <Label fx:id="jobSelectionHintLabel"/>
+                </VBox>
+
+                <!-- ── Two Column Workspace ── -->
+                <GridPane hgap="20" vgap="16">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="55"/>
+                        <ColumnConstraints percentWidth="45"/>
+                    </columnConstraints>
+
+                    <!-- Left Column: Step 1 (Target Job) & Step 2 (Guided Workflows) -->
+                    <VBox spacing="16" GridPane.columnIndex="0" GridPane.rowIndex="0">
+
+                        <!-- 1. Select Target Job Posting -->
+                        <VBox styleClass="section-card" spacing="12">
+                            <Label text="1. Select Target Job Opportunity" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                            <Label text="Choose an active job posting — the AI assistant will ground all gap analyses, preparation roadmaps, and interview questions directly in this role."
+                                   styleClass="detail-key" wrapText="true"/>
+                            <ComboBox fx:id="jobCombo" styleClass="combo-input" maxWidth="Infinity"
+                                      promptText="Select a job listing…"/>
+                        </VBox>
+
+                        <!-- 2. Choose Guided AI Capability -->
+                        <VBox styleClass="section-card" spacing="14">
+                            <Label text="2. Choose an AI Capability" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+                            <!-- Validation Warning -->
+                            <Label fx:id="validationErrorLabel" styleClass="error-label" wrapText="true"
+                                   visible="false" managed="false"/>
+
+                            <!-- 3 Main Action Cards Grid -->
+                            <GridPane hgap="12" vgap="12">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="33.3"/>
+                                    <ColumnConstraints percentWidth="33.3"/>
+                                    <ColumnConstraints percentWidth="33.3"/>
+                                </columnConstraints>
+
+                                <!-- Action 1: Skill Gap Plan -->
+                                <VBox styleClass="section-card" spacing="8" alignment="CENTER_LEFT"
+                                      style="-fx-padding: 14; -fx-background-color: #F8FAFC;" GridPane.columnIndex="0">
+                                    <Label text="🎯" style="-fx-font-size: 18px;"/>
+                                    <Label text="Skill Gap Plan" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                    <Label text="Compare skills against job requirements" style="-fx-font-size: 10.5px; -fx-text-fill: #64748B;" wrapText="true"/>
+                                    <Button fx:id="analyzeSkillsBtn" text="Analyze Skills →" styleClass="primary-button"
+                                            style="-fx-font-size: 11px; -fx-padding: 6 12;" maxWidth="Infinity" onAction="#handleAnalyzeSkills"/>
+                                </VBox>
+
+                                <!-- Action 2: Interview Practice -->
+                                <VBox styleClass="section-card" spacing="8" alignment="CENTER_LEFT"
+                                      style="-fx-padding: 14; -fx-background-color: #F8FAFC;" GridPane.columnIndex="1">
+                                    <Label text="💬" style="-fx-font-size: 18px;"/>
+                                    <Label text="Interview Prep" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                    <Label text="Generate role-specific interview questions" style="-fx-font-size: 10.5px; -fx-text-fill: #64748B;" wrapText="true"/>
+                                    <Button fx:id="generateQuestionsBtn" text="Practice Q&amp;A →" styleClass="primary-button"
+                                            style="-fx-font-size: 11px; -fx-padding: 6 12;" maxWidth="Infinity" onAction="#handleGenerateQuestions"/>
+                                </VBox>
+
+                                <!-- Action 3: Preparation Plan -->
+                                <VBox styleClass="section-card" spacing="8" alignment="CENTER_LEFT"
+                                      style="-fx-padding: 14; -fx-background-color: #F8FAFC;" GridPane.columnIndex="2">
+                                    <Label text="📅" style="-fx-font-size: 18px;"/>
+                                    <Label text="4-Week Roadmap" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                    <Label text="Week-by-week actionable study schedule" style="-fx-font-size: 10.5px; -fx-text-fill: #64748B;" wrapText="true"/>
+                                    <Button fx:id="prepPlanBtn" text="Create Plan →" styleClass="primary-button"
+                                            style="-fx-font-size: 11px; -fx-padding: 6 12;" maxWidth="Infinity" onAction="#handlePrepPlan"/>
+                                </VBox>
+                            </GridPane>
+
+                            <!-- Background Progress Indicator -->
+                            <HBox spacing="12" alignment="CENTER_LEFT" style="-fx-padding: 8 0 0 0;">
+                                <ProgressIndicator fx:id="aiLoading" prefWidth="22" prefHeight="22"
+                                                   visible="false" managed="false"/>
+                                <Label fx:id="loadingLabel" styleClass="detail-key"
+                                       visible="false" managed="false"/>
+                            </HBox>
+                        </VBox>
+
+                    </VBox>
+
+                    <!-- Right Column: Results & Interactive Assistant Output -->
+                    <VBox spacing="16" GridPane.columnIndex="1" GridPane.rowIndex="0">
+
+                        <VBox fx:id="resultsCard" styleClass="section-card" spacing="14"
+                              minHeight="380" visible="false" managed="false">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label fx:id="resultsTitleLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" HBox.hgrow="ALWAYS"/>
+                                <Button fx:id="copyBtn" text="📋 Copy" styleClass="secondary-button"
+                                        style="-fx-font-size: 11px; -fx-padding: 5 10;" onAction="#handleCopy" visible="false" managed="false"/>
+                                <Button fx:id="retryBtn" text="🔄 Retry" styleClass="secondary-button"
+                                        style="-fx-font-size: 11px; -fx-padding: 5 10;" onAction="#handleRetry" visible="false" managed="false"/>
+                            </HBox>
+                            <Separator/>
+
+                            <!-- Scrollable Formatted Content -->
+                            <VBox fx:id="resultsContentBox" styleClass="ai-results-container" spacing="10"/>
+                        </VBox>
+
+                        <!-- Assistant Guidance Overview Card (shown when no result active) -->
+                        <VBox styleClass="section-card" spacing="12" style="-fx-background-color: #F8FAFC;">
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <StackPane styleClass="header-avatar-badge" style="-fx-min-width: 28; -fx-min-height: 28; -fx-max-width: 28; -fx-max-height: 28;">
+                                    <Label text="AI" style="-fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold;"/>
+                                </StackPane>
+                                <VBox spacing="1">
+                                    <Label text="HireHub Career Intelligence" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                    <Label text="Powered by GroqCloud LPU Inference" style="-fx-font-size: 10.5px; -fx-text-fill: #64748B;"/>
+                                </VBox>
+                            </HBox>
+                            <Label text="Select a target job on the left and choose an AI capability. The system generates real-time analysis with zero hallucinated scores, formatted with actionable feedback."
+                                   style="-fx-font-size: 12px; -fx-text-fill: #64748B;" wrapText="true"/>
+                        </VBox>
+
+                    </VBox>
+                </GridPane>
+
+            </VBox>
+        </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

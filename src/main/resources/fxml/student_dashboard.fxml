@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  student_dashboard.fxml — HireHub Student Portal Redesign
+  Visual Source of Truth: D:\HireHub\images\student-overview.png and student-profile.png
+  Controller: com.hirehub.controller.StudentDashboardController
+  Preserves 100% of existing fx:id bindings, event handlers, and asynchronous Task workflows.
+-->
+<BorderPane fx:id="rootPane"
+            xmlns="http://javafx.oracle.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hirehub.controller.StudentDashboardController"
+            styleClass="app-root">
+
+    <!-- ── Left Sidebar (Dark Navy #0F172A) ── -->
+    <left>
+        <VBox styleClass="sidebar" spacing="2" minWidth="240" prefWidth="240">
+
+            <!-- Brand Logo Header -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="sidebar-brand">
+                <StackPane styleClass="sidebar-logo-badge">
+                    <Label text="H" style="-fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-font-size: 16px;"/>
+                </StackPane>
+                <VBox spacing="1">
+                    <Label text="HireHub" styleClass="sidebar-brand-name"/>
+                    <Label text="STUDENT WORKSPACE" styleClass="sidebar-brand-sub"/>
+                </VBox>
+            </HBox>
+
+            <Separator styleClass="sidebar-divider"/>
+
+            <!-- Category: WORKSPACE -->
+            <Label text="WORKSPACE" styleClass="sidebar-category-header"/>
+
+            <Button fx:id="navDashboardBtn" text="▦   Overview"
+                    styleClass="sidebar-nav-btn, sidebar-nav-active"
+                    maxWidth="Infinity" onAction="#handleNavDashboard"/>
+
+            <HBox alignment="CENTER_LEFT" spacing="0">
+                <Button fx:id="navBrowseJobsBtn" text="💼  Browse Jobs"
+                        styleClass="sidebar-nav-btn"
+                        HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleNavBrowseJobs"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="0">
+                <Button fx:id="navApplicationsBtn" text="📄  My Applications"
+                        styleClass="sidebar-nav-btn"
+                        HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleNavApplications"/>
+            </HBox>
+
+            <Button fx:id="navResumeAnalyzerBtn" text="⛶  Resume Analyzer"
+                    styleClass="sidebar-nav-btn"
+                    maxWidth="Infinity" onAction="#handleNavResumeAnalyzer"/>
+
+            <Button fx:id="navAIBtn" text="✦  AI Career Assistant"
+                    styleClass="sidebar-nav-btn"
+                    maxWidth="Infinity" onAction="#handleNavAI"/>
+
+            <!-- Category: ACCOUNT -->
+            <Label text="ACCOUNT" styleClass="sidebar-category-header" style="-fx-padding: 16 16 4 16;"/>
+
+            <Button fx:id="navProfileBtn" text="👤  My Profile"
+                    styleClass="sidebar-nav-btn"
+                    maxWidth="Infinity" onAction="#handleNavProfile"/>
+
+            <!-- Spacer -->
+            <Pane VBox.vgrow="ALWAYS"/>
+
+            <!-- Bottom Student Workspace Status Pill -->
+            <VBox styleClass="sidebar-bottom-panel" spacing="6" style="-fx-margin: 0 14 8 14;">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="🎓" style="-fx-font-size: 13px;"/>
+                    <VBox spacing="1" HBox.hgrow="ALWAYS">
+                        <Label text="Student Workspace" style="-fx-font-size: 10.5px; -fx-text-fill: #94A3B8; -fx-font-weight: bold;"/>
+                        <Label text="Career &amp; Placements" style="-fx-font-size: 11.5px; -fx-text-fill: #F1F5F9; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <Separator styleClass="sidebar-divider"/>
+
+            <!-- Logout Button -->
+            <Button fx:id="navLogoutBtn" text="⎋   Sign out"
+                    styleClass="sidebar-nav-btn, sidebar-logout-btn"
+                    maxWidth="Infinity" onAction="#handleLogout"/>
+            <Region minHeight="8"/>
+        </VBox>
+    </left>
+
+    <!-- ── Main Content Area ── -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="content-scroll">
+            <VBox spacing="0">
+
+                <!-- ── Top Header Bar ── -->
+                <HBox styleClass="content-header" alignment="CENTER_LEFT" spacing="14">
+                    <!-- Breadcrumbs & Screen Title -->
+                    <VBox spacing="2" HBox.hgrow="ALWAYS">
+                        <Label text="Student workspace &gt; Overview" styleClass="header-breadcrumb-root"/>
+                        <Label fx:id="welcomeLabel" text="Student Dashboard" styleClass="content-header-title"/>
+                    </VBox>
+
+                    <!-- Search Input Box -->
+                    <HBox styleClass="header-search-wrap" alignment="CENTER_LEFT" spacing="8">
+                        <Label text="🔍" style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                        <TextField promptText="Search jobs, companies…" styleClass="header-search-box" prefWidth="200"/>
+                        <Label text="Ctrl K" styleClass="header-shortcut-tag"/>
+                    </HBox>
+
+                    <!-- Notifications Button -->
+                    <Button text="🔔" styleClass="header-icon-action"/>
+
+                    <!-- Refresh button & progress indicator -->
+                    <Button fx:id="refreshBtn" text="↻" styleClass="header-icon-action" onAction="#handleRefresh"/>
+                    <ProgressIndicator fx:id="loadingIndicator" prefWidth="20" prefHeight="20" visible="false" managed="false"/>
+
+                    <!-- User Profile Avatar Pill -->
+                    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 4 0 8;">
+                        <StackPane styleClass="header-avatar-badge">
+                            <Label fx:id="headerUserInitialsLabel" text="ST" style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 12px;"/>
+                        </StackPane>
+                        <VBox spacing="1">
+                            <Label fx:id="headerUserNameLabel" text="Student" style="-fx-font-size: 12.5px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                            <Label fx:id="memberSinceLabel" text="Student Portal" style="-fx-font-size: 10.5px; -fx-text-fill: #64748B;"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Hidden status pills to preserve fx:id bindings -->
+                    <Label fx:id="headerProfileStatusPill" text="" visible="false" managed="false"/>
+                    <Label fx:id="lastRefreshedLabel" text="" visible="false" managed="false"/>
+                </HBox>
+
+                <!-- ── Banners (Error / Loading) ── -->
+                <VBox spacing="8" style="-fx-padding: 12 28 0 28;">
+                    <HBox fx:id="errorBannerBox" styleClass="stu-error-banner" alignment="CENTER_LEFT" spacing="12"
+                          visible="false" managed="false">
+                        <Label text="⚠" style="-fx-font-size: 16px; -fx-text-fill: #DC2626;"/>
+                        <Label fx:id="errorDetailLabel" text="An error occurred while loading dashboard data."
+                               styleClass="stu-error-text" HBox.hgrow="ALWAYS" wrapText="true"/>
+                        <Button fx:id="retryBtn" text="Retry" styleClass="stu-retry-btn" onAction="#handleRetry"/>
+                    </HBox>
+
+                    <HBox fx:id="initialLoadingBox" styleClass="stu-empty-state" alignment="CENTER" spacing="12"
+                          visible="false" managed="false">
+                        <ProgressIndicator prefWidth="24" prefHeight="24"/>
+                        <Label text="Loading your dashboard..." style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- ── VIEW 1: Main Dashboard Pane ── -->
+                <VBox fx:id="dashboardPane" styleClass="content-body" spacing="22">
+
+                    <!-- Greeting & Profile Readiness Bar -->
+                    <HBox alignment="CENTER_LEFT" spacing="16" styleClass="section-card" style="-fx-padding: 18 24;">
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="MONDAY, 24 NOVEMBER" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-letter-spacing: 0.8px;"/>
+                            <Label fx:id="welcomeGreetingLabel" text="Welcome back"
+                                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0F172A; -fx-font-family: 'Segoe UI Semibold', 'Segoe UI', sans-serif;"/>
+                            <Label text="Track applications, discover roles, and stay ready for your next opportunity."
+                                   style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER_RIGHT" spacing="6" minWidth="240">
+                            <HBox alignment="CENTER_RIGHT" spacing="8">
+                                <Label fx:id="profileCompletionPctLabel" text="84% Profile completion"
+                                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                <Label fx:id="profileStatusSummaryLabel" text="Almost there"
+                                       style="-fx-font-size: 11.5px; -fx-text-fill: #16A34A; -fx-font-weight: bold;"/>
+                            </HBox>
+                            <ProgressBar fx:id="profileCompletionBar" progress="0.84" prefWidth="220"
+                                         styleClass="stu-progress-custom"/>
+                            <HBox fx:id="missingFieldsBox" spacing="4" alignment="CENTER_RIGHT" visible="false" managed="false">
+                                <Label text="Missing:" style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                <Label fx:id="missingFieldsLabel" text="None" style="-fx-font-size: 11px; -fx-text-fill: #D97706;"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- ── 5 Standardized Modern KPI Cards ── -->
+                    <HBox spacing="14">
+                        <!-- KPI 1: Total Applications -->
+                        <VBox styleClass="kpi-card-figma" spacing="6" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="TOTAL APPLICATIONS" styleClass="kpi-figma-title" HBox.hgrow="ALWAYS"/>
+                                <StackPane styleClass="kpi-icon-pill">
+                                    <Label text="📄" style="-fx-font-size: 13px;"/>
+                                </StackPane>
+                            </HBox>
+                            <Label fx:id="kpiTotalAppsValue" text="0" styleClass="kpi-figma-val"/>
+                            <Label fx:id="kpiTotalAppsSub" text="All time submissions" styleClass="kpi-figma-sub"/>
+                        </VBox>
+
+                        <!-- KPI 2: Shortlisted -->
+                        <VBox styleClass="kpi-card-figma" spacing="6" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="SHORTLISTED" styleClass="kpi-figma-title" HBox.hgrow="ALWAYS"/>
+                                <StackPane styleClass="kpi-icon-pill" style="-fx-background-color: #EFF6FF;">
+                                    <Label text="✓" style="-fx-font-size: 13px; -fx-text-fill: #2563EB; -fx-font-weight: bold;"/>
+                                </StackPane>
+                            </HBox>
+                            <Label fx:id="kpiShortlistedValue" text="0" styleClass="kpi-figma-val" style="-fx-text-fill: #2563EB;"/>
+                            <Label fx:id="kpiShortlistedSub" text="Advancing to next stage" styleClass="kpi-figma-sub"/>
+                        </VBox>
+
+                        <!-- KPI 3: Under Review (Pending) -->
+                        <VBox styleClass="kpi-card-figma" spacing="6" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="UNDER REVIEW" styleClass="kpi-figma-title" HBox.hgrow="ALWAYS"/>
+                                <StackPane styleClass="kpi-icon-pill" style="-fx-background-color: #FEF3C7;">
+                                    <Label text="⏳" style="-fx-font-size: 13px;"/>
+                                </StackPane>
+                            </HBox>
+                            <Label fx:id="kpiPendingValue" text="0" styleClass="kpi-figma-val" style="-fx-text-fill: #D97706;"/>
+                            <Label fx:id="kpiPendingSub" text="Awaiting recruiter review" styleClass="kpi-figma-sub"/>
+                        </VBox>
+
+                        <!-- KPI 4: Offers / Selected -->
+                        <VBox styleClass="kpi-card-figma" spacing="6" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="OFFERS / SELECTED" styleClass="kpi-figma-title" HBox.hgrow="ALWAYS"/>
+                                <StackPane styleClass="kpi-icon-pill" style="-fx-background-color: #DCFCE7;">
+                                    <Label text="🏆" style="-fx-font-size: 13px;"/>
+                                </StackPane>
+                            </HBox>
+                            <Label fx:id="kpiSelectedValue" text="0" styleClass="kpi-figma-val" style="-fx-text-fill: #16A34A;"/>
+                            <Label fx:id="kpiSelectedSub" text="Successful placements" styleClass="kpi-figma-sub"/>
+                        </VBox>
+
+                        <!-- KPI 5: Open Opportunities -->
+                        <VBox styleClass="kpi-card-figma" spacing="6" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="OPEN OPPORTUNITIES" styleClass="kpi-figma-title" HBox.hgrow="ALWAYS"/>
+                                <StackPane styleClass="kpi-icon-pill" style="-fx-background-color: #EFF6FF;">
+                                    <Label text="💼" style="-fx-font-size: 13px;"/>
+                                </StackPane>
+                            </HBox>
+                            <Label fx:id="kpiOpenJobsValue" text="0" styleClass="kpi-figma-val" style="-fx-text-fill: #2563EB;"/>
+                            <Label fx:id="kpiOpenJobsSub" text="Active opportunities" styleClass="kpi-figma-sub"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- ── Application Pipeline & Activity Trend ── -->
+                    <GridPane hgap="20" vgap="16">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="48"/>
+                            <ColumnConstraints percentWidth="52"/>
+                        </columnConstraints>
+
+                        <!-- Application Pipeline -->
+                        <VBox styleClass="section-card" spacing="14" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <HBox alignment="CENTER_LEFT">
+                                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                    <Label text="Application pipeline" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                    <Label text="Active applications across recruitment stages" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                                </VBox>
+                                <Button text="View applications →" styleClass="table-action-btn" onAction="#handleNavApplications"/>
+                            </HBox>
+
+                            <VBox fx:id="pipelineDataBox" spacing="10">
+                                <VBox styleClass="stu-bar-row" spacing="4">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Under Review (Pending)" styleClass="stu-bar-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="pipelinePendingCount" text="0" styleClass="stu-bar-count"/>
+                                        <Label fx:id="pipelinePendingPct" text=" (0.0%)" styleClass="stu-bar-pct"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="pipelinePendingBar" progress="0.0" maxWidth="Infinity"
+                                                 styleClass="stu-progress-custom stu-progress-pending"/>
+                                </VBox>
+
+                                <VBox styleClass="stu-bar-row" spacing="4">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Shortlisted" styleClass="stu-bar-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="pipelineShortlistedCount" text="0" styleClass="stu-bar-count"/>
+                                        <Label fx:id="pipelineShortlistedPct" text=" (0.0%)" styleClass="stu-bar-pct"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="pipelineShortlistedBar" progress="0.0" maxWidth="Infinity"
+                                                 styleClass="stu-progress-custom stu-progress-shortlisted"/>
+                                </VBox>
+
+                                <VBox styleClass="stu-bar-row" spacing="4">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Selected / Offered" styleClass="stu-bar-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="pipelineSelectedCount" text="0" styleClass="stu-bar-count"/>
+                                        <Label fx:id="pipelineSelectedPct" text=" (0.0%)" styleClass="stu-bar-pct"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="pipelineSelectedBar" progress="0.0" maxWidth="Infinity"
+                                                 styleClass="stu-progress-custom stu-progress-selected"/>
+                                </VBox>
+
+                                <VBox styleClass="stu-bar-row" spacing="4">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Not Selected" styleClass="stu-bar-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="pipelineRejectedCount" text="0" styleClass="stu-bar-count"/>
+                                        <Label fx:id="pipelineRejectedPct" text=" (0.0%)" styleClass="stu-bar-pct"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="pipelineRejectedBar" progress="0.0" maxWidth="Infinity"
+                                                 styleClass="stu-progress-custom stu-progress-rejected"/>
+                                </VBox>
+                            </VBox>
+
+                            <VBox fx:id="pipelineEmptyBox" styleClass="stu-empty-state" spacing="6" visible="false" managed="false">
+                                <Label text="No applications submitted yet." styleClass="stu-empty-text"/>
+                                <Button text="Browse Open Jobs" styleClass="secondary-button" onAction="#handleNavBrowseJobs"/>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Activity Trend Chart -->
+                        <VBox fx:id="trendChartBox" styleClass="section-card" spacing="14" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <VBox spacing="2">
+                                <Label text="Application activity trend" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                <Label text="Weekly submission velocity across application stages" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                            </VBox>
+
+                            <LineChart fx:id="trendLineChart" animated="false" legendVisible="true" prefHeight="220"
+                                       styleClass="admin-chart-common">
+                                <xAxis><CategoryAxis fx:id="trendXAxis"/></xAxis>
+                                <yAxis><NumberAxis fx:id="trendYAxis"/></yAxis>
+                            </LineChart>
+
+                            <Label fx:id="trendEmptyLabel" text="No activity data recorded yet."
+                                   styleClass="stu-empty-text" visible="false" managed="false"/>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- ── Recommended For You & Recent Activity ── -->
+                    <GridPane hgap="20" vgap="16">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="60"/>
+                            <ColumnConstraints percentWidth="40"/>
+                        </columnConstraints>
+
+                        <!-- Recommended for you -->
+                        <VBox styleClass="section-card" spacing="14" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <HBox alignment="CENTER_LEFT">
+                                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                    <Label text="Recommended for you" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                    <Label text="Based on your skills, resume, and preferences" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                                </VBox>
+                                <Button text="Browse all jobs →" styleClass="table-action-btn" onAction="#handleNavBrowseJobs"/>
+                            </HBox>
+
+                            <VBox fx:id="recommendedJobsBox" spacing="10"/>
+
+                            <VBox fx:id="recommendationsEmptyBox" styleClass="stu-empty-state" spacing="6" visible="false" managed="false">
+                                <Label text="No matching jobs found right now." styleClass="stu-empty-text"/>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Recent Activity & Next Best Step -->
+                        <VBox spacing="16" GridPane.columnIndex="1" GridPane.rowIndex="0">
+
+                            <!-- Recent Activity Card -->
+                            <VBox styleClass="section-card" spacing="12">
+                                <Label text="Recent activity" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                <VBox fx:id="recentActivityBox" spacing="8"/>
+                                <Label fx:id="activityEmptyLabel" text="No recent placement activity recorded."
+                                       styleClass="stu-empty-text" visible="false" managed="false"/>
+                            </VBox>
+
+                            <!-- Next Best Step Card -->
+                            <VBox styleClass="section-card" spacing="10" style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1;">
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label text="Next best step" style="-fx-font-size: 13.5px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" HBox.hgrow="ALWAYS"/>
+                                    <Label text="HIGH IMPACT" styleClass="badge-pill-success" style="-fx-font-size: 9.5px;"/>
+                                </HBox>
+                                <Label text="Add portfolio projects" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E293B;"/>
+                                <Label text="Students with 2+ completed projects receive 34% more recruiter shortlists."
+                                       style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;" wrapText="true"/>
+                                <Button text="Complete profile →" styleClass="primary-button" style="-fx-font-size: 12px; -fx-padding: 8 16;" onAction="#handleNavProfile"/>
+                            </VBox>
+
+                        </VBox>
+                    </GridPane>
+
+                    <!-- ── Resume Readiness & Skill Insights Section ── -->
+                    <VBox styleClass="section-card" spacing="16">
+                        <HBox alignment="CENTER_LEFT">
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <Label text="Resume Readiness &amp; Skill Insights" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                <Label text="Deterministic evaluation of your uploaded profile resume" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                            </VBox>
+                            <Button fx:id="openResumeAnalyzerBtn" text="Analyze Resume"
+                                    styleClass="primary-button" style="-fx-font-size: 12px;" onAction="#handleNavResumeAnalyzer"/>
+                        </HBox>
+
+                        <!-- Empty state when no resume uploaded -->
+                        <VBox fx:id="resumeEmptyBox" styleClass="stu-empty-state" spacing="6" visible="false" managed="false">
+                            <Label text="No resume uploaded to your profile yet." styleClass="stu-empty-text"/>
+                            <Button text="Upload Resume in Profile" styleClass="secondary-button" onAction="#handleNavProfile"/>
+                        </VBox>
+
+                        <!-- Content box when resume exists -->
+                        <VBox fx:id="resumeContentBox" spacing="16">
+                            <GridPane hgap="20" vgap="14">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="48"/>
+                                    <ColumnConstraints percentWidth="52"/>
+                                </columnConstraints>
+
+                                <!-- Left Column: Score Card & Rubric Breakdown -->
+                                <VBox styleClass="admin-card-inner" spacing="12" GridPane.columnIndex="0">
+                                    <HBox alignment="CENTER_LEFT" spacing="10">
+                                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                            <Label text="OVERALL READINESS SCORE" styleClass="kpi-figma-title"/>
+                                            <Label fx:id="resumeOverallScoreLabel" text="— / 100" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
+                                        </VBox>
+                                        <Label fx:id="resumeConfidenceBadge" text="EVALUATION PENDING" styleClass="admin-scope-pill"/>
+                                    </HBox>
+
+                                    <HBox spacing="14" alignment="CENTER_LEFT">
+                                        <Label fx:id="resumeFilenameLabel" text="Active Resume" style="-fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                        <Label fx:id="resumeUploadDateLabel" text="Uploaded: —" styleClass="subtitle-muted"/>
+                                        <Label fx:id="resumeSizeLabel" text="—" styleClass="subtitle-muted"/>
+                                    </HBox>
+
+                                    <Separator/>
+
+                                    <!-- Rubric Bars -->
+                                    <VBox spacing="8">
+                                        <VBox spacing="3">
+                                            <HBox alignment="CENTER_LEFT">
+                                                <Label text="Skills Match" styleClass="detail-key"/>
+                                                <Region HBox.hgrow="ALWAYS"/>
+                                                <Label fx:id="rubricSkillsLabel" text="0 / 40 pts" styleClass="detail-value-bold"/>
+                                            </HBox>
+                                            <ProgressBar fx:id="rubricSkillsBar" progress="0.0" maxWidth="Infinity" styleClass="stu-progress-custom stu-progress-shortlisted"/>
+                                        </VBox>
+
+                                        <VBox spacing="3">
+                                            <HBox alignment="CENTER_LEFT">
+                                                <Label text="Experience Depth" styleClass="detail-key"/>
+                                                <Region HBox.hgrow="ALWAYS"/>
+                                                <Label fx:id="rubricExpLabel" text="0 / 25 pts" styleClass="detail-value-bold"/>
+                                            </HBox>
+                                            <ProgressBar fx:id="rubricExpBar" progress="0.0" maxWidth="Infinity" styleClass="stu-progress-custom stu-progress-pending"/>
+                                        </VBox>
+
+                                        <VBox spacing="3">
+                                            <HBox alignment="CENTER_LEFT">
+                                                <Label text="Education &amp; Credentials" styleClass="detail-key"/>
+                                                <Region HBox.hgrow="ALWAYS"/>
+                                                <Label fx:id="rubricEduLabel" text="0 / 15 pts" styleClass="detail-value-bold"/>
+                                            </HBox>
+                                            <ProgressBar fx:id="rubricEduBar" progress="0.0" maxWidth="Infinity" styleClass="stu-progress-custom stu-progress-selected"/>
+                                        </VBox>
+
+                                        <VBox spacing="3">
+                                            <HBox alignment="CENTER_LEFT">
+                                                <Label text="Completeness &amp; Structure" styleClass="detail-key"/>
+                                                <Region HBox.hgrow="ALWAYS"/>
+                                                <Label fx:id="rubricCompLabel" text="0 / 10 pts" styleClass="detail-value-bold"/>
+                                            </HBox>
+                                            <ProgressBar fx:id="rubricCompBar" progress="0.0" maxWidth="Infinity" styleClass="stu-progress-custom stu-progress-selected"/>
+                                        </VBox>
+                                    </VBox>
+
+                                    <!-- Parsed Signals Counter Tags -->
+                                    <HBox spacing="8" style="-fx-padding: 4 0 0 0;">
+                                        <Label fx:id="resumeSkillsCountLabel" text="0 Skills" styleClass="admin-badge-neutral"/>
+                                        <Label fx:id="resumeExpCountLabel" text="0 Experiences" styleClass="admin-badge-neutral"/>
+                                        <Label fx:id="resumeProjCountLabel" text="0 Projects" styleClass="admin-badge-neutral"/>
+                                        <Label fx:id="resumeCertCountLabel" text="0 Certs" styleClass="admin-badge-neutral"/>
+                                        <Label fx:id="resumeMetricsCountLabel" text="0 Metrics" styleClass="admin-badge-neutral"/>
+                                    </HBox>
+                                </VBox>
+
+                                <!-- Right Column: Skills Extracted & In-Demand Gaps -->
+                                <VBox styleClass="admin-card-inner" spacing="12" GridPane.columnIndex="1">
+                                    <VBox spacing="6">
+                                        <Label text="Recognized Resume Skills" style="-fx-font-weight: bold; -fx-text-fill: #0F172A; -fx-font-size: 13px;"/>
+                                        <FlowPane fx:id="currentSkillsFlowPane" hgap="6" vgap="6"/>
+                                        <Label fx:id="skillsEmptyLabel" text="No skills detected yet." styleClass="subtitle-muted" visible="false" managed="false"/>
+                                    </VBox>
+
+                                    <Separator/>
+
+                                    <VBox spacing="6">
+                                        <Label text="In-Demand Skill Gaps (Market Comparison)" style="-fx-font-weight: bold; -fx-text-fill: #D97706; -fx-font-size: 13px;"/>
+                                        <FlowPane fx:id="demandSkillsFlowPane" hgap="6" vgap="6"/>
+                                        <Label fx:id="demandEmptyLabel" text="All top market skills matched!" styleClass="subtitle-muted" visible="false" managed="false"/>
+                                    </VBox>
+
+                                    <Separator/>
+
+                                    <!-- Persisted Analysis Info -->
+                                    <HBox fx:id="resumePersistedBox" alignment="CENTER_LEFT" spacing="8">
+                                        <Label text="📊" style="-fx-font-size: 12px;"/>
+                                        <Label fx:id="resumePersistedSummaryLabel" text="Previous Full Analysis: None yet" styleClass="subtitle-muted" wrapText="true"/>
+                                    </HBox>
+
+                                    <Label fx:id="resumeDisclaimerLabel" styleClass="disclaimer-label" wrapText="true"
+                                           text="Deterministic resume quality indicator based on structural heuristics and skill extraction. Not a placement guarantee."/>
+                                </VBox>
+                            </GridPane>
+                        </VBox>
+                    </VBox>
+                </VBox>
+                <!-- ── VIEW 2: Student Profile Pane ── -->
+                <VBox fx:id="profilePane" styleClass="content-body" spacing="22" visible="false" managed="false">
+
+                    <HBox alignment="CENTER_LEFT" spacing="16" styleClass="section-card" style="-fx-padding: 18 24;">
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="STUDENT PROFILE" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-letter-spacing: 0.8px;"/>
+                            <Label text="My Profile" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                            <Label text="Keep your academic, professional, and preference data current." style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                        </VBox>
+                        <Button text="Save changes ✓" styleClass="primary-button" style="-fx-padding: 10 20;" onAction="#handleSaveProfile"/>
+                    </HBox>
+
+                    <!-- Profile Form Cards -->
+                    <GridPane hgap="20" vgap="16">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="32"/>
+                            <ColumnConstraints percentWidth="68"/>
+                        </columnConstraints>
+
+                        <!-- Left Profile Card -->
+                        <VBox styleClass="section-card" spacing="16" alignment="TOP_CENTER" GridPane.columnIndex="0">
+                            <StackPane styleClass="header-avatar-badge" style="-fx-min-width: 72; -fx-min-height: 72; -fx-max-width: 72; -fx-max-height: 72; -fx-font-size: 24px;">
+                                <Label fx:id="profileCardInitialsLabel" text="ST" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+                            </StackPane>
+                            <Label fx:id="profileCardNameLabel" text="Student Profile" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                            <Label fx:id="profileCardDegreeLabel" text="Degree Program" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                            <Label text="Student Member" styleClass="badge-pill-success"/>
+
+                            <Separator/>
+
+                            <GridPane hgap="12" vgap="8">
+                                <Label text="Institution" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="profileCardCollegeLabel" text="—" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                <Label text="Grad Year" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="profileCardGradYearLabel" text="—" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <Label text="Account" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <Label text="Active" styleClass="detail-value-bold" style="-fx-text-fill: #16A34A;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            </GridPane>
+
+                            <Label fx:id="profileStatusLabel" styleClass="success-label" wrapText="true" visible="false"/>
+                        </VBox>
+
+                        <!-- Right Form Details -->
+                        <VBox spacing="16" GridPane.columnIndex="1">
+
+                            <!-- Personal Information -->
+                            <VBox styleClass="section-card" spacing="14">
+                                <Label text="Personal information" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                <GridPane hgap="16" vgap="12">
+                                    <columnConstraints>
+                                        <ColumnConstraints percentWidth="50"/>
+                                        <ColumnConstraints percentWidth="50"/>
+                                    </columnConstraints>
+                                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                        <Label text="Phone Number" styleClass="field-label"/>
+                                        <TextField fx:id="phoneField" promptText="+91 98765 43210" styleClass="text-input"/>
+                                    </VBox>
+                                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                        <Label text="Current College / University" styleClass="field-label"/>
+                                        <TextField fx:id="collegeField" promptText="SRM University" styleClass="text-input"/>
+                                    </VBox>
+                                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                        <Label text="Degree Program" styleClass="field-label"/>
+                                        <TextField fx:id="degreeField" promptText="B.Tech Computer Science" styleClass="text-input"/>
+                                    </VBox>
+                                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                        <Label text="Graduation Year" styleClass="field-label"/>
+                                        <TextField fx:id="gradYearField" promptText="2028" styleClass="text-input"/>
+                                    </VBox>
+                                </GridPane>
+                            </VBox>
+
+                            <!-- Skills & Technical Attributes -->
+                            <VBox styleClass="section-card" spacing="14">
+                                <Label text="Skills &amp; Technical Attributes" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                <VBox spacing="6">
+                                    <Label text="Technical Skills (comma-separated)" styleClass="field-label"/>
+                                    <TextArea fx:id="skillsArea" promptText="e.g. Java, Spring Boot, MySQL, React, Python, Data Structures"
+                                              prefRowCount="3" wrapText="true" styleClass="text-input"/>
+                                </VBox>
+                                <VBox spacing="6">
+                                    <Label text="Resume Stored Path (optional / legacy)" styleClass="field-label"/>
+                                    <TextField fx:id="resumePathField" promptText="data/resumes/my_resume.pdf" styleClass="text-input"/>
+                                </VBox>
+                            </VBox>
+
+                        </VBox>
+                    </GridPane>
+
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

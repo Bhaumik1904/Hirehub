@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  student_sidebar.fxml — Shared persistent left navigation sidebar for all Student Portal screens.
+  Visual Source of Truth: D:\HireHub\images\student-overview.png
+  Controller: com.hirehub.controller.StudentSidebarController
+-->
+<VBox xmlns="http://javafx.oracle.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hirehub.controller.StudentSidebarController"
+      styleClass="sidebar" spacing="2" minWidth="240" prefWidth="240">
+
+    <!-- Brand Logo Header -->
+    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="sidebar-brand">
+        <StackPane styleClass="sidebar-logo-badge">
+            <Label text="H" style="-fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-font-size: 16px;"/>
+        </StackPane>
+        <VBox spacing="1">
+            <Label text="HireHub" styleClass="sidebar-brand-name"/>
+            <Label text="STUDENT WORKSPACE" styleClass="sidebar-brand-sub"/>
+        </VBox>
+    </HBox>
+
+    <Separator styleClass="sidebar-divider"/>
+
+    <!-- Category: WORKSPACE -->
+    <Label text="WORKSPACE" styleClass="sidebar-category-header"/>
+
+    <Button fx:id="navDashboardBtn" text="▦   Overview"
+            styleClass="sidebar-nav-btn"
+            maxWidth="Infinity" onAction="#handleNavDashboard"/>
+
+    <HBox alignment="CENTER_LEFT" spacing="0">
+        <Button fx:id="navBrowseJobsBtn" text="💼  Browse Jobs"
+                styleClass="sidebar-nav-btn"
+                HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleNavBrowseJobs"/>
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="0">
+        <Button fx:id="navApplicationsBtn" text="📄  My Applications"
+                styleClass="sidebar-nav-btn"
+                HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleNavApplications"/>
+    </HBox>
+
+    <Button fx:id="navResumeAnalyzerBtn" text="⛶  Resume Analyzer"
+            styleClass="sidebar-nav-btn"
+            maxWidth="Infinity" onAction="#handleNavResumeAnalyzer"/>
+
+    <Button fx:id="navAIBtn" text="✦  AI Career Assistant"
+            styleClass="sidebar-nav-btn"
+            maxWidth="Infinity" onAction="#handleNavAI"/>
+
+    <!-- Category: ACCOUNT -->
+    <Label text="ACCOUNT" styleClass="sidebar-category-header" style="-fx-padding: 16 16 4 16;"/>
+
+    <Button fx:id="navProfileBtn" text="👤  My Profile"
+            styleClass="sidebar-nav-btn"
+            maxWidth="Infinity" onAction="#handleNavProfile"/>
+
+    <!-- Spacer -->
+    <Pane VBox.vgrow="ALWAYS"/>
+
+    <!-- Bottom Student Workspace Status Pill -->
+    <VBox styleClass="sidebar-bottom-panel" spacing="6" style="-fx-margin: 0 14 8 14;">
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label text="🎓" style="-fx-font-size: 13px;"/>
+            <VBox spacing="1" HBox.hgrow="ALWAYS">
+                <Label text="Student Workspace" style="-fx-font-size: 10.5px; -fx-text-fill: #94A3B8; -fx-font-weight: bold;"/>
+                <Label text="Career &amp; Placements" style="-fx-font-size: 11.5px; -fx-text-fill: #F1F5F9; -fx-font-weight: bold;"/>
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <Separator styleClass="sidebar-divider"/>
+
+    <!-- Logout Button -->
+    <Button fx:id="navLogoutBtn" text="⎋   Sign out"
+            styleClass="sidebar-nav-btn, sidebar-logout-btn"
+            maxWidth="Infinity" onAction="#handleLogout"/>
+    <Region minHeight="8"/>
+</VBox>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  resume_analyzer.fxml — HireHub AI Resume Analyzer
+  Visual Source of Truth: D:\HireHub\images\student-resume-analyzer.png
+  Controller: com.hirehub.controller.ResumeAnalyzerController
+  Preserves 100% of existing fx:id bindings, event handlers, and GroqCloud AI workflows.
+-->
+<BorderPane xmlns="http://javafx.oracle.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hirehub.controller.ResumeAnalyzerController"
+            styleClass="app-root">
+
+    <!-- ── Left Persistent Navigation Sidebar ── -->
+    <left>
+        <fx:include fx:id="studentSidebar" source="student_sidebar.fxml"/>
+    </left>
+
+    <!-- ── Main Content Area ── -->
+    <center>
+        <VBox spacing="0">
+            <!-- ── Top Header Bar ── -->
+            <HBox styleClass="content-header" alignment="CENTER_LEFT" spacing="14">
+                <Button fx:id="backBtn" text="← Back to Dashboard" styleClass="header-icon-action" onAction="#handleBack"/>
+                <VBox spacing="1" HBox.hgrow="ALWAYS">
+                    <Label text="Student workspace &gt; Resume Analyzer" styleClass="header-breadcrumb-root"/>
+                    <Label text="Resume Analyzer" styleClass="content-header-title"/>
+                </VBox>
+                <HBox styleClass="header-search-wrap" alignment="CENTER_LEFT" spacing="8">
+                    <Label text="🔍" style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                    <TextField promptText="Search analyses…" styleClass="header-search-box" prefWidth="180"/>
+                    <Label text="Ctrl K" styleClass="header-shortcut-tag"/>
+                </HBox>
+                <Button text="🔔" styleClass="header-icon-action"/>
+                <Label text="STUDENT" styleClass="navbar-role-badge"/>
+            </HBox>
+
+            <!-- ── Main Scrollable Body ── -->
+            <ScrollPane fx:id="contentScrollPane" fitToWidth="true" fitToHeight="false"
+                        vbarPolicy="AS_NEEDED" hbarPolicy="NEVER" styleClass="content-scroll" VBox.vgrow="ALWAYS">
+            <VBox styleClass="content-body" spacing="22">
+
+                <!-- ── Subtitle & Action Header Banner ── -->
+                <HBox alignment="CENTER_LEFT" spacing="16" styleClass="section-card" style="-fx-padding: 18 24;">
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                        <Label text="CAREER TOOLKIT" style="-fx-font-size: 10.5px; -fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-letter-spacing: 0.8px;"/>
+                        <Label text="Resume Intelligence &amp; ATS Compatibility" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        <Label text="Measure resume readiness, benchmark against job openings, and receive AI-driven bullet optimizations."
+                               style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+                    <Label fx:id="resumeStatusBadge" text="No Resume Uploaded" styleClass="badge-inactive"/>
+                </HBox>
+
+                <!-- ── 1. MY RESUME SECTION CARD ── -->
+                <VBox styleClass="section-card" spacing="16">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="Active Resume File" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+
+                    <!-- Upload drop area when no resume is uploaded -->
+                    <VBox fx:id="noResumeBox" styleClass="upload-placeholder-box" spacing="12" alignment="CENTER"
+                          style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-style: dashed; -fx-border-radius: 12; -fx-padding: 32;">
+                        <Label text="📄" style="-fx-font-size: 32px;"/>
+                        <Label text="Upload Your PDF Resume (max 5 MB)" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        <Label text="Extracts contact details, education, skills, projects, and work history automatically."
+                               styleClass="detail-key" wrapText="true"/>
+                        <Button fx:id="uploadResumeBtn" text="📁 Select PDF Resume" styleClass="primary-button"
+                                style="-fx-padding: 10 24;" onAction="#handleUploadResume"/>
+                    </VBox>
+
+                    <!-- Active resume summary card -->
+                    <VBox fx:id="activeResumeBox" spacing="14" visible="false" managed="false">
+                        <GridPane hgap="24" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints minWidth="120" prefWidth="140"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                                <ColumnConstraints minWidth="120" prefWidth="140"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <Label text="File Name" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Label fx:id="fileNameLabel" styleClass="detail-value-bold" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="File Size" styleClass="detail-key" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <Label fx:id="fileSizeLabel" styleClass="detail-value" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                            <Label text="Uploaded On" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Label fx:id="uploadDateLabel" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="Integrity Hash" styleClass="detail-key" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                            <Label fx:id="fileHashLabel" styleClass="detail-value-mono" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                        </GridPane>
+
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Button fx:id="replaceResumeBtn" text="🔄 Replace Resume" styleClass="secondary-button"
+                                    onAction="#handleReplaceResume"/>
+                            <Button fx:id="deleteResumeBtn" text="🗑 Delete Resume" styleClass="delete-button"
+                                    onAction="#handleDeleteResume"/>
+                            <Label fx:id="uploadFeedbackLabel" styleClass="detail-key" wrapText="true"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ── 2. EXTRACTED PROFILE & SKILLS CARD ── -->
+                <VBox fx:id="extractedInfoCard" styleClass="section-card" spacing="16" visible="false" managed="false">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="Extracted Profile &amp; Structured Data" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="syncProfileBtn" text="⚡ Sync with My Profile" styleClass="accent-outline-button"
+                                onAction="#handleSyncProfile"/>
+                    </HBox>
+
+                    <GridPane hgap="24" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="120" prefWidth="140"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                            <ColumnConstraints minWidth="120" prefWidth="140"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <Label text="Candidate Name" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <Label fx:id="extractedNameLabel" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Email Address" styleClass="detail-key" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                        <Label fx:id="extractedEmailLabel" styleClass="detail-value" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                        <Label text="Phone Number" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <Label fx:id="extractedPhoneLabel" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Degree &amp; College" styleClass="detail-key" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                        <Label fx:id="extractedEduLabel" styleClass="detail-value" GridPane.columnIndex="3" GridPane.rowIndex="1" wrapText="true"/>
+
+                        <Label text="Profile Links" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <Label fx:id="extractedLinksLabel" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                               GridPane.columnSpan="3" wrapText="true"/>
+
+                        <Label text="Extracted Skills" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <FlowPane fx:id="skillsFlowPane" hgap="6" vgap="6" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                  GridPane.columnSpan="3"/>
+                    </GridPane>
+
+                    <Label fx:id="syncStatusLabel" styleClass="success-label" visible="false" managed="false"/>
+                </VBox>
+
+                <!-- ── 3. TARGET JOB SELECTION CARD ── -->
+                <VBox styleClass="section-card" spacing="14">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="Target Job Selection" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="clearJobSelectionBtn" text="🌐 General Review (No Job)" styleClass="secondary-button"
+                                onAction="#handleClearJobSelection"/>
+                    </HBox>
+                    <Label text="Select an active job posting for role-specific compatibility, or click 'General Review' for an overall audit."
+                           styleClass="detail-key" wrapText="true"/>
+
+                    <ComboBox fx:id="jobComboBox" styleClass="combo-input" maxWidth="Infinity"
+                              promptText="Choose a posted job listing (or leave empty for General Review)…"/>
+
+                    <VBox fx:id="jobDetailsBox" spacing="8" styleClass="callout-card" visible="false" managed="false">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label fx:id="jobTitleHeaderLabel" styleClass="detail-value-bold"/>
+                            <Label fx:id="jobCompanyLabel" styleClass="detail-key"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="jobLocationTypeLabel" styleClass="badge-neutral"/>
+                        </HBox>
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Label text="Required Skills:" styleClass="detail-key"/>
+                            <Label fx:id="jobSkillsLabel" styleClass="detail-value" wrapText="true"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ── 4. DETERMINISTIC COMPATIBILITY SCORE CARD ── -->
+                <VBox fx:id="scoreCard" styleClass="section-card" spacing="18" visible="false" managed="false">
+                    <HBox alignment="CENTER_LEFT" spacing="16">
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label fx:id="scoreSectionTitleLabel" text="Deterministic Compatibility Audit" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                <Label fx:id="confidenceBadgeLabel" text="Confidence: High" styleClass="badge-pill-success"/>
+                            </HBox>
+                            <Label text="Fair Evaluation Notice: Unstated information is marked as unevaluated rather than penalized."
+                                   styleClass="detail-key" wrapText="true"/>
+                        </VBox>
+
+                        <!-- Overall score display circle/badge -->
+                        <VBox alignment="CENTER" style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 16 24;">
+                            <Label fx:id="overallScoreNumberLabel" text="0%" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
+                            <Label fx:id="overallScoreTypeLabel" text="Overall Match" styleClass="score-sub-label"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- 5 Rubric Breakdown Bars -->
+                    <VBox spacing="12">
+                        <!-- Rubric 1: Required Skills (40 pts) -->
+                        <VBox spacing="4">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label fx:id="rubric1TitleLabel" text="🎯 Required Skills Match (40%)" styleClass="rubric-title" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="skillsScoreLabel" text="0 / 40 pts" styleClass="rubric-pts"/>
+                            </HBox>
+                            <ProgressBar fx:id="skillsProgressBar" progress="0.0" maxWidth="Infinity" styleClass="rubric-bar"/>
+                            <Label fx:id="skillsBreakdownDetailLabel" styleClass="detail-key" wrapText="true"/>
+                        </VBox>
+
+                        <!-- Rubric 2: Projects & Experience (25 pts) -->
+                        <VBox spacing="4">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="💼 Projects &amp; Work Experience (25%)" styleClass="rubric-title" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="expScoreLabel" text="0 / 25 pts" styleClass="rubric-pts"/>
+                            </HBox>
+                            <ProgressBar fx:id="expProgressBar" progress="0.0" maxWidth="Infinity" styleClass="rubric-bar"/>
+                            <Label fx:id="expBreakdownDetailLabel" styleClass="detail-key" wrapText="true"/>
+                        </VBox>
+
+                        <!-- Rubric 3: Education & Eligibility (15 pts) -->
+                        <VBox spacing="4">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="🎓 Academic Profile &amp; Eligibility (15%)" styleClass="rubric-title" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="eduScoreLabel" text="0 / 15 pts" styleClass="rubric-pts"/>
+                            </HBox>
+                            <ProgressBar fx:id="eduProgressBar" progress="0.0" maxWidth="Infinity" styleClass="rubric-bar"/>
+                            <Label fx:id="eduBreakdownDetailLabel" styleClass="detail-key" wrapText="true"/>
+                        </VBox>
+
+                        <!-- Rubric 4: Resume Completeness (10 pts) -->
+                        <VBox spacing="4">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="📋 Completeness &amp; Contact Clarity (10%)" styleClass="rubric-title" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="compScoreLabel" text="0 / 10 pts" styleClass="rubric-pts"/>
+                            </HBox>
+                            <ProgressBar fx:id="compProgressBar" progress="0.0" maxWidth="Infinity" styleClass="rubric-bar"/>
+                            <Label fx:id="compBreakdownDetailLabel" styleClass="detail-key" wrapText="true"/>
+                        </VBox>
+
+                        <!-- Rubric 5: Certifications (10 pts) -->
+                        <VBox spacing="4">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="📜 Detected Certifications &amp; Credentials (10%)" styleClass="rubric-title" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="certScoreLabel" text="0 / 10 pts" styleClass="rubric-pts"/>
+                            </HBox>
+                            <ProgressBar fx:id="certProgressBar" progress="0.0" maxWidth="Infinity" styleClass="rubric-bar"/>
+                            <Label fx:id="certBreakdownDetailLabel" styleClass="detail-key" wrapText="true"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Unevaluated Criteria Alert Box -->
+                    <VBox fx:id="unevaluatedCriteriaBox" spacing="4" styleClass="callout-card" visible="false" managed="false">
+                        <Label text="ℹ Criteria Not Specified in Resume (Treated as Unevaluated):" styleClass="detail-value-bold"/>
+                        <Label fx:id="unevaluatedCriteriaLabel" styleClass="detail-key" wrapText="true"/>
+                    </VBox>
+
+                    <!-- Matching & Missing Skills Tags -->
+                    <HBox spacing="16">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label fx:id="matchingSkillsTitleLabel" text="Matching Required Skills" styleClass="detail-value-bold"/>
+                            <FlowPane fx:id="matchingSkillsFlow" hgap="6" vgap="6"/>
+                        </VBox>
+                        <VBox fx:id="missingSkillsBox" spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="Missing Required Skills" styleClass="detail-value-bold"/>
+                            <FlowPane fx:id="missingSkillsFlow" hgap="6" vgap="6"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ── 5. AI DEEP ANALYSIS & ACTION PLAN CARD ── -->
+                <VBox fx:id="aiActionCard" styleClass="section-card" spacing="16">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                            <Label text="AI Deep Analysis &amp; Action Plan" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                            <Label text="Receive Google X-Y-Z bullet rewrites, ATS fixes, and a prioritized 30-day preparation roadmap."
+                                   styleClass="detail-key"/>
+                        </VBox>
+                        <Button fx:id="generateAiReviewBtn" text="🤖 Analyze with GroqCloud AI" styleClass="primary-button"
+                                style="-fx-padding: 10 20;" onAction="#handleGenerateAiReview"/>
+                    </HBox>
+
+                    <!-- Privacy & Consent Notice Banner -->
+                    <HBox styleClass="consent-info-box" spacing="10" alignment="CENTER_LEFT">
+                        <Label text="🔒" styleClass="info-icon"/>
+                        <Label text="Privacy Notice: HireHub asks for your explicit consent before transmitting any resume text or job details to GroqCloud. No data is sent automatically."
+                               styleClass="detail-key" wrapText="true" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+
+                    <!-- Loading Progress Indicator during AI call -->
+                    <HBox fx:id="aiLoadingBox" spacing="12" alignment="CENTER_LEFT" visible="false" managed="false">
+                        <ProgressIndicator fx:id="aiProgressIndicator" prefWidth="24" prefHeight="24"/>
+                        <Label fx:id="aiLoadingStatusLabel" text="GroqCloud AI is analyzing your resume against job requirements…"
+                               styleClass="detail-key"/>
+                    </HBox>
+
+                    <!-- Formatted AI Report Container -->
+                    <VBox fx:id="aiReportContainer" spacing="12" minHeight="100" visible="false" managed="false">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <Label text="GroqCloud Comprehensive Career Report" styleClass="detail-value-bold"/>
+                                <Label fx:id="aiReportMetaLabel" text="" styleClass="detail-key" wrapText="true" visible="false" managed="false"/>
+                            </VBox>
+                            <Button fx:id="copyReportBtn" text="📋 Copy Report" styleClass="secondary-button"
+                                    onAction="#handleCopyReport"/>
+                        </HBox>
+                        <Separator/>
+                        <VBox fx:id="aiMarkdownContentBox" spacing="10"/>
+                    </VBox>
+
+                    <!-- In-Place Retry & Notice Card -->
+                    <VBox fx:id="aiRetryCard" spacing="10" styleClass="callout-card" visible="false" managed="false">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="⚠" styleClass="info-icon"/>
+                            <Label text="GroqCloud AI Service Unavailable" styleClass="detail-value-bold"/>
+                        </HBox>
+                        <Label fx:id="aiServiceNoticeLabel"
+                               text="GroqCloud AI is currently experiencing high demand. All deterministic scores and extracted skills above remain fully preserved."
+                               styleClass="detail-key" wrapText="true"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Button fx:id="retryAiAnalysisBtn" text="🔄 Retry AI Analysis" styleClass="secondary-button"
+                                    onAction="#handleRetryAiReview"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ── 6. ANALYSIS HISTORY CARD ── -->
+                <VBox styleClass="section-card" spacing="14">
+                    <Label text="Analysis History" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    <Label text="Review your previous resume analyses and track your compatibility growth across target positions."
+                           styleClass="detail-key"/>
+
+                    <TableView fx:id="historyTableView" prefHeight="220" styleClass="data-table">
+                        <columns>
+                            <TableColumn fx:id="colDate" text="Date" prefWidth="130"/>
+                            <TableColumn fx:id="colJobTitle" text="Target Job" prefWidth="220"/>
+                            <TableColumn fx:id="colCompany" text="Company" prefWidth="160"/>
+                            <TableColumn fx:id="colScore" text="Match Score" prefWidth="110"/>
+                            <TableColumn fx:id="colSkillsScore" text="Skills Match" prefWidth="110"/>
+                            <TableColumn fx:id="colAction" text="Action" prefWidth="120"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="No previous resume analyses recorded. Upload a resume and evaluate against a job above."
+                                   styleClass="detail-key"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

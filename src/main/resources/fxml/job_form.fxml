@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  job_form.fxml — HireHub Recruiter Job Posting & Editing View
+  Visual Source of Truth: D:\HireHub\images\recruiter-post-job.png
+  Controller: com.hirehub.controller.JobFormController
+  Preserves 100% of existing fx:id bindings, event handlers, and atomic moderation workflows.
+-->
+<BorderPane xmlns="http://javafx.oracle.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hirehub.controller.JobFormController"
+            styleClass="app-root">
+
+    <!-- ── Left Sidebar Navigation (Matching Figma recruiter-post-job.png) ── -->
+    <left>
+        <VBox styleClass="sidebar-root" prefWidth="240" spacing="4">
+            <!-- Brand Logo -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="sidebar-brand-box">
+                <StackPane styleClass="brand-logo-pill">
+                    <Label text="H" styleClass="brand-logo-letter"/>
+                </StackPane>
+                <VBox spacing="2">
+                    <Label text="HireHub" styleClass="brand-title"/>
+                    <Label text="RECRUITER WORKSPACE" styleClass="brand-subtitle"/>
+                </VBox>
+            </HBox>
+
+            <Separator styleClass="sidebar-divider"/>
+
+            <!-- Category: HIRING WORKSPACE -->
+            <Label text="HIRING WORKSPACE" styleClass="sidebar-category-header"/>
+
+            <Button fx:id="navDashboardBtn" text="▦   Overview"
+                    onAction="#handleCancel" styleClass="sidebar-nav-btn" maxWidth="Infinity"/>
+            <Button fx:id="navJobsBtn" text="💼  Job Management"
+                    onAction="#handleCancel" styleClass="sidebar-nav-btn" maxWidth="Infinity"/>
+            <Button fx:id="navPostJobBtn" text="➕  Post a Job"
+                    styleClass="sidebar-nav-btn, sidebar-nav-active" maxWidth="Infinity"/>
+
+            <!-- Category: ORGANIZATION -->
+            <Label text="ORGANIZATION" styleClass="sidebar-category-header" style="-fx-padding: 16 16 4 16;"/>
+
+            <Button fx:id="navProfileBtn" text="🏢  Company Profile"
+                    onAction="#handleCancel" styleClass="sidebar-nav-btn" maxWidth="Infinity"/>
+
+            <!-- Spacer -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Bottom: Enterprise Badge -->
+            <VBox styleClass="sidebar-enterprise-card" spacing="3">
+                <Label text="Enterprise Verified" styleClass="sidebar-enterprise-title"/>
+                <Label text="Active posting portal" styleClass="sidebar-enterprise-sub"/>
+            </VBox>
+
+            <!-- Sign out -->
+            <Button fx:id="navLogoutBtn" text="⎋   Sign out"
+                    onAction="#handleCancel" styleClass="sidebar-nav-btn, sidebar-logout-btn" maxWidth="Infinity"/>
+            <Region minHeight="8"/>
+        </VBox>
+    </left>
+
+    <!-- ── Top Header Bar ── -->
+    <top>
+        <HBox styleClass="content-header" alignment="CENTER_LEFT" spacing="14">
+            <Button fx:id="cancelBtn" text="← Dashboard" styleClass="header-icon-action" onAction="#handleCancel"/>
+            <VBox spacing="1" HBox.hgrow="ALWAYS">
+                <Label text="Recruiter workspace &gt; Post a Job" styleClass="header-breadcrumb-root"/>
+                <Label fx:id="formTitleLabel" text="Post a Job" styleClass="content-header-title"/>
+            </VBox>
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button fx:id="saveDraftBtn" text="Save as Draft" styleClass="secondary-button" onAction="#handleSaveDraft"/>
+                <Button fx:id="publishBtn" text="Review &amp; Publish →" styleClass="primary-button" onAction="#handlePublish"/>
+            </HBox>
+        </HBox>
+    </top>
+
+    <!-- ── Scrollable Form Body ── -->
+    <center>
+        <ScrollPane fx:id="formScrollPane" fitToWidth="true" styleClass="content-scroll">
+            <VBox styleClass="content-body" spacing="22">
+
+                <!-- ── Header Subtitle Banner ── -->
+                <HBox alignment="CENTER_LEFT" spacing="16" styleClass="section-card" style="-fx-padding: 18 24;">
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                        <Label text="CREATE OPPORTUNITY" style="-fx-font-size: 10.5px; -fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-letter-spacing: 0.8px;"/>
+                        <Label text="Job Specification &amp; Requirements" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        <Label text="Provide comprehensive job details to attract qualified student candidates across campus."
+                               style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+                    <ProgressIndicator fx:id="loadingIndicator" prefWidth="24" prefHeight="24" visible="false" managed="false"/>
+                </HBox>
+
+                <!-- Feedback / Status message -->
+                <Label fx:id="statusLabel" styleClass="error-label" wrapText="true" maxWidth="Infinity" visible="false" managed="false"/>
+
+                <!-- ── Two Column Layout (Form on Left + Live Preview & Quality on Right) ── -->
+                <GridPane hgap="24" vgap="16">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="65"/>
+                        <ColumnConstraints percentWidth="35"/>
+                    </columnConstraints>
+
+                    <!-- Left: Main Job Form Card -->
+                    <VBox styleClass="section-card" spacing="18" GridPane.columnIndex="0">
+                        <Label text="Role details" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+                        <GridPane hgap="16" vgap="14">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+
+                            <!-- Row 0: Job Title (full width) -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
+                                <Label text="JOB TITLE *" styleClass="field-label"/>
+                                <TextField fx:id="titleField" styleClass="text-input" promptText="e.g. Software Engineering Intern"/>
+                            </VBox>
+
+                            <!-- Row 1: Company Name & Job Type -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="COMPANY NAME *" styleClass="field-label"/>
+                                <TextField fx:id="companyNameField" styleClass="text-input" promptText="e.g. Acme Technologies"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="EMPLOYMENT TYPE *" styleClass="field-label"/>
+                                <ComboBox fx:id="jobTypeCombo" styleClass="combo-input" maxWidth="Infinity"/>
+                            </VBox>
+
+                            <!-- Row 2: Location & Salary -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                <Label text="PRIMARY LOCATION *" styleClass="field-label"/>
+                                <TextField fx:id="locationField" styleClass="text-input" promptText="e.g. Bengaluru, Karnataka (or Remote)"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label text="COMPENSATION / SALARY (optional)" styleClass="field-label"/>
+                                <TextField fx:id="salaryRangeField" styleClass="text-input" promptText="e.g. ₹35,000 / month or 8–12 LPA"/>
+                            </VBox>
+
+                            <!-- Row 3: Description -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                                <Label text="JOB DESCRIPTION *" styleClass="field-label"/>
+                                <TextArea fx:id="descriptionArea" styleClass="text-input"
+                                          promptText="Explain the role, responsibilities, projects, and day-to-day work."
+                                          prefRowCount="6" wrapText="true"/>
+                            </VBox>
+
+                            <!-- Row 4: Required Skills -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2">
+                                <Label text="REQUIRED SKILLS (comma-separated) *" styleClass="field-label"/>
+                                <TextField fx:id="skillsField" styleClass="text-input"
+                                           promptText="e.g. Java, Spring Boot, MySQL, REST APIs, Git"/>
+                            </VBox>
+
+                            <!-- Row 5: Eligibility -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2">
+                                <Label text="ELIGIBILITY CRITERIA" styleClass="field-label"/>
+                                <TextArea fx:id="eligibilityArea" styleClass="text-input"
+                                          promptText="e.g. B.Tech / B.E. in CS/IT, minimum 7.0 CGPA, 2026/2027 graduating batch"
+                                          prefRowCount="3" wrapText="true"/>
+                            </VBox>
+
+                            <!-- Row 6: Deadline -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="6">
+                                <Label text="APPLICATION DEADLINE" styleClass="field-label"/>
+                                <DatePicker fx:id="deadlinePicker" styleClass="combo-input" maxWidth="Infinity" promptText="Select deadline date"/>
+                            </VBox>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Right: Live Summary Preview & Posting Quality -->
+                    <VBox spacing="16" GridPane.columnIndex="1">
+
+                        <!-- Live Summary Preview Card -->
+                        <VBox styleClass="section-card" spacing="12">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Live summary" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" HBox.hgrow="ALWAYS"/>
+                                <Label text="PREVIEW" styleClass="badge-pill-info" style="-fx-font-size: 10px;"/>
+                            </HBox>
+                            <Label text="Candidate-facing preview of how this listing appears on student job boards."
+                                   style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;" wrapText="true"/>
+
+                            <Separator/>
+
+                            <VBox spacing="6" style="-fx-background-color: #F8FAFC; -fx-padding: 12; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                                <Label text="Product / Engineering Role" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                                <Label text="Verified Employer Organization" style="-fx-font-size: 12px; -fx-text-fill: #2563EB; -fx-font-weight: bold;"/>
+                                <Label text="📍 Bangalore · Full-Time · ₹35,000/mo" style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Posting Quality Card -->
+                        <VBox styleClass="section-card" spacing="10">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Posting quality" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" HBox.hgrow="ALWAYS"/>
+                                <Label text="86%" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #16A34A;"/>
+                            </HBox>
+                            <ProgressBar progress="0.86" maxWidth="Infinity" styleClass="stu-progress-custom"/>
+
+                            <VBox spacing="6" style="-fx-padding: 6 0 0 0;">
+                                <Label text="✓ Clear role title" style="-fx-font-size: 11.5px; -fx-text-fill: #16A34A;"/>
+                                <Label text="✓ Compensation details provided" style="-fx-font-size: 11.5px; -fx-text-fill: #16A34A;"/>
+                                <Label text="✓ Focused skill requirements" style="-fx-font-size: 11.5px; -fx-text-fill: #16A34A;"/>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Hiring Tip Card -->
+                        <VBox styleClass="section-card" spacing="8" style="-fx-background-color: #EFF6FF; -fx-border-color: #BFDBFE;">
+                            <Label text="💡 Hiring Tip" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1E40AF;"/>
+                            <Label text="Roles with transparent salary details and fewer than 8 required skills receive 42% more qualified applications."
+                                   style="-fx-font-size: 11.5px; -fx-text-fill: #1E3A8A;" wrapText="true"/>
+                        </VBox>
+
+                    </VBox>
+                </GridPane>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

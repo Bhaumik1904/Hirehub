@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  applicant_management.fxml — HireHub Recruiter Candidate Pipeline View
+  Visual Source of Truth: D:\HireHub\images\recruiter-applicants.png
+  Controller: com.hirehub.controller.ApplicantManagementController
+  Preserves 100% of existing fx:id bindings, event handlers, and secure resume access logic.
+-->
+<BorderPane xmlns="http://javafx.oracle.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hirehub.controller.ApplicantManagementController"
+            styleClass="app-root">
+
+    <!-- ── Top Header Bar ── -->
+    <top>
+        <HBox styleClass="content-header" alignment="CENTER_LEFT" spacing="14">
+            <Button fx:id="backBtn" text="← Dashboard" styleClass="header-icon-action" onAction="#handleBack"/>
+            <VBox spacing="1" HBox.hgrow="ALWAYS">
+                <Label text="Recruiter workspace &gt; Applicants" styleClass="header-breadcrumb-root"/>
+                <Label text="Applicant Pipeline" styleClass="content-header-title"/>
+            </VBox>
+            <HBox styleClass="header-search-wrap" alignment="CENTER_LEFT" spacing="8">
+                <Label text="🔍" style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                <TextField promptText="Search candidates…" styleClass="header-search-box" prefWidth="180"/>
+                <Label text="Ctrl K" styleClass="header-shortcut-tag"/>
+            </HBox>
+            <Button text="🔔" styleClass="header-icon-action"/>
+            <Label text="RECRUITER" styleClass="navbar-role-badge recruiter-badge"/>
+        </HBox>
+    </top>
+
+    <!-- ── Main Layout: Filter Bar + Table View + Action Toolbar + Detail Panel ── -->
+    <center>
+        <HBox spacing="0" style="-fx-background-color: #F8FAFC;">
+
+            <!-- ── Left Filter Panel ── -->
+            <VBox styleClass="filter-panel" spacing="16" minWidth="240" prefWidth="240"
+                  style="-fx-background-color: #FFFFFF; -fx-border-color: transparent #E2E8F0 transparent transparent; -fx-border-width: 0 1 0 0; -fx-padding: 22 20;">
+
+                <Label text="Filter Candidates" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+                <VBox spacing="6">
+                    <Label text="Pipeline Stage" styleClass="field-label"/>
+                    <ComboBox fx:id="statusFilterCombo" styleClass="combo-input" maxWidth="Infinity"/>
+                </VBox>
+
+                <Button fx:id="refreshBtn" text="↻ Refresh Pipeline" styleClass="secondary-button"
+                        maxWidth="Infinity" onAction="#handleRefresh"/>
+
+                <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-padding: 6 0 0 0;">
+                    <ProgressIndicator fx:id="loadingIndicator" prefWidth="18" prefHeight="18" visible="false" managed="false"/>
+                    <Label fx:id="applicantCountLabel" style="-fx-font-size: 12px; -fx-text-fill: #64748B; -fx-font-weight: bold;"/>
+                </HBox>
+
+                <Label fx:id="tableStatusLabel" styleClass="error-label" wrapText="true"
+                       maxWidth="Infinity" visible="false" managed="false"/>
+
+                <!-- Hidden bindings container -->
+                <VBox visible="false" managed="false">
+                    <Label fx:id="jobTitleLabel"/>
+                    <Label fx:id="companyLabel"/>
+                </VBox>
+            </VBox>
+
+            <!-- ── Center Table & Action Toolbar ── -->
+            <VBox HBox.hgrow="ALWAYS" minWidth="520" spacing="14" style="-fx-padding: 22 24;">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="2" HBox.hgrow="ALWAYS">
+                        <Label text="CANDIDATE PIPELINE" style="-fx-font-size: 10.5px; -fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-letter-spacing: 0.8px;"/>
+                        <Label text="Review &amp; Advance Applicants" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Applicants TableView -->
+                <TableView fx:id="applicantsTable" styleClass="job-table" VBox.vgrow="ALWAYS"
+                           style="-fx-background-color: #FFFFFF; -fx-border-color: #E2E8F0; -fx-border-radius: 10; -fx-background-radius: 10;">
+                    <columns>
+                        <TableColumn fx:id="colName"        text="NAME"          prefWidth="140"/>
+                        <TableColumn fx:id="colEmail"       text="EMAIL"         prefWidth="160"/>
+                        <TableColumn fx:id="colCollege"     text="COLLEGE"       prefWidth="140"/>
+                        <TableColumn fx:id="colDegree"      text="DEGREE"        prefWidth="100"/>
+                        <TableColumn fx:id="colSkills"      text="SKILLS"        prefWidth="150"/>
+                        <TableColumn fx:id="colAppliedDate" text="APPLIED ON"    prefWidth="100"/>
+                        <TableColumn fx:id="colStatus"      text="STATUS"        prefWidth="100"/>
+                    </columns>
+                </TableView>
+
+                <!-- Pipeline Action Toolbar -->
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="section-card" style="-fx-padding: 12 16;">
+                    <Button fx:id="viewProfileBtn"     text="👤 Profile"      styleClass="secondary-button" onAction="#handleViewProfile"/>
+                    <Button fx:id="viewCoverLetterBtn" text="📄 Cover Letter" styleClass="secondary-button" onAction="#handleViewCoverLetter"/>
+                    <Button fx:id="viewResumeBtn"      text="📎 View Resume"  styleClass="secondary-button" onAction="#handleViewResume"/>
+                    <Separator orientation="VERTICAL"/>
+                    <Button fx:id="shortlistBtn"       text="✓ Shortlist"    styleClass="table-action-btn" onAction="#handleShortlist"/>
+                    <Button fx:id="selectBtn"          text="🏆 Select"       styleClass="primary-button" style="-fx-background-color: #16A34A; -fx-padding: 6 14;" onAction="#handleSelect"/>
+                    <Button fx:id="rejectBtn"          text="✕ Reject"       styleClass="delete-button" onAction="#handleReject"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="actionStatusLabel" styleClass="detail-key" wrapText="true"/>
+                </HBox>
+            </VBox>
+
+            <!-- ── Right Applicant Detail Panel ── -->
+            <ScrollPane fitToWidth="true" HBox.hgrow="NEVER" prefWidth="380"
+                        style="-fx-background-color: #FFFFFF; -fx-border-color: transparent transparent transparent #E2E8F0; -fx-border-width: 0 0 0 1;">
+                <VBox fx:id="detailPanel" styleClass="detail-panel" spacing="12"
+                      visible="false" managed="false" prefWidth="360" style="-fx-padding: 24 22; -fx-background-color: #FFFFFF;">
+
+                    <Label text="Applicant Details" style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    <Separator/>
+
+                    <Label text="Name" styleClass="detail-key"/>
+                    <Label fx:id="detailName" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+                    <Label text="Email Address" styleClass="detail-key"/>
+                    <Label fx:id="detailEmail" styleClass="detail-value" wrapText="true"/>
+
+                    <Label text="College / University" styleClass="detail-key"/>
+                    <Label fx:id="detailCollege" styleClass="detail-value" wrapText="true"/>
+
+                    <GridPane hgap="12" vgap="6">
+                        <Label text="Degree" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <Label fx:id="detailDegree" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        <Label text="Graduation Year" styleClass="detail-key" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <Label fx:id="detailGradYear" styleClass="detail-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    </GridPane>
+
+                    <Label text="Skills" styleClass="detail-key"/>
+                    <Label fx:id="detailSkills" styleClass="detail-value" wrapText="true"/>
+
+                    <Label text="Current Status" styleClass="detail-key"/>
+                    <Label fx:id="detailStatus" styleClass="detail-value" style="-fx-font-weight: bold; -fx-text-fill: #2563EB;"/>
+
+                    <Separator/>
+
+                    <Label text="Submitted Resume Snapshot" styleClass="detail-section-heading"/>
+                    <Label fx:id="detailResumeStatus" styleClass="detail-value" wrapText="true"/>
+                    <Button fx:id="detailDownloadResumeBtn" text="📥 Download Resume" styleClass="secondary-button"
+                            maxWidth="Infinity" onAction="#handleDownloadResume"/>
+
+                    <Separator/>
+
+                    <Label text="Cover Letter" styleClass="detail-section-heading"/>
+                    <TextArea fx:id="detailCoverLetter" styleClass="text-input detail-description"
+                              editable="false" wrapText="true" prefRowCount="6"/>
+                </VBox>
+            </ScrollPane>
+
+        </HBox>
+    </center>
+
+</BorderPane>

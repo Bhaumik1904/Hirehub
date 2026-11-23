@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="rootPane"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hirehub.controller.RecruiterDashboardController"
+            styleClass="app-root"
+            prefWidth="1220" prefHeight="780">
+
+    <!-- Persistent Left Sidebar (Dark Navy #0F172A) -->
+    <left>
+        <VBox styleClass="sidebar" prefWidth="240" minWidth="240" maxWidth="240" spacing="2">
+            <!-- Brand Logo Header -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="sidebar-brand">
+                <StackPane styleClass="sidebar-logo-badge">
+                    <Label text="H" style="-fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-font-size: 16px;"/>
+                </StackPane>
+                <VBox spacing="1">
+                    <Label text="HireHub" styleClass="sidebar-brand-name"/>
+                    <Label text="RECRUITER WORKSPACE" styleClass="sidebar-brand-sub"/>
+                </VBox>
+            </HBox>
+
+            <Separator styleClass="sidebar-divider"/>
+
+            <!-- Category: HIRING WORKSPACE -->
+            <Label text="HIRING WORKSPACE" styleClass="sidebar-category-header"/>
+
+            <Button fx:id="navDashboardBtn" text="▦   Overview"
+                    onAction="#showDashboard" styleClass="sidebar-nav-btn, sidebar-nav-active" maxWidth="Infinity"/>
+            <Button fx:id="navJobsBtn" text="💼  Job Management"
+                    onAction="#showJobs" styleClass="sidebar-nav-btn" maxWidth="Infinity"/>
+            <Button fx:id="navPostJobBtn" text="➕  Post a Job"
+                    onAction="#handlePostJob" styleClass="sidebar-nav-btn" maxWidth="Infinity"/>
+
+            <!-- Category: ORGANIZATION -->
+            <Label text="ORGANIZATION" styleClass="sidebar-category-header" style="-fx-padding: 16 16 4 16;"/>
+
+            <Button fx:id="navProfileBtn" text="🏢  Company Profile"
+                    onAction="#showProfile" styleClass="sidebar-nav-btn" maxWidth="Infinity"/>
+
+            <!-- Spacer -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Bottom Recruiter Workspace Status Pill -->
+            <VBox styleClass="sidebar-bottom-panel" spacing="6" style="-fx-margin: 0 14 8 14;">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label text="💼" style="-fx-font-size: 13px;"/>
+                    <VBox spacing="1" HBox.hgrow="ALWAYS">
+                        <Label text="Recruiter Workspace" style="-fx-font-size: 10.5px; -fx-text-fill: #94A3B8; -fx-font-weight: bold;"/>
+                        <Label text="Hiring &amp; Management" style="-fx-font-size: 11.5px; -fx-text-fill: #F1F5F9; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <Separator styleClass="sidebar-divider"/>
+
+            <Button fx:id="navLogoutBtn" text="⎋   Sign out"
+                    onAction="#handleLogout" styleClass="sidebar-nav-btn, sidebar-logout-btn" maxWidth="Infinity"/>
+            <Region minHeight="8"/>
+        </VBox>
+    </left>
+
+    <!-- Single Outer Scrollable Content Area -->
+    <center>
+        <ScrollPane fx:id="mainScrollPane"
+                    fitToWidth="true" fitToHeight="false"
+                    hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    styleClass="content-scroll">
+            <VBox styleClass="content-area" spacing="22">
+                <padding>
+                    <Insets top="0" right="30" bottom="34" left="30"/>
+                </padding>
+
+                <!-- Persistent Account Header -->
+                <HBox alignment="CENTER_LEFT" styleClass="content-header" spacing="14" style="-fx-padding: 14 0 14 0;">
+                    <VBox spacing="1" HBox.hgrow="ALWAYS">
+                        <Label text="Recruiter workspace &gt; Overview" styleClass="header-breadcrumb-root"/>
+                        <Label text="Recruiter Dashboard" styleClass="content-header-title"/>
+                    </VBox>
+
+                    <!-- Search Input Box -->
+                    <HBox styleClass="header-search-wrap" alignment="CENTER_LEFT" spacing="8">
+                        <Label text="🔍" style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                        <TextField promptText="Search candidates, jobs…" styleClass="header-search-box" prefWidth="200"/>
+                        <Label text="Ctrl K" styleClass="header-shortcut-tag"/>
+                    </HBox>
+
+                    <Button text="Post a job" styleClass="primary-button" style="-fx-font-size: 12px; -fx-padding: 8 16;" onAction="#handlePostJob"/>
+                    <Button text="🔔" styleClass="header-icon-action"/>
+
+                    <!-- User Profile Avatar Pill -->
+                    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 4 0 8;">
+                        <StackPane styleClass="header-avatar-badge">
+                            <Label fx:id="recruiterInitialsLabel" text="RC" style="-fx-font-weight: bold; -fx-text-fill: white; -fx-font-size: 12px;"/>
+                        </StackPane>
+                        <VBox spacing="1">
+                            <Label fx:id="welcomeLabel" text="Recruiter" style="-fx-font-size: 12.5px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                            <Label fx:id="companyNameHeaderLabel" text="Company Profile" style="-fx-font-size: 10.5px; -fx-text-fill: #64748B;"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Hidden labels/indicators to strictly preserve fx:id bindings -->
+                    <HBox visible="false" managed="false">
+                        <Label fx:id="headerProfileStatusPill"/>
+                        <Label fx:id="memberSinceLabel"/>
+                        <ProgressIndicator fx:id="loadingIndicator"/>
+                        <Label fx:id="lastRefreshedLabel"/>
+                    </HBox>
+                </HBox>
+
+                <!-- ===========================================================
+                     VIEW 1: RECRUITER INTELLIGENCE DASHBOARD (Sections A - I)
+                     =========================================================== -->
+                <VBox fx:id="dashboardPane" spacing="18">
+
+                    <!-- Recruiter Verification Card (Section 0) -->
+                    <VBox fx:id="verificationCard" spacing="12" styleClass="rec-verification-card">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <Label text="Verification Status:" styleClass="rec-verification-title"/>
+                                    <Label fx:id="verificationStatusBadge" text="UNVERIFIED" styleClass="rec-badge-unverified"/>
+                                </HBox>
+                                <Label fx:id="verificationMessageLabel"
+                                       text="Your company profile has not been submitted for verification. Submit your company details to enable job posting."
+                                       styleClass="rec-verification-msg" wrapText="true"/>
+                            </VBox>
+                            <Button fx:id="verificationActionButton" text="Complete &amp; Submit Profile"
+                                    onAction="#handleVerificationAction" styleClass="rec-primary-btn" minWidth="-Infinity"/>
+                        </HBox>
+
+                        <!-- Admin Feedback / Rejection / Suspension Reason Box -->
+                        <VBox fx:id="verificationFeedbackBox" spacing="4" styleClass="rec-feedback-box" managed="false" visible="false">
+                            <Label text="Admin Feedback / Reason:" styleClass="rec-feedback-title"/>
+                            <Label fx:id="verificationReasonLabel" text="" styleClass="rec-feedback-body" wrapText="true"/>
+                        </VBox>
+
+                        <!-- Stored Data Verification Timeline -->
+                        <HBox fx:id="verificationTimelineBox" alignment="CENTER_LEFT" spacing="16" styleClass="rec-timeline-box">
+                            <Label fx:id="timelineCreatedLabel" text="Account Created: —" styleClass="rec-timeline-item"/>
+                            <Label fx:id="timelineUpdatedLabel" text="Profile Updated: —" styleClass="rec-timeline-item"/>
+                            <Label fx:id="timelineReviewedLabel" text="Verification Reviewed: —" styleClass="rec-timeline-item"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Section A: Dashboard Header, Actions & Preset Filter Bar -->
+                    <VBox spacing="14" styleClass="rec-toolbar-card">
+                        <HBox alignment="CENTER_LEFT" spacing="14">
+                            <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                <Label text="Recruiter Dashboard" styleClass="rec-page-title"/>
+                                <Label text="Track job performance, application funnel conversion, hiring velocity, and applicant readiness."
+                                       styleClass="rec-page-subtitle" wrapText="true"/>
+                            </VBox>
+                            <HBox alignment="CENTER_RIGHT" spacing="10" minWidth="-Infinity">
+                                <Button text="+ Post New Job" onAction="#handlePostJob"
+                                        styleClass="rec-primary-btn" minWidth="-Infinity"/>
+                                <Button text="Manage Jobs" onAction="#showJobs"
+                                        styleClass="rec-secondary-btn" minWidth="-Infinity"/>
+                                <Button fx:id="refreshBtn" text="Refresh" onAction="#handleRefresh"
+                                        styleClass="rec-refresh-btn" minWidth="-Infinity"/>
+                            </HBox>
+                        </HBox>
+
+                        <Separator/>
+
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <fx:define>
+                                <ToggleGroup fx:id="filterPresetGroup"/>
+                            </fx:define>
+                            <Label text="Reporting Period:" styleClass="rec-filter-label" minWidth="-Infinity"/>
+                            <ToggleButton fx:id="preset30Btn" text="30 Days" toggleGroup="$filterPresetGroup"
+                                          onAction="#handlePreset30" styleClass="rec-preset-btn" minWidth="-Infinity"/>
+                            <ToggleButton fx:id="preset60Btn" text="60 Days" toggleGroup="$filterPresetGroup"
+                                          onAction="#handlePreset60" styleClass="rec-preset-btn" minWidth="-Infinity"/>
+                            <ToggleButton fx:id="preset200Btn" text="200 Days" toggleGroup="$filterPresetGroup"
+                                          onAction="#handlePreset200" styleClass="rec-preset-btn" minWidth="-Infinity"/>
+                            <ToggleButton fx:id="presetAllBtn" text="All Time" toggleGroup="$filterPresetGroup"
+                                          onAction="#handlePresetAllTime" selected="true"
+                                          styleClass="rec-preset-btn, rec-preset-btn-active" minWidth="-Infinity"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="reportingPeriodLabel" text="All Time" styleClass="rec-period-pill" minWidth="-Infinity"/>
+                            <Label fx:id="trendGranularityBadge" text="Monthly" styleClass="rec-granularity-pill" minWidth="-Infinity"/>
+                        </HBox>
+
+                        <Label fx:id="scopeInfoLabel"
+                               text="Date presets scope jobs created, applications submitted, hiring activity events, and candidate readiness within the window. Active job availability and pending backlog reflect live portfolio state."
+                               styleClass="rec-scope-note" wrapText="true"/>
+                    </VBox>
+
+                    <!-- Error Recovery Banner -->
+                    <HBox fx:id="errorBannerBox" alignment="CENTER_LEFT" spacing="14"
+                          styleClass="rec-error-banner" managed="false" visible="false">
+                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                            <Label text="Unable to load latest recruiter analytics" styleClass="rec-error-title"/>
+                            <Label fx:id="errorDetailLabel" text="" styleClass="rec-error-detail" wrapText="true"/>
+                        </VBox>
+                        <Button fx:id="retryBtn" text="Retry" onAction="#handleRetry"
+                                styleClass="rec-retry-btn" minWidth="-Infinity"/>
+                    </HBox>
+
+                    <!-- Initial Loading State -->
+                    <HBox fx:id="initialLoadingBox" alignment="CENTER_LEFT" spacing="12"
+                          styleClass="rec-info-banner" managed="false" visible="false">
+                        <ProgressIndicator prefWidth="18" prefHeight="18" styleClass="rec-progress"/>
+                        <Label text="Loading recruiter analytics snapshot..." styleClass="rec-section-sub"/>
+                    </HBox>
+
+                    <!-- Empty Portfolio Notice -->
+                    <HBox fx:id="emptyDashboardBox" alignment="CENTER_LEFT" spacing="14"
+                          styleClass="rec-empty-box" managed="false" visible="false">
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="Your recruiter workspace has no job postings or applications yet" styleClass="rec-empty-title"/>
+                            <Label fx:id="emptyDashboardSubLabel"
+                                   text="Create a job posting or finish completing your company profile to activate portfolio intelligence."
+                                   styleClass="rec-empty-sub" wrapText="true"/>
+                        </VBox>
+                        <Button text="+ Post Your First Job" onAction="#handlePostJob"
+                                styleClass="rec-primary-btn" minWidth="-Infinity"/>
+                        <Button text="Company Profile" onAction="#showProfile"
+                                styleClass="rec-secondary-btn" minWidth="-Infinity"/>
+                    </HBox>
+
+                    <!-- Section B: Overview KPI Cards (Row 1 - Portfolio & Openings) -->
+                    <GridPane hgap="14" vgap="14">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <VBox spacing="5" styleClass="rec-kpi-card, rec-kpi-card-accent-navy" GridPane.columnIndex="0">
+                            <Label text="TOTAL JOBS POSTED" styleClass="rec-kpi-title"/>
+                            <Label fx:id="kpiTotalJobsValue" text="—" styleClass="rec-kpi-value"/>
+                            <Label fx:id="kpiJobStatusBreakdownLabel" text="Loading..." styleClass="rec-kpi-sub" wrapText="true"/>
+                        </VBox>
+
+                        <VBox spacing="5" styleClass="rec-kpi-card, rec-kpi-card-accent-green" GridPane.columnIndex="1">
+                            <Label text="OPEN ACCEPTING JOBS" styleClass="rec-kpi-title"/>
+                            <Label fx:id="kpiOpenAcceptingValue" text="—" styleClass="rec-kpi-value"/>
+                            <Label fx:id="kpiOpenContextLabel" text="Loading..." styleClass="rec-kpi-sub" wrapText="true"/>
+                            <Label fx:id="kpiExpiredWarningLabel" text="" styleClass="rec-warn-pill"
+                                   managed="false" visible="false"/>
+                        </VBox>
+
+                        <VBox spacing="5" styleClass="rec-kpi-card, rec-kpi-card-accent-blue" GridPane.columnIndex="2">
+                            <Label text="JOBS CREATED IN PERIOD" styleClass="rec-kpi-title"/>
+                            <Label fx:id="kpiJobsCreatedValue" text="—" styleClass="rec-kpi-value"/>
+                            <Label fx:id="kpiCompanyProfileLabel" text="Loading..." styleClass="rec-kpi-sub" wrapText="true"/>
+                        </VBox>
+
+                        <VBox spacing="5" styleClass="rec-kpi-card, rec-kpi-card-accent-amber" GridPane.columnIndex="3">
+                            <Label text="ZERO-APPLICANT OPEN JOBS" styleClass="rec-kpi-title"/>
+                            <Label fx:id="kpiZeroApplicantValue" text="—" styleClass="rec-kpi-value"/>
+                            <Label fx:id="kpiZeroApplicantSubLabel" text="Loading..." styleClass="rec-kpi-sub" wrapText="true"/>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- Section B: Overview KPI Cards (Row 2 - Applications & Outcomes) -->
+                    <GridPane hgap="14" vgap="14">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="25" hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <VBox spacing="5" styleClass="rec-kpi-card, rec-kpi-card-accent-blue" GridPane.columnIndex="0">
+                            <Label text="PERIOD APPLICATIONS" styleClass="rec-kpi-title"/>
+                            <Label fx:id="kpiPeriodAppsValue" text="—" styleClass="rec-kpi-value"/>
+                            <Label fx:id="kpiPeriodAppsSubLabel" text="Loading..." styleClass="rec-kpi-sub" wrapText="true"/>
+                        </VBox>
+
+                        <VBox spacing="5" styleClass="rec-kpi-card, rec-kpi-card-accent-amber" GridPane.columnIndex="1">
+                            <Label text="PENDING BACKLOG (LIVE)" styleClass="rec-kpi-title"/>
+                            <Label fx:id="kpiLifetimePendingValue" text="—" styleClass="rec-kpi-value"/>
+                            <Label fx:id="kpiPeriodPendingSubLabel" text="Loading..." styleClass="rec-kpi-sub" wrapText="true"/>
+                        </VBox>
+
+                        <VBox spacing="5" styleClass="rec-kpi-card, rec-kpi-card-accent-navy" GridPane.columnIndex="2">
+                            <Label text="SHORTLISTED (PERIOD)" styleClass="rec-kpi-title"/>
+                            <Label fx:id="kpiShortlistedValue" text="—" styleClass="rec-kpi-value"/>
+                            <Label fx:id="kpiShortlistRateSubLabel" text="Loading..." styleClass="rec-kpi-sub" wrapText="true"/>
+                        </VBox>
+
+                        <VBox spacing="5" styleClass="rec-kpi-card, rec-kpi-card-accent-green" GridPane.columnIndex="3">
+                            <Label text="SELECTED / HIRED (PERIOD)" styleClass="rec-kpi-title"/>
+                            <Label fx:id="kpiSelectedValue" text="—" styleClass="rec-kpi-value"/>
+                            <Label fx:id="kpiSelectionRateSubLabel" text="Loading..." styleClass="rec-kpi-sub" wrapText="true"/>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- Section C: Application Pipeline & Conversion Rates -->
+                    <GridPane hgap="16" vgap="16">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="46" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="54" hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <!-- Left: Status Distribution PieChart + Pill Rows -->
+                        <VBox spacing="12" styleClass="section-card" GridPane.columnIndex="0">
+                            <VBox spacing="2">
+                                <Label text="Application Status Distribution" styleClass="rec-section-title"/>
+                                <Label fx:id="pipelineDistSubLabel" text="Selected period breakdown" styleClass="rec-section-sub"/>
+                            </VBox>
+
+                            <PieChart fx:id="statusPieChart" animated="false" labelsVisible="false"
+                                      legendSide="BOTTOM" minHeight="230" prefHeight="245"/>
+
+                            <VBox fx:id="pipelineEmptyBox" alignment="CENTER" spacing="4"
+                                  styleClass="rec-empty-box" managed="false" visible="false">
+                                <Label text="No applications in the selected window" styleClass="rec-empty-title"/>
+                                <Label text="Status slices appear once candidates apply within the active period."
+                                       styleClass="rec-empty-sub" wrapText="true"/>
+                            </VBox>
+
+                            <VBox fx:id="statusPillListBox" spacing="7"/>
+                        </VBox>
+
+                        <!-- Right: Funnel Progress Bars & Conversion Rate Tiles -->
+                        <VBox spacing="14" styleClass="section-card" GridPane.columnIndex="1">
+                            <VBox spacing="2">
+                                <Label text="Application Pipeline &amp; Conversion Rates" styleClass="rec-section-title"/>
+                                <Label fx:id="pipelineFunnelSubLabel" text="Stage breakdown and candidate conversion ratios" styleClass="rec-section-sub"/>
+                            </VBox>
+
+                            <VBox spacing="9">
+                                <VBox spacing="3">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Reviewed (Non-Pending)" styleClass="rec-filter-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="funnelReviewedCountLabel" text="0 / 0" styleClass="rec-section-sub"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="funnelReviewedBar" progress="0" maxWidth="Infinity"
+                                                 styleClass="rec-progress-bar, rec-progress-navy"/>
+                                </VBox>
+
+                                <VBox spacing="3">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Pending Review" styleClass="rec-filter-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="funnelPendingCountLabel" text="0" styleClass="rec-section-sub"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="funnelPendingBar" progress="0" maxWidth="Infinity"
+                                                 styleClass="rec-progress-bar, rec-progress-amber"/>
+                                </VBox>
+
+                                <VBox spacing="3">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Shortlisted" styleClass="rec-filter-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="funnelShortlistedCountLabel" text="0" styleClass="rec-section-sub"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="funnelShortlistedBar" progress="0" maxWidth="Infinity"
+                                                 styleClass="rec-progress-bar"/>
+                                </VBox>
+
+                                <VBox spacing="3">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Selected / Hired" styleClass="rec-filter-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="funnelSelectedCountLabel" text="0" styleClass="rec-section-sub"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="funnelSelectedBar" progress="0" maxWidth="Infinity"
+                                                 styleClass="rec-progress-bar, rec-progress-green"/>
+                                </VBox>
+
+                                <VBox spacing="3">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Rejected" styleClass="rec-filter-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="funnelRejectedCountLabel" text="0" styleClass="rec-section-sub"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="funnelRejectedBar" progress="0" maxWidth="Infinity"
+                                                 styleClass="rec-progress-bar, rec-progress-red"/>
+                                </VBox>
+                            </VBox>
+
+                            <GridPane hgap="10" vgap="10">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="33.33" hgrow="ALWAYS"/>
+                                    <ColumnConstraints percentWidth="33.33" hgrow="ALWAYS"/>
+                                    <ColumnConstraints percentWidth="33.34" hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <VBox spacing="2" styleClass="rec-rate-tile" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                    <Label text="REVIEW RATE" styleClass="rec-rate-label"/>
+                                    <Label fx:id="rateReviewLabel" text="—" styleClass="rec-rate-value"/>
+                                    <Label fx:id="rateReviewHintLabel" text="Reviewed / Total" styleClass="rec-rate-hint"/>
+                                </VBox>
+                                <VBox spacing="2" styleClass="rec-rate-tile" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <Label text="SHORTLIST RATE" styleClass="rec-rate-label"/>
+                                    <Label fx:id="rateShortlistLabel" text="—" styleClass="rec-rate-value"/>
+                                    <Label fx:id="rateShortlistHintLabel" text="Shortlisted / Total" styleClass="rec-rate-hint"/>
+                                </VBox>
+                                <VBox spacing="2" styleClass="rec-rate-tile" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                    <Label text="SELECTION RATE" styleClass="rec-rate-label"/>
+                                    <Label fx:id="rateSelectionLabel" text="—" styleClass="rec-rate-value"/>
+                                    <Label fx:id="rateSelectionHintLabel" text="Selected / Total" styleClass="rec-rate-hint"/>
+                                </VBox>
+
+                                <VBox spacing="2" styleClass="rec-rate-tile" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                    <Label text="REJECTION RATE" styleClass="rec-rate-label"/>
+                                    <Label fx:id="rateRejectionLabel" text="—" styleClass="rec-rate-value"/>
+                                    <Label fx:id="rateRejectionHintLabel" text="Rejected / Total" styleClass="rec-rate-hint"/>
+                                </VBox>
+                                <VBox spacing="2" styleClass="rec-rate-tile" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <Label text="ADVANCEMENT RATE" styleClass="rec-rate-label"/>
+                                    <Label fx:id="rateAdvancementLabel" text="—" styleClass="rec-rate-value"/>
+                                    <Label fx:id="rateAdvancementHintLabel" text="(Shortlisted+Sel)/Total" styleClass="rec-rate-hint"/>
+                                </VBox>
+                                <VBox spacing="2" styleClass="rec-rate-tile" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <Label text="UNIQUE HIRE RATE" styleClass="rec-rate-label"/>
+                                    <Label fx:id="rateUniqueHireLabel" text="—" styleClass="rec-rate-value"/>
+                                    <Label fx:id="rateUniqueHireHintLabel" text="Hired / Unique" styleClass="rec-rate-hint"/>
+                                </VBox>
+                            </GridPane>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- Section E & F: Application Trends & Job Type Distribution -->
+                    <GridPane hgap="16" vgap="16">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="60" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="40" hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <!-- Section E: Application Trends -->
+                        <VBox spacing="12" styleClass="section-card" GridPane.columnIndex="0">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                    <Label text="Application Trends" styleClass="rec-section-title"/>
+                                    <Label fx:id="trendSubLabel" text="Backend chronological submission and progression volume" styleClass="rec-section-sub"/>
+                                </VBox>
+                                <Label fx:id="trendHeaderGranularityLabel" text="Monthly" styleClass="rec-granularity-pill" minWidth="-Infinity"/>
+                            </HBox>
+
+                            <LineChart fx:id="applicationTrendChart" animated="false" createSymbols="true"
+                                       legendSide="BOTTOM" minHeight="250" prefHeight="265" styleClass="rec-trend-chart">
+                                <xAxis>
+                                    <CategoryAxis fx:id="trendXAxis" label="Period"/>
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis fx:id="trendYAxis" label="Applications" minorTickVisible="false"/>
+                                </yAxis>
+                            </LineChart>
+
+                            <VBox fx:id="trendEmptyBox" alignment="CENTER" spacing="4"
+                                  styleClass="rec-empty-box" managed="false" visible="false">
+                                <Label text="No application volume recorded in this period" styleClass="rec-empty-title"/>
+                                <Label text="Try expanding the reporting period or publishing active listings."
+                                       styleClass="rec-empty-sub" wrapText="true"/>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Section F: Job Type Distribution -->
+                        <VBox spacing="12" styleClass="section-card" GridPane.columnIndex="1">
+                            <VBox spacing="2">
+                                <Label text="Job Type Distribution" styleClass="rec-section-title"/>
+                                <Label fx:id="jobTypeSubLabel" text="Portfolio mix and period demand across all job types" styleClass="rec-section-sub"/>
+                            </VBox>
+
+                            <BarChart fx:id="jobTypeBarChart" animated="false" legendSide="BOTTOM"
+                                      minHeight="210" prefHeight="225" styleClass="rec-type-chart">
+                                <xAxis>
+                                    <CategoryAxis fx:id="jobTypeXAxis"/>
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis fx:id="jobTypeYAxis" minorTickVisible="false"/>
+                                </yAxis>
+                            </BarChart>
+
+                            <VBox fx:id="jobTypeEmptyBox" alignment="CENTER" spacing="4"
+                                  styleClass="rec-empty-box" managed="false" visible="false">
+                                <Label text="No jobs or applications posted yet" styleClass="rec-empty-title"/>
+                                <Label text="All job types remain at zero until listings are created."
+                                       styleClass="rec-empty-sub" wrapText="true"/>
+                            </VBox>
+
+                            <VBox fx:id="jobTypeSummaryListBox" spacing="7"/>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- Section D: Job Performance Breakdown -->
+                    <VBox spacing="12" styleClass="section-card">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <Label text="Job Performance Breakdown" styleClass="rec-section-title"/>
+                                <Label text="Period status counts, conversion rates, and lifetime demand per job — click Applicants or double-click a row to manage candidates."
+                                       styleClass="rec-section-sub" wrapText="true"/>
+                            </VBox>
+                            <Label fx:id="jobPerformanceCountLabel" text="0 jobs" styleClass="rec-period-pill" minWidth="-Infinity"/>
+                        </HBox>
+
+                        <TableView fx:id="jobPerformanceTable" styleClass="job-table, rec-perf-table">
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
+                            <columns>
+                                <TableColumn fx:id="colPerfTitle" text="Job Title" minWidth="140" prefWidth="165"/>
+                                <TableColumn fx:id="colPerfType" text="Type" minWidth="80" prefWidth="82" maxWidth="90"/>
+                                <TableColumn fx:id="colPerfStatus" text="Status" minWidth="118" prefWidth="122" maxWidth="130"/>
+                                <TableColumn fx:id="colPerfDeadline" text="Deadline" minWidth="88" prefWidth="90" maxWidth="98"/>
+                                <TableColumn fx:id="colPerfPeriodApps" text="Period" minWidth="54" prefWidth="56" maxWidth="64"/>
+                                <TableColumn fx:id="colPerfPending" text="Pend" minWidth="48" prefWidth="50" maxWidth="58"/>
+                                <TableColumn fx:id="colPerfShortlisted" text="Short" minWidth="50" prefWidth="52" maxWidth="60"/>
+                                <TableColumn fx:id="colPerfSelected" text="Sel" minWidth="40" prefWidth="42" maxWidth="50"/>
+                                <TableColumn fx:id="colPerfRejected" text="Rej" minWidth="40" prefWidth="42" maxWidth="50"/>
+                                <TableColumn fx:id="colPerfLifetime" text="Total" minWidth="48" prefWidth="50" maxWidth="58"/>
+                                <TableColumn fx:id="colPerfRates" text="SL / Sel" minWidth="74" prefWidth="76" maxWidth="84"/>
+                                <TableColumn fx:id="colPerfAction" text="Action" minWidth="98" prefWidth="102" maxWidth="112" sortable="false"/>
+                            </columns>
+                            <placeholder>
+                                <Label text="No job postings found for this recruiter account." styleClass="subtitle-muted"/>
+                            </placeholder>
+                        </TableView>
+
+                        <VBox fx:id="jobPerformanceEmptyBox" alignment="CENTER" spacing="4"
+                              styleClass="rec-empty-box" managed="false" visible="false">
+                            <Label text="No job performance records yet" styleClass="rec-empty-title"/>
+                            <Label text="Publish a job posting to track period applications, conversion rates, and deadlines."
+                                   styleClass="rec-empty-sub" wrapText="true"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Section H & G: Pending Applicants Queue & Recent Hiring Activity -->
+                    <GridPane hgap="16" vgap="16">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="52" hgrow="ALWAYS"/>
+                            <ColumnConstraints percentWidth="48" hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <!-- Section H: Pending Applicants -->
+                        <VBox spacing="12" styleClass="section-card" GridPane.columnIndex="0">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                    <Label text="Pending Applicants" styleClass="rec-section-title"/>
+                                    <Label text="Awaiting review — metadata summary only; click Review to inspect full candidate details."
+                                           styleClass="rec-section-sub" wrapText="true"/>
+                                </VBox>
+                                <Label fx:id="pendingQueueBadge" text="0 pending" styleClass="rec-badge-pending" minWidth="-Infinity"/>
+                            </HBox>
+
+                            <VBox fx:id="pendingApplicantsBox" spacing="8"/>
+
+                            <VBox fx:id="pendingEmptyBox" alignment="CENTER" spacing="4"
+                                  styleClass="rec-empty-box" managed="false" visible="false">
+                                <Label text="No pending applications awaiting review" styleClass="rec-empty-title"/>
+                                <Label text="All submitted applications in your queue have been processed."
+                                       styleClass="rec-empty-sub" wrapText="true"/>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Section G: Recent Hiring Activity -->
+                        <VBox spacing="12" styleClass="section-card" GridPane.columnIndex="1">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                    <Label text="Recent Hiring Activity" styleClass="rec-section-title"/>
+                                    <Label text="Real database-timestamped job posts, applications, and review events"
+                                           styleClass="rec-section-sub" wrapText="true"/>
+                                </VBox>
+                                <Label fx:id="recentActivityCountLabel" text="0 events" styleClass="rec-period-pill" minWidth="-Infinity"/>
+                            </HBox>
+
+                            <VBox fx:id="recentActivityBox" spacing="8"/>
+
+                            <VBox fx:id="activityEmptyBox" alignment="CENTER" spacing="4"
+                                  styleClass="rec-empty-box" managed="false" visible="false">
+                                <Label text="No recent hiring events in this period" styleClass="rec-empty-title"/>
+                                <Label text="Job publications, incoming applications, and candidate reviews appear here."
+                                       styleClass="rec-empty-sub" wrapText="true"/>
+                            </VBox>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- Section I: Applicant Readiness & Advisory Metrics -->
+                    <VBox spacing="14" styleClass="section-card">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                <Label text="Applicant Readiness &amp; AI Fit Overview" styleClass="rec-section-title"/>
+                                <Label fx:id="readinessPeriodLabel"
+                                       text="Profile completeness, active resume availability, and job-specific AI coverage for applicants in scope"
+                                       styleClass="rec-section-sub" wrapText="true"/>
+                            </VBox>
+                        </HBox>
+
+                        <VBox fx:id="readinessUnavailableBox" alignment="CENTER" spacing="4"
+                              styleClass="rec-empty-box" managed="false" visible="false">
+                            <Label text="Applicant readiness metrics not yet available" styleClass="rec-empty-title"/>
+                            <Label fx:id="readinessUnavailableLabel" text="" styleClass="rec-empty-sub" wrapText="true"/>
+                        </VBox>
+
+                        <GridPane fx:id="readinessContentGrid" hgap="18" vgap="14">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="62" hgrow="ALWAYS"/>
+                                <ColumnConstraints percentWidth="38" hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <VBox spacing="11" GridPane.columnIndex="0">
+                                <VBox spacing="4">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Completed Student Profiles" styleClass="rec-filter-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="readinessProfileValueLabel" text="0.0% (0 / 0)" styleClass="rec-section-sub"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="readinessProfileBar" progress="0" maxWidth="Infinity"
+                                                 styleClass="rec-progress-bar, rec-progress-green"/>
+                                </VBox>
+
+                                <VBox spacing="4">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Active PDF Resume on File" styleClass="rec-filter-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="readinessActiveResumeValueLabel" text="0.0% (0 / 0)" styleClass="rec-section-sub"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="readinessActiveResumeBar" progress="0" maxWidth="Infinity"
+                                                 styleClass="rec-progress-bar"/>
+                                </VBox>
+
+                                <VBox spacing="4">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Any Resume Uploaded" styleClass="rec-filter-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="readinessAnyResumeValueLabel" text="0.0% (0 / 0)" styleClass="rec-section-sub"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="readinessAnyResumeBar" progress="0" maxWidth="Infinity"
+                                                 styleClass="rec-progress-bar, rec-progress-navy"/>
+                                </VBox>
+
+                                <VBox spacing="4">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Job-Specific AI Audit Coverage" styleClass="rec-filter-label"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label fx:id="readinessAiCovValueLabel" text="0.0% (0 / 0)" styleClass="rec-section-sub"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="readinessAiCovBar" progress="0" maxWidth="Infinity"
+                                                 styleClass="rec-progress-bar, rec-progress-amber"/>
+                                </VBox>
+                            </VBox>
+
+                            <VBox spacing="8" alignment="CENTER_LEFT" styleClass="rec-ai-score-card" GridPane.columnIndex="1">
+                                <Label text="AVERAGE JOB-SPECIFIC AI FIT SCORE" styleClass="rec-kpi-title"/>
+                                <Label fx:id="readinessAvgAiScoreLabel" text="Not available" styleClass="rec-ai-score-na"/>
+                                <Label fx:id="readinessAvgAiSubLabel"
+                                       text="No job-specific AI analyses recorded for this scope."
+                                       styleClass="rec-section-sub" wrapText="true"/>
+                            </VBox>
+                        </GridPane>
+
+                        <HBox fx:id="readinessDisclaimerBox" alignment="CENTER_LEFT" spacing="10" styleClass="rec-advisory-box">
+                            <Label text="ADVISORY" styleClass="rec-badge-shortlisted" minWidth="-Infinity"/>
+                            <Label fx:id="readinessAdvisoryLabel"
+                                   text="AI fit scores are advisory only and must not be used for automated rejection."
+                                   styleClass="rec-advisory-text" wrapText="true" HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                    </VBox>
+
+                </VBox>
+
+                <!-- ===========================================================
+                     VIEW 2: COMPANY PROFILE (PRESERVED)
+                     =========================================================== -->
+                <VBox fx:id="profilePane" spacing="20" managed="false" visible="false" maxWidth="980">
+                    <!-- Title & Header Banner -->
+                    <HBox alignment="CENTER_LEFT" spacing="16" styleClass="section-card" style="-fx-padding: 18 24;">
+                        <StackPane styleClass="brand-logo-pill" prefWidth="48" prefHeight="48" style="-fx-background-color: #0F172A; -fx-background-radius: 10;">
+                            <Label text="🏢" style="-fx-font-size: 20px;"/>
+                        </StackPane>
+                        <VBox spacing="3" HBox.hgrow="ALWAYS">
+                            <Label text="ORGANIZATION IDENTITY" style="-fx-font-size: 10.5px; -fx-font-weight: bold; -fx-text-fill: #2563EB; -fx-letter-spacing: 0.8px;"/>
+                            <Label text="Company Profile &amp; Verification" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                            <Label text="Manage organizational branding, domain credentials, and enterprise recruitment verification."
+                                   style="-fx-font-size: 13px; -fx-text-fill: #64748B;"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Profile Verification Banner -->
+                    <VBox fx:id="profileVerificationBanner" spacing="8" styleClass="rec-verification-card">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Verification Status:" styleClass="rec-verification-title"/>
+                            <Label fx:id="profileStatusBadge" text="UNVERIFIED" styleClass="rec-badge-unverified"/>
+                        </HBox>
+                        <Label fx:id="profileVerificationMsgLabel" text="Submit your company profile to request verification."
+                               styleClass="rec-verification-msg" wrapText="true"/>
+                        <VBox fx:id="profileFeedbackBox" spacing="4" styleClass="rec-feedback-box" managed="false" visible="false">
+                            <Label text="Admin Feedback:" styleClass="rec-feedback-title"/>
+                            <Label fx:id="profileReasonLabel" text="" styleClass="rec-feedback-body" wrapText="true"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Main Form Card (Two-column layout) -->
+                    <VBox styleClass="section-card" spacing="20" style="-fx-padding: 24 28;">
+                        <Label text="Company Details" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+                        <GridPane hgap="24" vgap="18">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+
+                            <!-- Row 0: Company Name & Industry -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="COMPANY NAME *" styleClass="field-label"/>
+                                <TextField fx:id="companyNameField" promptText="e.g. Acme Technologies" styleClass="text-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="INDUSTRY SECTOR" styleClass="field-label"/>
+                                <TextField fx:id="industryField" promptText="e.g. Software &amp; Technology" styleClass="text-input"/>
+                            </VBox>
+
+                            <!-- Row 1: Company Website & Compliance Tip -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="COMPANY WEBSITE" styleClass="field-label"/>
+                                <TextField fx:id="companyWebsiteField" promptText="e.g. https://acme.com" styleClass="text-input"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1" alignment="CENTER_LEFT"
+                                  style="-fx-background-color: #F8FAFC; -fx-background-radius: 8; -fx-padding: 10 14; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                                <Label text="Verification requirement" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #334155;"/>
+                                <Label text="Corporate domain and accurate industry info accelerate recruiter verification."
+                                       style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;" wrapText="true"/>
+                            </VBox>
+
+                            <!-- Row 2: Company Description (Full width) -->
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2">
+                                <Label text="COMPANY DESCRIPTION" styleClass="field-label"/>
+                                <TextArea fx:id="companyDescField" promptText="Brief description of your company culture, mission, and work environment..."
+                                          prefRowCount="5" wrapText="true" styleClass="text-input"/>
+                            </VBox>
+                        </GridPane>
+
+                        <Separator styleClass="sidebar-divider"/>
+
+                        <!-- Action Buttons -->
+                        <HBox spacing="14" alignment="CENTER_LEFT">
+                            <Button fx:id="saveProfileBtn" text="Save Draft Profile"
+                                    onAction="#handleSaveProfile" styleClass="secondary-button"/>
+                            <Button fx:id="submitVerificationBtn" text="Submit for Verification →"
+                                    onAction="#handleSubmitVerification" styleClass="primary-button"/>
+                            <ProgressIndicator fx:id="profileLoading" prefWidth="22" prefHeight="22"
+                                               managed="false" visible="false"/>
+                            <Label fx:id="profileStatusLabel" managed="false" visible="false" styleClass="success-label"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ===========================================================
+                     VIEW 3: MANAGE JOBS (PRESERVED)
+                     =========================================================== -->
+                <VBox fx:id="jobsPane" spacing="16" managed="false" visible="false">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="Manage Job Postings" styleClass="section-title" HBox.hgrow="ALWAYS"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="+ Post New Job" onAction="#handlePostJob" styleClass="primary-button"/>
+                    </HBox>
+
+                    <!-- Job Publishing Verification Warning Banner -->
+                    <HBox fx:id="jobsVerificationWarningBanner" alignment="CENTER_LEFT" spacing="12"
+                          styleClass="rec-warning-banner" managed="false" visible="false">
+                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                            <Label text="Job Publishing Restricted" styleClass="rec-warning-title"/>
+                            <Label fx:id="jobsVerificationWarningLabel"
+                                   text="Your recruiter account must be verified by an administrator before you can publish or activate job postings."
+                                   styleClass="rec-warning-body" wrapText="true"/>
+                        </VBox>
+                        <Button text="Complete Verification" onAction="#showProfile" styleClass="primary-button" minWidth="-Infinity"/>
+                    </HBox>
+
+                    <VBox styleClass="section-card" spacing="12">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="All Postings" styleClass="section-heading"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="Tip: Click Applicants or double-click any row to manage applications" styleClass="subtitle-muted"/>
+                        </HBox>
+                        <TableView fx:id="jobTable" prefHeight="420" styleClass="job-table">
+                            <columns>
+                                <TableColumn fx:id="colTitle" text="Job Title" prefWidth="200"/>
+                                <TableColumn fx:id="colType" text="Type" prefWidth="95"/>
+                                <TableColumn fx:id="colLocation" text="Location" prefWidth="120"/>
+                                <TableColumn fx:id="colStatus" text="Status" prefWidth="90"/>
+                                <TableColumn fx:id="colDeadline" text="Deadline" prefWidth="105"/>
+                                <TableColumn fx:id="colApplicants" text="Applicants" prefWidth="85"/>
+                                <TableColumn fx:id="colActions" text="Actions" prefWidth="135"/>
+                            </columns>
+                            <placeholder>
+                                <Label text="No job postings yet. Click '+ Post New Job' to create one."/>
+                            </placeholder>
+                        </TableView>
+
+                        <Label fx:id="jobTableStatus" managed="false" visible="false" styleClass="error-label"/>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Button fx:id="editJobBtn" text="Edit Selected"
+                                    onAction="#handleEditJob" styleClass="secondary-button"/>
+                            <Button fx:id="closeJobBtn" text="Close Job"
+                                    onAction="#handleCloseJob" styleClass="btn-warn"/>
+                            <Button fx:id="deleteJobBtn" text="Delete Job"
+                                    onAction="#handleDeleteJob" styleClass="btn-danger"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="viewApplicantsBtn" text="View Applicants →"
+                                    onAction="#handleViewApplicants" styleClass="primary-button"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>
